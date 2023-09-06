@@ -55,11 +55,11 @@ void CDebugProc::Init(void)
 	D3DXCreateFont(pDevice, 18, 0, 0, 0, FALSE, SHIFTJIS_CHARSET, OUT_DEFAULT_PRECIS, DEFAULT_QUALITY, DEFAULT_PITCH, "Terminal", &m_pFont);
 
 	//èâä˙ï\é¶ê›íË
-//#if _DEBUG
+#if _DEBUG
 	m_bDisp = true;
-//#else NDEBUG
-	//m_bDisp = false;
-//#endif
+#else NDEBUG
+	m_bDisp = false;
+#endif
 }
 
 //==========================================================
