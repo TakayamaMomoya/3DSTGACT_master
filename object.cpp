@@ -73,6 +73,15 @@ void CObject::Release(void)
 //=====================================================
 void CObject::Delete(void)
 {
+	if (m_apCur[m_nPriority] != this && m_apTop[m_nPriority] != this)
+	{// 真ん中のアドレスの破棄
+		// 前のアドレスから次のアドレスをつなぐ
+		m_pPrev->m_pNext = m_pNext;
+
+		// 次のアドレスから前のアドレスをつなぐ
+		m_pNext->m_pPrev = m_pPrev;
+	}
+
 	if (m_apTop[m_nPriority] == this)
 	{// 先頭アドレスの破棄
 		//if (m_pNext != nullptr)
@@ -85,22 +94,18 @@ void CObject::Delete(void)
 			}
 		}
 	}
-	else if (m_apCur[m_nPriority] == this)
+	
+	if (m_apCur[m_nPriority] == this)
 	{// 最後尾アドレスの破棄
 		if (m_pPrev != nullptr)
 		{// 最後尾アドレスを前のアドレスに引き継ぐ
 			m_apCur[m_nPriority] = m_pPrev;
 
-			m_pPrev->m_pNext = nullptr;
+			if (m_pPrev != nullptr)
+			{
+				m_pPrev->m_pNext = nullptr;
+			}
 		}
-	}
-	else
-	{// 真ん中のアドレスの破棄
-	 // 前のアドレスから次のアドレスをつなぐ
-		m_pPrev->m_pNext = m_pNext;
-
-		// 次のアドレスから前のアドレスをつなぐ
-		m_pNext->m_pPrev = m_pPrev;
 	}
 
 	// 自身の破棄

@@ -538,6 +538,7 @@ void CPlayer::Input(void)
 	// カメラ操作
 	InputCamera();
 
+#ifdef _DEBUG
 	if (pKeyboard->GetPress(DIK_B))
 	{// ボーナス表示
 		CBonus::Create(CBonus::TYPE_DOGDE);
@@ -550,7 +551,6 @@ void CPlayer::Input(void)
 		CBonus::Create(CBonus::TYPE_MISSILE);
 	}
 
-#ifdef _DEBUG
 	if (pKeyboard->GetTrigger(DIK_F4))
 	{// パラメーターカンスト
 		m_fParamCost = 1.0f;
@@ -644,7 +644,7 @@ void CPlayer::InputMove(void)
 	{
 		if (D3DXVec3Length(&move) != 0)
 		{
-			if (pKeyboard->GetPress(DIK_LSHIFT) || pJoypad->GetPress(CInputJoypad::PADBUTTONS_B, 0))
+			if (pKeyboard->GetPress(DIK_LSHIFT)/* || pJoypad->GetPress(CInputJoypad::PADBUTTONS_LB, 0)*/)
 			{// ブースト移動
 				if (m_bTurnDowner)
 				{
@@ -693,12 +693,12 @@ void CPlayer::InputMove(void)
 			}
 		}
 
-		if ((pKeyboard->GetTrigger(DIK_SPACE) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0)) && m_bLand)
+		if ((pKeyboard->GetTrigger(DIK_SPACE) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_LB, 0)) && m_bLand)
 		{// ジャンプ初動
 			move.y += JUMP_START_POW;
 		}
 
-		if (pKeyboard->GetPress(DIK_SPACE) || pJoypad->GetPress(CInputJoypad::PADBUTTONS_A, 0))
+		if (pKeyboard->GetPress(DIK_SPACE) || pJoypad->GetPress(CInputJoypad::PADBUTTONS_LB, 0))
 		{// ブーストジャンプ
 			move.y += JUMP_POW;
 			if (m_pBodyDowner->GetMotion() != MOTION_BOOST)
@@ -736,7 +736,7 @@ void CPlayer::InputMove(void)
 		}
 	}
 
-	if (pKeyboard->GetRelease(DIK_SPACE) || m_boostState == BOOSTSTATE_EMPTY || pJoypad->GetRelease(CInputJoypad::PADBUTTONS_A, 0))
+	if (pKeyboard->GetRelease(DIK_SPACE) || m_boostState == BOOSTSTATE_EMPTY || pJoypad->GetRelease(CInputJoypad::PADBUTTONS_LB, 0))
 	{// ジャンプボタンを離したら
 		if (m_pBodyDowner->GetMotion() == MOTION_BOOST || m_pBodyDowner->GetMotion() == MOTION_TURNBOOST)
 		{// ニュートラルモーションへ移行
@@ -753,12 +753,12 @@ void CPlayer::InputMove(void)
 //=====================================================
 void CPlayer::InputShot(void)
 {
-	// 情報入手
 	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
 	CInputMouse *pMouse = CManager::GetMouse();
 	CInputJoypad *pJoypad = CManager::GetJoypad();
 	float fRapid, fCost;
 	CCamera *pCamera = CManager::GetCamera();
+	CBullet *pBullet = nullptr;
 
 	// 銃口の位置、向きを取得
 	D3DXVECTOR3 posMazzle = { m_mtxMazzle[0]._41,m_mtxMazzle[0]._42 ,m_mtxMazzle[0]._43 };
@@ -793,7 +793,7 @@ void CPlayer::InputShot(void)
 					(pJoypad->GetRepeat(CInputJoypad::PADBUTTONS_RB, 0) >= CHARGE_TIMER && pJoypad->GetRelease(CInputJoypad::PADBUTTONS_RB, 0)))
 				{// タメ撃ちの弾発射
 					// 弾の発射
-					CBullet::Create
+					pBullet = CBullet::Create
 					(
 						posMazzle,
 						vecMazzle * BULLET_SPEED,
@@ -836,7 +836,7 @@ void CPlayer::InputShot(void)
 						}
 
 						// 弾の発射
-						CBullet::Create
+						pBullet = CBullet::Create
 						(
 							posMazzle,
 							vecMazzle * BULLET_SPEED,
@@ -897,7 +897,7 @@ void CPlayer::InputShot(void)
 					if (pMouse->GetRepeat(CInputMouse::BUTTON_LMB) % (int)fRapid == 0 && pMouse->GetPress(CInputMouse::BUTTON_LMB))
 					{
 						// 弾の発射
-						CBullet::Create
+						pBullet = CBullet::Create
 						(
 							posMazzle,
 							vecMazzle * BULLET_SPEED,
@@ -929,7 +929,7 @@ void CPlayer::InputShot(void)
 					if (pJoypad->GetRepeat(CInputJoypad::PADBUTTONS_RB, 0) % (int)fRapid == 0 && pJoypad->GetPress(CInputJoypad::PADBUTTONS_RB, 0))
 					{
 						// 弾の発射
-						CBullet::Create
+						pBullet = CBullet::Create
 						(
 							posMazzle,
 							vecMazzle * BULLET_SPEED,
@@ -971,7 +971,10 @@ void CPlayer::InputShot(void)
 		}
 	}
 
-	//CManager::GetDebugProc()->Print("\nリピート[%d]", pJoypad->GetRepeat(CInputJoypad::PADBUTTONS_RB, 0));
+	if (pBullet != nullptr && m_pEnemy != nullptr)
+	{// 発射した弾をロックオン弾に設定
+		pBullet->EnableLock(true);
+	}
 }
 
 //=====================================================
@@ -989,7 +992,7 @@ void CPlayer::InputCamera(void)
 	// カメラ取得
 	CCamera::Camera *pCameraInfo = CManager::GetCamera()->GetCamera();
 
-	if (pMouse->GetPress(CInputMouse::BUTTON_RMB) || pJoypad->GetPress(CInputJoypad::PADBUTTONS_LB, 0))
+	if (pMouse->GetPress(CInputMouse::BUTTON_RMB)/* || pJoypad->GetPress(CInputJoypad::PADBUTTONS_LB, 0)*/)
 	{// エイム時
 		m_bAim = true;
 		pCameraInfo->fLength = AIM_LENGTH;
@@ -1153,6 +1156,25 @@ void CPlayer::Lockon(void)
 	if (m_pLockon != nullptr)
 	{
 		m_pLockon->SetEnemy(m_pEnemy);
+
+		if (m_pEnemy == nullptr)
+		{
+			// マズル方向にマーカー設置
+			D3DXVECTOR3 vecMazzle;
+
+			vecMazzle = 
+			{
+				m_mtxMazzle[1]._41 - m_mtxMazzle[0]._41,
+				m_mtxMazzle[1]._42 - m_mtxMazzle[0]._42,
+				m_mtxMazzle[1]._43 - m_mtxMazzle[0]._43
+			};
+
+			D3DXVec3Normalize(&vecMazzle, &vecMazzle);
+
+			vecMazzle *= BULLET_SPEED * BULLET_LIFE;
+
+			m_pLockon->SetPosDest(GetPosition() - vecMazzle);
+		}
 	}
 }
 

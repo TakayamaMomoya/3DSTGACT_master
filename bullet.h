@@ -51,6 +51,8 @@ public:
 	static void Unload(void);
 	void LimitPos(void);	// 画面外に行ったら消える処理
 	static int GetNumAll(void) { return m_nNumAll; }
+	bool IsLock(void) { return m_bLock; }
+	void EnableLock(bool bLock) { m_bLock = bLock; }
 
 private:
 	void ManageHit(void);	// ヒット数管理
@@ -66,6 +68,7 @@ private:
 	D3DXCOLOR m_col;	// 色
 	int m_nNumHit;	// 命中回数
 	float m_fDamage;	// 与ダメージ
+	bool m_bLock;	// ロックオン弾かどうか
 };
 
 #endif

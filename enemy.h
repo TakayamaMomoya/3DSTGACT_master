@@ -110,7 +110,6 @@ private:
 	void ManageState(void);
 	void SearchTarget(void);
 	void ManageBonus(void);
-	void ManageLockon(void);
 	void ManageCollision(void);
 
 	int m_nCntAttack;	// UŒ‚‚ğ‚·‚é‚Ü‚Å‚ÌŠÔ	

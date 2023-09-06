@@ -32,6 +32,7 @@
 //*****************************************************
 #define SPEED_MOVE	(7.0f)	// 移動速度
 #define ROLL_SPEED	(0.1f)	// 回転速度
+#define EDGE_ORBIT	(13)	// 軌跡の辺の数
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -48,6 +49,7 @@ CBullet::CBullet(int nPriority) : CBillboard(nPriority)
 	m_fDamage = 0.0f;
 	m_type = TYPE_NONE;
 	m_bPierce = false;
+	m_bLock = false;
 	m_move = { 0.0f,0.0f,0.0f };
 	m_rot = { 0.0f,0.0f,0.0f };
 	m_col = { 0.0f,0.0f,0.0f,0.0f };
@@ -72,11 +74,55 @@ CBullet::~CBullet()
 //=====================================================
 HRESULT CBullet::Init(void)
 {
+	// 汎用処理取得
+	CUniversal *pUniversal = CManager::GetUniversal();
+
 	// 継承クラスの初期化
 	CBillboard::Init();
 
 	// タイプの設定
 	SetType(TYPE_BULLET);
+
+	Draw();
+
+	if (m_apOrbit[0] == nullptr)
+	{// 軌跡の生成
+		m_apOrbit[0] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), 0.0f, 0.0f), D3DXVECTOR3(-GetWidth(), 0.0f, 0.0f), m_col, EDGE_ORBIT);
+	}
+
+	if (m_apOrbit[1] == nullptr)
+	{// 軌跡の生成
+		m_apOrbit[1] = COrbit::Create(GetMatrix(), D3DXVECTOR3(0.0f, GetWidth(), 0.0f), D3DXVECTOR3(0.0f, -GetWidth(), 0.0f), m_col, EDGE_ORBIT);
+	}
+
+	if (m_apOrbit[2] == nullptr)
+	{// 軌跡の生成
+		m_apOrbit[2] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), GetWidth(), 0.0f), D3DXVECTOR3(-GetWidth(), -GetWidth(), 0.0f), m_col, EDGE_ORBIT);
+	}
+
+	if (m_apOrbit[3] == nullptr)
+	{// 軌跡の生成
+		m_apOrbit[3] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), -GetWidth(), 0.0f), D3DXVECTOR3(-GetWidth(), GetWidth(), 0.0f), m_col, EDGE_ORBIT);
+	}
+
+	D3DXMATRIX mtx;
+
+	// マトリックス初期化
+	D3DXMatrixIdentity(&mtx);
+
+	// マトリックスをかけ合わせる
+	pUniversal->SetOffSet(&mtx, GetMatrix(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_rot);
+
+	for (int nCnt = 0; nCnt < 6; nCnt++)
+	{
+		for (int nCntOrbit = 0; nCntOrbit < NUM_ORBIT; nCntOrbit++)
+		{// 軌跡の更新
+			if (m_apOrbit[nCntOrbit] != nullptr)
+			{
+				m_apOrbit[nCntOrbit]->SetPositionOffset(mtx, 0);
+			}
+		}
+	}
 
 	return S_OK;
 }
@@ -126,6 +172,11 @@ void CBullet::ManageHit(void)
 			if (pPlayer != nullptr)
 			{// ヒット数加算
 				pPlayer->SetNumHit(pPlayer->GetNumHit() + 1);
+
+				if (m_bLock == false)
+				{
+					CBonus::Create(CBonus::TYPE_MANUALHIT);
+				}
 			}
 		}
 		else
@@ -328,26 +379,6 @@ void CBullet::Draw(void)
 
 	// ビルボードの描画
 	CBillboard::SetMatrix();
-
-	if (m_apOrbit[0] == nullptr)
-	{// 軌跡の生成
-		m_apOrbit[0] = COrbit::Create(GetMatrix(),D3DXVECTOR3(GetWidth(),0.0f,0.0f), D3DXVECTOR3(-GetWidth(), 0.0f, 0.0f), m_col,10);
-	}
-
-	if (m_apOrbit[1] == nullptr)
-	{// 軌跡の生成
-		m_apOrbit[1] = COrbit::Create(GetMatrix(), D3DXVECTOR3(0.0f, GetWidth(), 0.0f), D3DXVECTOR3(0.0f, -GetWidth(), 0.0f), m_col, 10);
-	}
-
-	if (m_apOrbit[2] == nullptr)
-	{// 軌跡の生成
-		m_apOrbit[2] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), GetWidth(), 0.0f), D3DXVECTOR3(-GetWidth(), -GetWidth(), 0.0f), m_col, 10);
-	}
-
-	if (m_apOrbit[3] == nullptr)
-	{// 軌跡の生成
-		m_apOrbit[3] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), -GetWidth(), 0.0f), D3DXVECTOR3(-GetWidth(), GetWidth(), 0.0f), m_col, 10);
-	}
 }
 
 //=====================================================

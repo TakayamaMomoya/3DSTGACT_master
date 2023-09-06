@@ -1,8 +1,8 @@
-﻿  effect3D.cpp
+﻿  bullet.cpp
   コード生成しています。
-  0 of 921 functions ( 0.0%) were compiled, the rest were copied from previous compilation.
+  1 of 923 functions ( 0.1%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
     0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
-  09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\09_master\09_master.exe
-  09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\09_master\09_master.pdb (Full PDB)
+  09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.exe
+  09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.pdb (Full PDB)

@@ -33,6 +33,7 @@ CLockon::CLockon(int nPriority)
 {
 	m_pLockOn = nullptr;
 	m_pEnemy = nullptr;
+	m_posDest = { 0.0f,0.0f,0.0f };
 	m_fSize = 0.0f;
 }
 
@@ -85,7 +86,6 @@ void CLockon::Uninit(void)
 void CLockon::Update(void)
 {
 	D3DXVECTOR3 vecDiff;
-	D3DXVECTOR3 posDest = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3 pos;
 
 	// カメラ取得
@@ -98,7 +98,7 @@ void CLockon::Update(void)
 
 		if (pCameraInfo != nullptr)
 		{
-			posDest = pCameraInfo->posRDest;
+			//m_posDest = pCameraInfo->posRDest;
 
 			// 差分のベクトルを取得
 			vecDiff = m_pLockOn->GetPosition() - pCameraInfo->posV;
@@ -117,7 +117,7 @@ void CLockon::Update(void)
 
 	if (m_pEnemy != nullptr && m_pLockOn != nullptr)
 	{
-		posDest = m_pEnemy->GetPosition();
+		m_posDest = m_pEnemy->GetPosition();
 
 		m_fSize += (LOCK_SIZE - m_fSize) * SIZE_FACT;
 	}
@@ -126,7 +126,7 @@ void CLockon::Update(void)
 		m_fSize += (DEFAULT_SIZE - m_fSize) * SIZE_FACT;
 	}
 
-	vecDiff = posDest - m_pLockOn->GetPosition();
+	vecDiff = m_posDest - m_pLockOn->GetPosition();
 
 	pos = m_pLockOn->GetPosition() + vecDiff * MOVE_FACT;
 

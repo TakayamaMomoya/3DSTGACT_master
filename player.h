@@ -91,6 +91,7 @@ public:
 	void SetNumHit(int nNumHit);
 	void SetNumShot(int nNumShot) { m_nNumShot = nNumShot; }
 	CAssess *GetAssess(void) { return m_pAssess; }
+	CEnemy *GetLockEnemy(void) { return m_pEnemy; }
 
 private:
 	void Input(void);

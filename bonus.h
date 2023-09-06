@@ -28,6 +28,7 @@ public:
 	{
 		TYPE_DOGDE = 0,	// 回避
 		TYPE_MISSILE,	// ミサイル撃破
+		TYPE_MANUALHIT,	// マニュアル照準で命中
 		TYPE_MAX
 	};
 

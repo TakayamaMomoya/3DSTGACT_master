@@ -33,10 +33,13 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void SetEnemy(CEnemy *pEnemy) { m_pEnemy = pEnemy; }
+	D3DXVECTOR3 GetPosDest(void) { return m_posDest; }
+	void SetPosDest(D3DXVECTOR3 pos) { m_posDest = pos; }
 
 private:
 	CBillboard *m_pLockOn;	// ロックオンマーカーのビルボード
 	CEnemy *m_pEnemy;	// 見てる敵のポインタ
+	D3DXVECTOR3 m_posDest;	// 目的の座標
 	float m_fSize;	// サイズ
 };
 

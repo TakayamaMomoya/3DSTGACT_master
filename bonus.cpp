@@ -26,8 +26,10 @@
 #define TIME_FADE	(60)	// フェードアウトまでのフレーム数
 #define DOGDE_SCORE	(2000)	// 至近弾回避のスコア
 #define MISSILE_SCORE	(500)	// ミサイル撃破のスコア
+#define MANUALHIT_SCORE	(1000)	// マニュアル照準のスコア
 #define ASSESS_DODGE	(0.07f)	// 回避の評価単価
 #define ASSESS_MISSILE	(0.07f)	// ミサイル撃破の評価単価
+#define ASSESS_MANUALHIT	(0.1f)	// マニュアルヒットの評価単価
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -254,7 +256,8 @@ CBonus *CBonus::Create(TYPE type)
 	char *aPath[TYPE_MAX] =
 	{
 		"data\\TEXTURE\\UI\\message00.png",
-		"data\\TEXTURE\\UI\\message01.png"
+		"data\\TEXTURE\\UI\\message01.png",
+		"data\\TEXTURE\\UI\\message02.png"
 	};
 
 	CBonus *pBonus = nullptr;
@@ -313,7 +316,8 @@ void CBonus::BonusScore(TYPE type)
 	int aScore[TYPE_MAX] = 
 	{
 		DOGDE_SCORE,
-		MISSILE_SCORE
+		MISSILE_SCORE,
+		MANUALHIT_SCORE
 	};
 
 	if (pScore != nullptr)
@@ -336,6 +340,11 @@ void CBonus::BonusScore(TYPE type)
 	case CBonus::TYPE_MISSILE:
 
 		pAssess->AddHit(ASSESS_MISSILE);
+
+		break;
+	case CBonus::TYPE_MANUALHIT:
+
+		pAssess->AddHit(ASSESS_MANUALHIT);
 
 		break;
 	default:
