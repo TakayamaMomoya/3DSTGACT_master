@@ -1,0 +1,99 @@
+#====================================================================
+#
+# 敵ウェーブスクリプトファイル[enemywave.txt]
+# Author：Momoya Takayama
+#
+#====================================================================
+SCRIPT
+
+NUM_WAVE = 4
+
+WAVESET		#1 ヘリ小隊
+	NUM_ENEMY = 3
+	
+	ENEMYSET
+		TYPE = 1
+		POS = 0.0 0.0 0.0
+	END_ENEMYSET
+	
+	ENEMYSET
+		TYPE = 1
+		POS = 400.0 0.0 0.0
+	END_ENEMYSET
+
+	ENEMYSET
+		TYPE = 1
+		POS = -400.0 0.0 0.0
+	END_ENEMYSET
+END_WAVESET
+
+WAVESET		#2 戦車小隊
+	NUM_ENEMY = 1
+	
+	ENEMYSET
+		TYPE = 2
+		POS = 0.0 0.0 0.0
+	END_ENEMYSET
+END_WAVESET
+
+WAVESET		#3 戦車ヘリ混合小隊
+	NUM_ENEMY = 3
+	
+	ENEMYSET
+		TYPE = 2
+		POS = 0.0 0.0 0.0
+	END_ENEMYSET
+	
+	ENEMYSET
+		TYPE = 1
+		POS = 400.0 0.0 0.0
+	END_ENEMYSET
+
+	ENEMYSET
+		TYPE = 1
+		POS = -400.0 0.0 0.0
+	END_ENEMYSET
+END_WAVESET
+
+WAVESET		#4 ヘリ部隊
+	NUM_ENEMY = 7
+	
+	ENEMYSET
+		TYPE = 1
+		POS = 0.0 0.0 0.0
+	END_ENEMYSET
+	
+	ENEMYSET
+		TYPE = 1
+		POS = 300.0 0.0 0.0
+	END_ENEMYSET
+
+	ENEMYSET
+		TYPE = 1
+		POS = -300.0 0.0 0.0
+	END_ENEMYSET
+	
+	ENEMYSET
+		TYPE = 1
+		POS = 300.0 0.0 300.0
+	END_ENEMYSET
+	
+	ENEMYSET
+		TYPE = 1
+		POS = -300.0 0.0 -300.0
+	END_ENEMYSET
+
+	ENEMYSET
+		TYPE = 1
+		POS = 300.0 0.0 -300.0
+	END_ENEMYSET
+
+	ENEMYSET
+		TYPE = 1
+		POS = -300.0 0.0 300.0
+	END_ENEMYSET
+
+END_WAVESET
+
+
+END_SCRIPT

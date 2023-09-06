@@ -1,0 +1,19 @@
+#====================================================================
+#
+# プレイヤーパラメータースクリプトファイル[player.txt]
+# Author：Momoya Takayama
+#
+#====================================================================
+SCRIPT
+
+PARAMSET
+	INITIAL_RAPID = 0.1
+	INITIAL_POWER = 0.1
+	INITIAL_COST  = 0.1
+	
+	GRAW_RAPID = 0.018
+	GRAW_POWER = 0.1
+	GRAW_COST  = 0.02
+END_PARAMSET
+
+END_SCRIPT

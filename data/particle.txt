@@ -1,0 +1,159 @@
+#====================================================================
+#
+# パーティクルスクリプトファイル[particle.txt]
+# Author：Momoya Takayama
+#
+#====================================================================
+SCRIPT
+
+PARTICLESET		#1 爆発のパーティクル
+    LIFE_PARTICLE = 0
+    NUM_EFFECT = 59
+    LIFE_EFFECT = 116
+    RADIUS_EFFECT = 51.26
+    SPEED_EFFECT = 3.36
+    GRAVITY = -0.00
+    DECREASE = -1.43
+    RANGEROT = 0.07
+    IS_ADD = 1
+    IS_ROT = 0
+    IS_TURN = 0
+    COLOR = 0.73 0.26 0.10 1.00
+END_PARTICLESET
+
+PARTICLESET		#2 砂煙のパーティクル
+    LIFE_PARTICLE = 1
+    NUM_EFFECT = 180
+    LIFE_EFFECT = 22
+    RADIUS_EFFECT = 24.03
+    SPEED_EFFECT = 9.22
+    DECREASE = 0.34
+    GRAVITY = 0.43
+    RANGEROT = 2.14
+    IS_ADD = 0
+    IS_ROT = 1
+    IS_TURN = 0
+    COLOR = 0.97 0.90 0.71 1.00
+END_PARTICLESET
+
+PARTICLESET		#3 ヒットパーティクル
+    LIFE_PARTICLE = 1
+    NUM_EFFECT = 20
+    LIFE_EFFECT = 21
+    RADIUS_EFFECT = 24.03
+    SPEED_EFFECT = 8.67
+    GRAVITY = 0.00
+    DECREASE = 0.42
+    RANGEROT = 0.07
+    IS_ADD = 1
+    IS_ROT = 0
+    IS_TURN = 0
+    COLOR = 0.81 0.68 0.23 1.00
+END_PARTICLESET
+
+PARTICLESET		#4 ブーストのパーティクル
+    LIFE_PARTICLE = 1
+    NUM_EFFECT = 30
+    LIFE_EFFECT = 15
+    RADIUS_EFFECT = 17.48
+    SPEED_EFFECT = 11.74
+    GRAVITY = 0.00
+    DECREASE = 0.42
+    RANGEROT = 0.07
+    IS_ADD = 1
+    IS_ROT = 1
+    IS_TURN = 0
+    COLOR = 0.39 0.43 0.72 1.00
+END_PARTICLESET
+
+PARTICLESET		#5 煙のパーティクル
+    LIFE_PARTICLE = 0
+    NUM_EFFECT = 4
+    LIFE_EFFECT = 54
+    RADIUS_EFFECT = 20.21
+    SPEED_EFFECT = 0.96
+    GRAVITY = 0.00
+    DECREASE = 0.02
+    RANGEROT = 0.07
+    IS_ADD = 0
+    IS_ROT = 0
+    IS_TURN = 0
+    COLOR = 0.23 0.23 0.25 1.00
+END_PARTICLESET
+
+PARTICLESET		#6 爆煙のパーティクル
+    LIFE_PARTICLE = 0
+    NUM_EFFECT = 59
+    LIFE_EFFECT = 116
+    RADIUS_EFFECT = 51.26
+    SPEED_EFFECT = 3.36
+    GRAVITY = -0.00
+    DECREASE = -1.43
+    RANGEROT = 0.07
+    IS_ADD = 0
+    IS_ROT = 0
+    IS_TURN = 0
+    COLOR = 0.10 0.10 0.10 1.00
+END_PARTICLESET
+
+PARTICLESET		#7 ビームのパーティクル
+    LIFE_PARTICLE = 1
+    NUM_EFFECT = 2
+    LIFE_EFFECT = 64
+    RADIUS_EFFECT = 18.95
+    SPEED_EFFECT = 2.18
+    GRAVITY = 0.00
+    DECREASE = -0.58
+    RANGEROT = 0.07
+    IS_ADD = 1
+    IS_ROT = 0
+    IS_TURN = 1
+    COLOR = 0.70 0.52 0.99 1.00
+END_PARTICLESET
+
+PARTICLESET		#8 マックスチャージのパーティクル
+    LIFE_PARTICLE = 1
+    NUM_EFFECT = 2
+    LIFE_EFFECT = 24
+    RADIUS_EFFECT = 18.95
+    SPEED_EFFECT = 1.38
+    GRAVITY = -0.00
+    DECREASE = -0.58
+    RANGEROT = 0.07
+    IS_ADD = 1
+    IS_ROT = 0
+    IS_TURN = 1
+    COLOR = 0.70 0.52 0.99 1.00
+END_PARTICLESET
+
+PARTICLESET		#9 射撃時のパーティクル
+    LIFE_PARTICLE = 0
+    NUM_EFFECT = 22
+    LIFE_EFFECT = 20
+    RADIUS_EFFECT = 25.87
+    SPEED_EFFECT = 1.50
+    GRAVITY = -0.00
+    DECREASE = 0.34
+    RANGEROT = 0.07
+    IS_ADD = 1
+    IS_ROT = 0
+    IS_TURN = 0
+    COLOR = 0.70 0.52 0.99 1.00
+END_PARTICLESET
+
+PARTICLESET		#10 塵のパーティクル
+    LIFE_PARTICLE = 1
+    NUM_EFFECT = 14
+    LIFE_EFFECT = 82
+    RADIUS_EFFECT = 24.03
+    SPEED_EFFECT = 1.54
+    GRAVITY = -0.03
+    DECREASE = -0.74
+    RANGEROT = 2.14
+    IS_ADD = 0
+    IS_ROT = 0
+    IS_TURN = 0
+    COLOR = 0.97 0.90 0.71 1.00
+END_PARTICLESET
+
+END_SCRIPT
