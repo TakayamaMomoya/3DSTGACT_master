@@ -54,8 +54,7 @@ CBullet::CBullet(int nPriority) : CBillboard(nPriority)
 	m_rot = { 0.0f,0.0f,0.0f };
 	m_col = { 0.0f,0.0f,0.0f,0.0f };
 	m_pCollisionSphere = nullptr;
-	m_apOrbit[0] = nullptr;
-	m_apOrbit[1] = nullptr;
+	ZeroMemory(&m_apOrbit[0], sizeof(m_apOrbit));
 
 	// 総数カウントアップ
 	m_nNumAll++;
@@ -238,25 +237,9 @@ void CBullet::Update(void)
 		case TYPE_PLAYER:
 			tag = CCollision::TAG_ENEMY;
 
-			if (m_pCollisionSphere->SphereCollision(CCollision::TAG_MISSILE))
-			{// 対象との当たり判定
-				CObject *pObj = m_pCollisionSphere->GetOther();
+			// ミサイルとの当たり判定
+			bHit = BulletHit(CCollision::TAG_MISSILE);
 
-				bHit = true;
-
-				// ヒット数加算
-				m_nNumHit++;
-
-				if (pObj != nullptr)
-				{
-					// 当たったオブジェクトのヒット処理
-					pObj->Hit(m_fDamage);
-
-					CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
-
-					CBonus::Create(CBonus::TYPE_MISSILE);
-				}
-			}
 			break;
 		case TYPE_ENEMY:
 			tag = CCollision::TAG_PLAYER;
@@ -265,34 +248,12 @@ void CBullet::Update(void)
 			break;
 		}
 
-		if (m_pCollisionSphere->SphereCollision(tag))
-		{// 対象との当たり判定
-			CObject *pObj = m_pCollisionSphere->GetOther();
-
-			bHit = true;
-
-			// ヒット数加算
-			m_nNumHit++;
-
-			if (pObj != nullptr)
-			{
-				// 当たったオブジェクトのヒット処理
-				pObj->Hit(m_fDamage);
-
-				CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
-			}
-		}
+		// キャラクターとの当たり判定
+		bHit = BulletHit(tag);
 
 		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
 		{// ブロックとの当たり判定
-			// 爆発アニメーション
-			CExplosion::Create(GetPosition());
-
-			// 爆発パーティクル
-			CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
-
-			// 終了処理
-			Uninit();
+			Death();
 		}
 	}
 
@@ -315,23 +276,14 @@ void CBullet::Update(void)
 
 		if (m_nLife < 0 || fHeight > GetPosition().y)
 		{// 自分の削除
-			CExplosion::Create(GetPosition());
-
-			CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
-
-			Uninit();
+			Death();
 		}
 	}
 	else
 	{
 		if (m_bPierce == false)
-		{// 貫通する弾は消えない
-			CExplosion::Create(GetPosition());
-
-			CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
-
-			// 終了処理
-			Uninit();
+		{// 貫通しない弾は消える
+			Death();
 		}
 	}
 
@@ -353,20 +305,44 @@ void CBullet::Update(void)
 }
 
 //=====================================================
-// 画面外削除処理
+// 命中したか確認する処理
 //=====================================================
-void CBullet::LimitPos(void)
+bool CBullet::BulletHit(CCollision::TAG tag)
 {
-	// 位置の入手
-	D3DXVECTOR3 pos = GetPosition();
+	bool bHit = false;
+	bool bSame = false;
 
-	if (pos.x < 0 || pos.x > SCREEN_WIDTH ||
-		pos.y < 0 || pos.y > SCREEN_HEIGHT)
-	{
-		CExplosion::Create(GetPosition());
+	if (m_pCollisionSphere->IsTriggerEnter(tag))
+	{// 対象との当たり判定
+		CObject *pObj = m_pCollisionSphere->GetOther();
 
-		Uninit();
+		if (pObj != nullptr)
+		{
+			bHit = true;
+
+			// 当たったオブジェクトのヒット処理
+			pObj->Hit(m_fDamage);
+
+			CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
+
+			// ヒット数加算
+			m_nNumHit++;
+		}
 	}
+
+	return bHit;
+}
+
+//=====================================================
+// 命中したか確認する処理
+//=====================================================
+void CBullet::Death(void)
+{
+	// パーティクル生成
+	CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
+
+	// 終了処理
+	Uninit();
 }
 
 //=====================================================

@@ -630,21 +630,7 @@ void CGame::Debug(void)
 
 	if (pKeyboard != nullptr)
 	{
-		if (pKeyboard->GetTrigger(DIK_M))
-		{// –h‰q–Ú•W”j‰ó
-			if (m_pDefend != nullptr)
-			{
-				m_pDefend->Hit(100000);
-			}
-		}
 
-		if (pKeyboard->GetTrigger(DIK_RETURN))
-		{// ‘JˆÚ
-			if (pFade != nullptr)
-			{
-				//pFade->SetFade(MODE_RANKING);
-			}
-		}
 	}
 }
 

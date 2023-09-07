@@ -456,6 +456,58 @@ bool CCollisionSphere::IsTriggerExit(TAG tag)
 }
 
 //=====================================================
+// ãÖÇ™Ç‘Ç¬Ç©Ç¡ÇΩèuä‘ÇÃîªíË
+//=====================================================
+bool CCollisionSphere::IsTriggerEnter(TAG tag)
+{
+	bool bExit = false;
+
+	CCollision **ppCollision = GetCollision();
+
+	for (int nCnt = 0; nCnt < NUM_OBJECT; nCnt++)
+	{
+		if (ppCollision[nCnt] != nullptr)
+		{
+			if (ppCollision[nCnt]->GetType() == TYPE_SPHERE)
+			{
+				if (tag == TAG_NONE)
+				{
+
+				}
+				else if (ppCollision[nCnt]->GetTag() != tag)
+				{
+					continue;
+				}
+
+				// ç∑ï™éÊìæ
+				D3DXVECTOR3 vecDiff = ppCollision[nCnt]->GetPosition() - GetPosition();
+
+				// ç∑ï™ÇÃí∑Ç≥
+				float fLengthDiff = D3DXVec3Length(&vecDiff);
+
+				// ëOâÒÇÃà íuÇ∆ÇÃç∑ï™
+				vecDiff = ppCollision[nCnt]->GetOwner()->GetPositionOld() - GetPositionOld();
+
+				float fLengthOld = D3DXVec3Length(&vecDiff);
+
+				// Ç‘Ç¬Ç©ÇÈéûÇÃãóó£
+				float fLength = ppCollision[nCnt]->GetRadius() + GetRadius();
+
+				if (fLengthDiff <= fLength && fLengthOld > fLength)
+				{
+					// Ç‘Ç¬Ç©Ç¡ÇΩëäéËÇÃéùÇøéÂÇîªï 
+					SetOther(ppCollision[nCnt]->GetOwner());
+
+					return true;
+				}
+			}
+		}
+	}
+
+	return bExit;
+}
+
+//=====================================================
 // ê∂ê¨èàóù
 //=====================================================
 CCollisionSphere *CCollisionSphere::Create(TAG tag, TYPE type, CObject *obj)

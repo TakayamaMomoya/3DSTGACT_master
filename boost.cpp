@@ -22,6 +22,8 @@
 #define GAUGE_WIDTH	(40.0f)	// ゲージの横幅
 #define GAUGE_HEIGTH	(250.0f)	// ゲージの縦の長さ
 #define GAUGE_POS	(D3DXVECTOR3(1100.0f,650.0f,0.0f))	// ゲージの初期位置
+#define CAPTION_WIDTH	(10.0f)	// 見出しの横幅
+#define CAPTION_HEIGTH	(50.0f)	// 見出しの縦の長さ
 
 //=====================================================
 // コンストラクタ
@@ -29,6 +31,7 @@
 CBoost::CBoost(int nPriority) : CObject(nPriority)
 {
 	m_pObjectGauge = nullptr;
+	m_pCaption = nullptr;
 }
 
 //=====================================================

@@ -32,6 +32,7 @@ public:
 
 private:
 	CObject2D *m_pObjectGauge;	// ゲージのポインタ
+	CObject2D *m_pCaption;	// 見出しのポインタ
 };
 
 #endif

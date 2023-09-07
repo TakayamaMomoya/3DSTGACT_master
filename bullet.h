@@ -13,11 +13,13 @@
 //*****************************************************
 #include "object2D.h"
 #include "billboard.h"
+#include "collision.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define NUM_ORBIT	(4)	// 軌跡の数
+#define MAX_HIT	(54)	// 最大で覚えられる命中したオブジェクト
 
 //*****************************************************
 // 前方宣言
@@ -49,13 +51,14 @@ public:
 	void Draw(void);
 	static HRESULT Load(void);	// 読込
 	static void Unload(void);
-	void LimitPos(void);	// 画面外に行ったら消える処理
 	static int GetNumAll(void) { return m_nNumAll; }
 	bool IsLock(void) { return m_bLock; }
 	void EnableLock(bool bLock) { m_bLock = bLock; }
 
 private:
 	void ManageHit(void);	// ヒット数管理
+	bool BulletHit(CCollision::TAG tag);
+	void Death(void);
 
 	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_rot;	// 向き

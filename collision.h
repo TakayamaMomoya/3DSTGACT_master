@@ -101,6 +101,7 @@ public:
 	static CCollisionSphere *Create(TAG tag, TYPE type, CObject *obj);
 	void SetRadius(float fRadius) { m_fRadius = fRadius; }
 	bool IsTriggerExit(TAG tag);
+	bool IsTriggerEnter(TAG tag);
 
 private:
 	float m_fRadius;

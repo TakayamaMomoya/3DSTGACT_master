@@ -49,6 +49,8 @@
 #define SHOT_COST	(50.0f)	// 通常射撃のブーストコスト
 #define COST_MAX	(SHOT_COST * 0.8f)	// コスト最大効率の倍率
 #define CHARGE_COST	(SHOT_COST * 1.5f)	// チャージショットのコスト
+#define CHARGE_DAMAGE	(10.0f)	// チャージショットの威力
+#define NORMAL_DAMAGE	(5.0f)	// 通常ショットの威力
 #define ROLL_SPEED	(0.05f)	// 視点操作速度
 #define RAPID_TIME	(10)	// 連射モードにうつる猶予
 #define SPEED_SPRINT	(0.1f)	// ダッシュ時の移動倍率
@@ -560,7 +562,7 @@ void CPlayer::Input(void)
 
 	if (pKeyboard->GetTrigger(DIK_F5))
 	{// 死亡
-		Uninit();
+		Hit(100000);
 	}
 
 	if (pKeyboard->GetTrigger(DIK_F6))
@@ -801,7 +803,7 @@ void CPlayer::InputShot(void)
 						CBullet::TYPE_PLAYER,
 						true,
 						CHARGE_RADIUS * m_fParamPower,
-						10.0f
+						CHARGE_DAMAGE
 					);
 
 					// エネルギー消費
@@ -843,7 +845,8 @@ void CPlayer::InputShot(void)
 							BULLET_LIFE,
 							CBullet::TYPE_PLAYER,
 							false,
-							BULLET_RADIUS
+							BULLET_RADIUS,
+							NORMAL_DAMAGE
 						);
 
 						// 発射カウンター設定
@@ -904,7 +907,8 @@ void CPlayer::InputShot(void)
 							BULLET_LIFE,
 							CBullet::TYPE_PLAYER,
 							false,
-							BULLET_RADIUS
+							BULLET_RADIUS,
+							NORMAL_DAMAGE
 						);
 
 						if (m_pBodyUpper != nullptr)
@@ -936,7 +940,8 @@ void CPlayer::InputShot(void)
 							BULLET_LIFE,
 							CBullet::TYPE_PLAYER,
 							false,
-							BULLET_RADIUS
+							BULLET_RADIUS,
+							NORMAL_DAMAGE
 						);
 
 						if (m_pBodyUpper != nullptr)
@@ -1173,7 +1178,7 @@ void CPlayer::Lockon(void)
 
 			vecMazzle *= BULLET_SPEED * BULLET_LIFE;
 
-			m_pLockon->SetPosDest(GetPosition() - vecMazzle);
+			m_pLockon->SetPosDest(m_posMazzle - vecMazzle);
 		}
 	}
 }
@@ -1590,6 +1595,11 @@ void CPlayer::Hit(float fDamage)
 	if (m_nLife <= 0)
 	{// 死亡判定
 		m_nLife = 0;
+
+		D3DXVECTOR3 pos = { m_mtxWaist._41,m_mtxWaist._42, m_mtxWaist._43 };
+
+		// 爆発パーティクル
+		CParticle::Create(pos, CParticle::TYPE_EXPLOSION);
 
 		Uninit();
 	}
