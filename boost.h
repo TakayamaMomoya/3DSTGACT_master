@@ -28,11 +28,18 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	void Draw(void) {};
+	void Draw(void);
 
 private:
+	void Edit(void);
+
 	CObject2D *m_pObjectGauge;	// ゲージのポインタ
 	CObject2D *m_pCaption;	// 見出しのポインタ
+	CObject2D *m_pFrame;	// フレームのポインタ
+
+	D3DXVECTOR3 m_posFrame;	// フレームの位置
+	float m_fWidthFrame;	// フレームの幅
+	float m_fHeightFrame;	// フレームの高さ
 };
 
 #endif
