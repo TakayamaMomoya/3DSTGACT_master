@@ -26,7 +26,7 @@ public:
 
 private:
 	void Tilt(void);	// ŒX‚«‚Ì§Œä
-	void ChaseDefend(void);	// ’ÇÕˆ—
+	void ChaseTarget(void);	// ’ÇÕˆ—
 	void Fall(void);	// ’Ä—‚Ì“®‚«
 
 	float m_fAngleFall;	// ’Ä—Šp“x

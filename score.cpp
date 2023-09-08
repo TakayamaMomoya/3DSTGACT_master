@@ -113,8 +113,8 @@ CScore *CScore::Create(void)
 
 	if (pObject2D != nullptr)
 	{
-		pObject2D->SetPosition(D3DXVECTOR3(940.0f, 70.0f, 0.0f));
-		pObject2D->SetSize(120.0f, 60.0f);
+		pObject2D->SetPosition(D3DXVECTOR3(1030.0f, 80.0f, 0.0f));
+		pObject2D->SetSize(70.0f, 35.0f);
 
 		// テクスチャ番号取得
 		int nIdx = CManager::GetTexture()->Regist("data\\TEXTURE\\UI\\scoreBack.png");
@@ -130,8 +130,8 @@ CScore *CScore::Create(void)
 		if (pScore->m_pObjNumber == nullptr)
 		{
 			pScore->m_pObjNumber = CNumber::Create(NUM_PLACE, pScore->m_nScore);
-			pScore->m_pObjNumber->SetPosition(D3DXVECTOR3(1060.0f, 80.0f, 0.0f));
-			pScore->m_pObjNumber->SetSizeAll(20.0f,50.0f);
+			pScore->m_pObjNumber->SetPosition(D3DXVECTOR3(1100.0f, 80.0f, 0.0f));
+			pScore->m_pObjNumber->SetSizeAll(15.0f,32.5f);
 		}
 	}
 

@@ -120,7 +120,7 @@ void CEnemyMove::Update(void)
 	if (GetState() != STATE_DEATH)
 	{
 		// 追跡処理
-		CEnemyMove::ChaseDefend();
+		CEnemyMove::ChaseTarget();
 
 		// 傾きの制御
 		Tilt();
@@ -187,19 +187,16 @@ void CEnemyMove::Tilt(void)
 //=====================================================
 // 目標追跡
 //=====================================================
-void CEnemyMove::ChaseDefend(void)
+void CEnemyMove::ChaseTarget(void)
 {
 	// プレイヤー情報取得
-	CPlayer *pDefend = CGame::GetPlayer();
+	CPlayer *pPlayer = CGame::GetPlayer();
 
-	if (pDefend != nullptr)
+	if (pPlayer != nullptr)
 	{
 		if (GetMoveState() == MOVESTATE_CHASE)
 		{
-			if (IsFind() == false)
-			{
-				SetPosDest(pDefend->GetPosition());
-			}
+			SetPosDest(pPlayer->GetPosition());
 		}
 	}
 
@@ -257,10 +254,7 @@ void CEnemyMove::ChaseDefend(void)
 		{
 			if (GetCntAttack() >= ATTACK_FREQ)
 			{// 一定時間ごとに攻撃
-				if (IsFind() == false)
-				{
-					CMissile::Create(GetPosition());
-				}
+				CMissile::Create(GetPosition());
 
 				SetCntAttack(0);
 			}

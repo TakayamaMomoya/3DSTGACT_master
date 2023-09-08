@@ -236,7 +236,7 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// ƒAƒCƒeƒ€“Çˆ—
 	CItem::Load();
 
-	SetMode(CScene::MODE_TITLE);
+	SetMode(m_mode);
 
 	return S_OK;
 }

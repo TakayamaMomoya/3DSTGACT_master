@@ -78,7 +78,7 @@ CEnemy::CEnemy()
 	m_nScore = 0;
 	m_nCntClose = 0;
 	m_bLockon = false;
-	m_bFind = false;
+	m_bFind = true;
 	m_pCollisionSphere = nullptr;
 	m_state = STATE_NORMAL;
 	m_moveState = MOVESTATE_NONE;
@@ -356,7 +356,7 @@ void CEnemy::Update(void)
 	}
 
 	// çıìGèàóù
-	SearchTarget();
+	//SearchTarget();
 }
 
 //=====================================================

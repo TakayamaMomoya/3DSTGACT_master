@@ -34,6 +34,7 @@
 #include "pause.h"
 #include "dustmanager.h"
 #include "assess.h"
+#include "rank.h"
 
 //*****************************************************
 // マクロ定義
@@ -187,6 +188,9 @@ HRESULT CGame::Init(void)
 
 	// 敵生成
 	CEnemy::SpawnEnemy(3);
+
+	// ランクの生成
+	CRank::Create();
 
 	return S_OK;
 }

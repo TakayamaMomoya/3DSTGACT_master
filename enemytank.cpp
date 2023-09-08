@@ -30,7 +30,7 @@
 #define DEFAULT_SPEED	(4.0f)	// 基準のスピード
 #define DEFAULT_TILT	(-D3DX_PI * 0.1f)	// 基準の傾き
 #define TANK_HEIGHT	(150.0f)	// 高さ
-#define LIFE_TANK	(20)	// 初期体力
+#define LIFE_TANK	(25)	// 初期体力
 #define INITIAL_SCORE	(1500)	// 初期スコア
 
 //=====================================================
