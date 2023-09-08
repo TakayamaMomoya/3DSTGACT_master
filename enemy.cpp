@@ -585,11 +585,6 @@ void CEnemy::Hit(float fDamage)
 		return;
 	}
 
-	//if (m_state != STATE_NORMAL)
-	{// ƒ_ƒ[ƒWó‘Ô‚È‚ç’Ê‚ç‚È‚¢
-		//return;
-	}
-
 	// ‘Ì—ÍŒ¸­
 	SetLife(GetLife() - fDamage);
 

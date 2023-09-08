@@ -31,6 +31,7 @@ private:
 
 	float m_fAngleFall;	// ’Ä—ŽŠp“x
 	float m_fRotateFall;	// ’Ä—ŽŽž‚Ì‰ñ“]—Ê
+	bool m_bFall;	// ’Ä—Ž‚·‚é‚©‚Ç‚¤‚©
 };
 
 class CEnemyAttack : public CEnemy

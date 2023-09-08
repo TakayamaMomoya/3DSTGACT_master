@@ -43,6 +43,7 @@
 #define FALL_SPEED	(4.0f)	// 墜落速度
 #define ROLL_FACT	(0.05f)	// 旋回速度
 #define INITIAL_SCORE	(500)	// 初期スコア
+#define FALL_POSSIBILITY	(20)	// 墜落するパーセンテージ
 
 //=====================================================
 // コンストラクタ
@@ -51,6 +52,7 @@ CEnemyMove::CEnemyMove()
 {
 	m_fAngleFall = 0.0f;
 	m_fRotateFall = 0.0f;
+	m_bFall = false;
 }
 
 //=====================================================
@@ -77,7 +79,7 @@ HRESULT CEnemyMove::Init(void)
 
 	// 初期の体力設定
 	SetLife(LIFE_HELI);
-
+	
 	// 墜落時の向き誤差を設定
 	m_fAngleFall = (float)(rand() % (int)(3.14 * 100.0f) - 3.14 * 50.0f) / 100.0f;
 
@@ -86,6 +88,14 @@ HRESULT CEnemyMove::Init(void)
 
 	// スコア設定
 	SetScore(INITIAL_SCORE);
+
+	// 墜落するかどうかの設定
+	int nRand = rand() % 100;
+
+	if (nRand < FALL_POSSIBILITY)
+	{
+		m_bFall = true;
+	}
 
 	return S_OK;
 }
@@ -117,8 +127,15 @@ void CEnemyMove::Update(void)
 	}
 	else
 	{
-		// 墜落
-		Fall();
+		if (m_bFall)
+		{
+			// 墜落
+			Fall();
+		}
+		else
+		{
+			Death();
+		}
 	}
 
 	if (GetState() == STATE_DEATH)
@@ -226,7 +243,7 @@ void CEnemyMove::ChaseDefend(void)
 
 	if (length > ATTACK_RANGE)
 	{// 目標から離れていたら
-	 // 目標方向へ進む
+		// 目標方向へ進む
 		SetMove(D3DXVECTOR3
 		(
 			sinf(GetRot().y) * SPEED_MOVE,
@@ -269,7 +286,6 @@ void CEnemyMove::Fall(void)
 {
 	// 汎用処理取得
 	CUniversal *pUniversal = CManager::GetUniversal();
-
 	D3DXVECTOR3 move,rot;
 
 	// 移動方向取得

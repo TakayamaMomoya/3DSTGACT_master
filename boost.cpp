@@ -184,8 +184,6 @@ void CBoost::Update(void)
 		m_pObjectGauge->SetSize(GAUGE_WIDTH, fHeight);
 		m_pObjectGauge->SetVtx();
 	}
-
-	//Edit();
 }
 
 //=====================================================
@@ -193,8 +191,8 @@ void CBoost::Update(void)
 //=====================================================
 void CBoost::Draw(void)
 {
-	CManager::GetDebugProc()->Print("\nフレームの位置：[%f,%f,%f]", m_posFrame.x, m_posFrame.y, m_posFrame.z);
-	CManager::GetDebugProc()->Print("\nフレームの大きさ：[%f,%f]", m_fWidthFrame, m_fHeightFrame);
+	//CManager::GetDebugProc()->Print("\nフレームの位置：[%f,%f,%f]", m_posFrame.x, m_posFrame.y, m_posFrame.z);
+	//CManager::GetDebugProc()->Print("\nフレームの大きさ：[%f,%f]", m_fWidthFrame, m_fHeightFrame);
 }
 
 //=====================================================

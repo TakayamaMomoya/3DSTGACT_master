@@ -121,9 +121,9 @@ private:
 	CCollisionCube *m_pCollisionCube;	// 立方体の当たり判定
 	bool m_bLockon;	// ロックオンされているかどうか
 	bool m_bFind;	// 見つけているかどうか
-	static CEnemy *m_apEnemy[NUM_OBJECT];
 	static int m_nNumWave;	// ウェーブ数
 	static WAVEINFO *m_pWaveInfo;	// ウェーブ情報のポインタ
+	static CEnemy *m_apEnemy[NUM_OBJECT];	// 敵情報
 	CShadow *m_pShadow;	// 影のポインタ
 	STATE m_state;	// 状態
 	int m_nTimerDeath;	// 死亡までのカウンタ
