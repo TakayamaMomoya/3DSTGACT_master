@@ -14,20 +14,24 @@
 #include "object2D.h"
 #include "texture.h"
 #include "number.h"
+#include "inputkeyboard.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define FRAME_POS	(D3DXVECTOR3(830.0f,60.0f,0.0f))	// フレームの初期位置
+#define FRAME_POS	(D3DXVECTOR3(830.0f,70.0f,0.0f))	// フレームの初期位置
 #define FRAME_WIDTH	(465.0f)	// フレームの横幅
 #define FRAME_HEIGHT	(172.0f)	// フレームの縦の長さ
 #define FRAME_SCALE	(0.3f)	// フレームのスケール
 #define FRAME_PATH	"data\\TEXTURE\\UI\\rank00.png"	// フレームのパス
 #define NUM_PLACE	(2)	// 桁数
-#define RANK_POS	(D3DXVECTOR3(725.0f,60.0f,0.0f))	// ランクの位置
-#define GAUGE_WIDTH	(100.0f)	// ゲージの横幅
+#define RANK_POS	(D3DXVECTOR3(725.0f,70.0f,0.0f))	// ランクの位置
+#define GAUGE_WIDTH	(108.0f)	// ゲージの横幅
 #define GAUGE_HEIGHT	(16.0f)	// ゲージの縦の長さ
-#define GAUGE_POS	(D3DXVECTOR3(745.0f,88.0f,0.0f))	// ゲージの位置
+#define GAUGE_POS	(D3DXVECTOR3(745.0f,98.0f,0.0f))	// ゲージの位置
+#define INITIAL_RANK	(1)	// 初期ランク
+#define MAX_RANK	(99)	// ランクの最大値
+#define GAUGE_COl	(D3DXCOLOR(0.9f,0.9f,0.9f,0.9f))	// ゲージの色
 
 //=====================================================
 // コンストラクタ
@@ -54,6 +58,19 @@ CRank::~CRank()
 //=====================================================
 HRESULT CRank::Init(void)
 {
+	m_nRank = INITIAL_RANK;
+
+	m_pGaugeProgress = CObject2D::Create(6);
+
+	if (m_pGaugeProgress != nullptr)
+	{
+		m_pGaugeProgress->SetPosition(GAUGE_POS);
+		m_pGaugeProgress->SetSize(GAUGE_WIDTH, GAUGE_HEIGHT);
+
+		m_pGaugeProgress->SetVtx();
+		m_pGaugeProgress->SetCol(GAUGE_COl);
+	}
+
 	m_pFrame = CObject2D::Create(6);
 
 	if (m_pFrame != nullptr)
@@ -67,17 +84,6 @@ HRESULT CRank::Init(void)
 		m_pFrame->SetIdxTexture(nIdx);
 		m_pFrame->SetVtx();
 	}
-
-	m_pGaugeProgress = CObject2D::Create(6);
-
-	if (m_pGaugeProgress != nullptr)
-	{
-		m_pGaugeProgress->SetPosition(GAUGE_POS);
-		m_pGaugeProgress->SetSize(GAUGE_WIDTH, GAUGE_HEIGHT);
-
-		m_pGaugeProgress->SetVtx();
-	}
-
 
 	if (m_pRankNum == nullptr)
 	{
@@ -127,8 +133,18 @@ void CRank::Uninit(void)
 //=====================================================
 void CRank::Update(void)
 {
+	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
+
 	// 進行ゲージの管理
 	ManageGauge();
+
+	if (pKeyboard != nullptr)
+	{
+		if (pKeyboard->GetPress(DIK_O))
+		{
+			AddProgress(1.0f);
+		}
+	}
 }
 
 //=====================================================
@@ -140,6 +156,19 @@ void CRank::ManageGauge(void)
 	{
 		return;
 	}
+
+	float fWidth;
+	D3DXVECTOR3 pos;
+
+	fWidth = m_fProgress * GAUGE_WIDTH;
+
+	// 位置設定
+	pos = { GAUGE_POS.x + fWidth,GAUGE_POS.y,0.0f };
+
+	// サイズ設定
+	m_pGaugeProgress->SetPosition(pos);
+	m_pGaugeProgress->SetSize(fWidth, GAUGE_HEIGHT);
+	m_pGaugeProgress->SetVtx();
 }
 
 //=====================================================
@@ -159,6 +188,14 @@ void CRank::AddProgress(float fValue)
 		m_fProgress = 0.0f;
 
 		m_nRank++;
+
+		// ランク制限
+		if (m_nRank > MAX_RANK)
+		{
+			m_nRank = MAX_RANK;
+
+			m_fProgress = 1.0f;
+		}
 	}
 
 	if (m_pRankNum != nullptr)

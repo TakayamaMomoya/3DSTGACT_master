@@ -82,26 +82,26 @@ HRESULT CCockPit::Init(void)
 	if (m_pLife == nullptr)
 	{
 		m_pLife = CNumber::Create(NUM_PLACE, 0);
-		m_pLife->SetPosition(D3DXVECTOR3(900.0f, 600.0f, 0.0f));
+		m_pLife->SetPosition(D3DXVECTOR3(1030.0f, 660.0f, 0.0f));
 		m_pLife->SetSizeAll(20.0f, 50.0f);
 	}
 
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
 		if (m_apGauge[nCnt] == nullptr)
-		{// ブーストゲージの生成
+		{// パラメーターゲージの生成
 			m_apGauge[nCnt] = CObject2D::Create(7);
 
 			if (m_apGauge[nCnt] != nullptr)
 			{
-				m_apGauge[nCnt]->SetPosition(D3DXVECTOR3(100.0f, 50.0f + BETWEEN_HEIGHT * nCnt, 0.0f));
+				m_apGauge[nCnt]->SetPosition(D3DXVECTOR3(100.0f, 60.0f + BETWEEN_HEIGHT * nCnt, 0.0f));
 				m_apGauge[nCnt]->SetSize(10.0f, GAUGE_HEIGHT);
 				m_apGauge[nCnt]->SetVtx();
 			}
 		}
 
 		if (m_apFrame[nCnt] == nullptr)
-		{// ブーストゲージの生成
+		{// パラメーターフレームの生成
 			m_apFrame[nCnt] = CObject2D::Create(7);
 
 			if (m_apFrame[nCnt] != nullptr)
@@ -113,7 +113,7 @@ HRESULT CCockPit::Init(void)
 				m_apFrame[nCnt]->SetVtx();
 				m_apFrame[nCnt]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-				m_apFrame[nCnt]->SetPosition(D3DXVECTOR3(40.0f, 50.0f + BETWEEN_HEIGHT * nCnt, 0.0f));
+				m_apFrame[nCnt]->SetPosition(D3DXVECTOR3(40.0f, 60.0f + BETWEEN_HEIGHT * nCnt, 0.0f));
 				m_apFrame[nCnt]->SetSize(40.0f, 40.0f);
 				m_apFrame[nCnt]->SetVtx();
 			}
@@ -131,7 +131,7 @@ HRESULT CCockPit::Init(void)
 				m_apIcon[nCnt]->SetIdxTexture(nIdx);
 				m_apIcon[nCnt]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-				m_apIcon[nCnt]->SetPosition(D3DXVECTOR3(40.0f, 50.0f + BETWEEN_HEIGHT * nCnt, 0.0f));
+				m_apIcon[nCnt]->SetPosition(D3DXVECTOR3(40.0f, 60.0f + BETWEEN_HEIGHT * nCnt, 0.0f));
 				m_apIcon[nCnt]->SetSize(40.0f, 40.0f);
 				m_apIcon[nCnt]->SetVtx();
 			}
