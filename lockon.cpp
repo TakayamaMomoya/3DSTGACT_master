@@ -98,8 +98,6 @@ void CLockon::Update(void)
 
 		if (pCameraInfo != nullptr)
 		{
-			//m_posDest = pCameraInfo->posRDest;
-
 			// ·•ª‚ÌƒxƒNƒgƒ‹‚ðŽæ“¾
 			vecDiff = m_pLockOn->GetPosition() - pCameraInfo->posV;
 

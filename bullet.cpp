@@ -272,9 +272,16 @@ void CBullet::Update(void)
 		{
 			// メッシュフィールドとの当たり判定
 			fHeight = pMesh->GetHeight(GetPosition(), nullptr);
+
+			if (fHeight > GetPosition().y)
+			{
+				CParticle::Create(GetPosition(), CParticle::TYPE_SAND);
+
+				Death();
+			}
 		}
 
-		if (m_nLife < 0 || fHeight > GetPosition().y)
+		if (m_nLife < 0)
 		{// 自分の削除
 			Death();
 		}

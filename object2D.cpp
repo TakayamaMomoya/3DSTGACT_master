@@ -50,13 +50,16 @@ HRESULT CObject2D::Init(void)
 
 	if (pDevice != nullptr)
 	{
-		// 頂点バッファの生成
-		pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
-			D3DUSAGE_WRITEONLY,
-			FVF_VERTEX_2D,
-			D3DPOOL_MANAGED,
-			&m_pVtxBuff,
-			nullptr);
+		if (m_pVtxBuff == nullptr)
+		{
+			// 頂点バッファの生成
+			pDevice->CreateVertexBuffer(sizeof(VERTEX_2D) * 4,
+				D3DUSAGE_WRITEONLY,
+				FVF_VERTEX_2D,
+				D3DPOOL_MANAGED,
+				&m_pVtxBuff,
+				nullptr);
+		}
 	}
 
 	// 頂点情報のポインタ
@@ -255,10 +258,13 @@ CObject2D *CObject2D::Create(int nPriority, float fCenterHeight)
 		// インスタンス生成
 		pObject2D = new CObject2D(nPriority);
 
-		pObject2D->m_fCenterHeight = fCenterHeight;
+		if (pObject2D != nullptr)
+		{
+			pObject2D->m_fCenterHeight = fCenterHeight;
 
-		// 初期化処理
-		pObject2D->Init();
+			// 初期化処理
+			pObject2D->Init();
+		}
 	}
 
 	return pObject2D;

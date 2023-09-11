@@ -15,6 +15,9 @@
 #include "texture.h"
 #include "number.h"
 #include "inputkeyboard.h"
+#include "player.h"
+#include "game.h"
+#include "assess.h"
 
 //*****************************************************
 // マクロ定義
@@ -176,7 +179,24 @@ void CRank::ManageGauge(void)
 //=====================================================
 void CRank::AddProgress(float fValue)
 {
-	m_fProgress += fValue;
+	// 評価取得
+	CPlayer *pPlayer = CGame::GetPlayer();
+	CAssess *pAssess = nullptr;
+
+	if (pPlayer != nullptr)
+	{
+		pAssess = pPlayer->GetAssess();
+ 	}
+
+	// 評価の平均値算出
+	float fAve = 0.0f;
+
+	if (pAssess != nullptr)
+	{
+		fAve = (pAssess->GetAttack() + pAssess->GetDodge() + pAssess->GetHit()) / 3;
+	}
+
+	m_fProgress += fValue * fAve + fValue;
 
 	// 値の制限
 	if (m_fProgress < 0.0f)

@@ -34,6 +34,7 @@ public:
 	void Update(void);
 	void Draw(void);
 	void AddProgress(float fValue);
+	int GetRank(void) { return m_nRank; }
 
 private:
 	void ManageGauge(void);	// 進行ゲージの管理

@@ -54,6 +54,7 @@ CMeshField *CGame::m_pMeshField = nullptr;	// メッシュフィールドのポインタ
 CScore *CGame::m_pScore = nullptr;	// スコアのポインタ
 CTimer *CGame::m_pTimer = nullptr;	// タイマーのポインタ
 CDefend *CGame::m_pDefend = nullptr;	// 護衛対象へのポインタ
+CRank *CGame::m_pRank = nullptr;	// ランクへのポインタ
 CEdit *CGame::m_pEdit = nullptr;	// エディターへのポインタ
 CGame::STATE CGame::m_state = STATE_NONE;
 bool CGame::m_bPause = false;
@@ -189,8 +190,10 @@ HRESULT CGame::Init(void)
 	// 敵生成
 	CEnemy::SpawnEnemy(3);
 
-	// ランクの生成
-	CRank::Create();
+	if (m_pRank == nullptr)
+	{// ランク生成
+		m_pRank = CRank::Create();
+	}
 
 	return S_OK;
 }
@@ -237,6 +240,13 @@ void CGame::Uninit(void)
 		m_pTimer->Uninit();
 
 		m_pTimer = nullptr;
+	}
+
+	if (m_pRank != nullptr)
+	{// ランクの終了・破棄
+		m_pRank->Uninit();
+
+		m_pRank = nullptr;
 	}
 
 #if _DEBUG

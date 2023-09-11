@@ -304,7 +304,7 @@ void CEnemyMove::Fall(void)
 
 	SetRot(rot);
 
-	// 地面に当たったら爆発
+	// メッシュフィールドとの当たり判定
 	CMeshField *pMesh = CGame::GetMeshField();
 
 	CParticle::Create(GetPosition(), CParticle::TYPE_SMOKE);
@@ -314,8 +314,10 @@ void CEnemyMove::Fall(void)
 		float  fHeight = CGame::GetMeshField()->GetHeight(GetPosition(), &move);
 
 		if (fHeight >= GetPosition().y)
-		{
+		{// メッシュフィールドに当たったら爆発
 			CDebrisSpawner::Create(GetPosition(), 15.0f, 1, 3);
+
+			CParticle::Create(GetPosition(), CParticle::TYPE_SAND);
 
 			Death();
 		}

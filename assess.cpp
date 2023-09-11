@@ -12,14 +12,17 @@
 #include "object2D.h"
 #include "manager.h"
 #include "debugproc.h"
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define GAUGE_POS	(D3DXVECTOR3(50.0f,550.0f,0.0f))	// ゲージの初期位置
-#define GAUGE_WIDTH	(20.0f)	// ゲージの横幅
-#define GAUGE_HEIGHT	(125.0f)	// ゲージの縦の長さ
+#define GAUGE_WIDTH	(SCREEN_WIDTH / 3)	// ゲージの横幅
+#define GAUGE_HEIGHT	(9.0f)	// ゲージの縦の長さ
 #define BETWEEN_HEIGHT	(50.0f)	// ゲージ間の幅
+#define FRAME_HEIGHT	(10.0f)	// フレームの縦の長さ
+#define FRAME_WIDTH	(SCREEN_WIDTH / 3)	// フレームの横幅
 
 //=====================================================
 // コンストラクタ
@@ -29,6 +32,8 @@ CAssess::CAssess(int nPriority)
 	m_fAssessHit = 0.0f;
 	m_fAssessDodge = 0.0f;
 	m_fAssessAttack = 0.0f;
+	ZeroMemory(&m_apGauge[0], PARAM_MAX);
+	ZeroMemory(&m_apFrame[0], PARAM_MAX);
 }
 
 //=====================================================
@@ -52,9 +57,28 @@ HRESULT CAssess::Init(void)
 
 			if (m_apGauge[nCnt] != nullptr)
 			{
-				m_apGauge[nCnt]->SetPosition(D3DXVECTOR3(GAUGE_POS.x + BETWEEN_HEIGHT * nCnt, GAUGE_POS.y, 0.0f));
+				m_apGauge[nCnt]->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
 				m_apGauge[nCnt]->SetSize(GAUGE_WIDTH, GAUGE_HEIGHT);
 				m_apGauge[nCnt]->SetVtx();
+			}
+		}
+
+		if (m_apFrame[nCnt] == nullptr)
+		{// パラメーターフレームの生成
+			m_apFrame[nCnt] = CObject2D::Create(7);
+
+			if (m_apFrame[nCnt] != nullptr)
+			{
+				// テクスチャ番号取得
+				int nIdx = CManager::GetTexture()->Regist("data\\TEXTURE\\UI\\frame04.png");
+
+				m_apFrame[nCnt]->SetIdxTexture(nIdx);
+				m_apFrame[nCnt]->SetVtx();
+				m_apFrame[nCnt]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+
+				m_apFrame[nCnt]->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
+				m_apFrame[nCnt]->SetSize(FRAME_WIDTH * 0.5f, FRAME_HEIGHT);
+				m_apFrame[nCnt]->SetVtx();
 			}
 		}
 	}
@@ -74,6 +98,13 @@ void CAssess::Uninit(void)
 			m_apGauge[nCnt]->Uninit();
 
 			m_apGauge[nCnt] = nullptr;
+		}
+
+		if (m_apFrame[nCnt] != nullptr)
+		{
+			m_apFrame[nCnt]->Uninit();
+
+			m_apFrame[nCnt] = nullptr;
 		}
 	}
 
@@ -108,14 +139,10 @@ void CAssess::ManageGauge(void)
 	{
 		if (m_apGauge[nCnt] != nullptr)
 		{
-			float fHeight = aParam[nCnt] * GAUGE_HEIGHT;
+			float fWidth = aParam[nCnt] * GAUGE_WIDTH * 0.5f;
 
-			// 位置設定
-			D3DXVECTOR3 pos = { GAUGE_POS.x + BETWEEN_HEIGHT * nCnt,GAUGE_POS.y - fHeight,0.0f };
- 
 			// サイズ設定
-			m_apGauge[nCnt]->SetPosition(pos);
-			m_apGauge[nCnt]->SetSize(GAUGE_WIDTH, fHeight);
+			m_apGauge[nCnt]->SetSize(fWidth, GAUGE_HEIGHT);
 			m_apGauge[nCnt]->SetVtx();
 		}
 	}

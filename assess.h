@@ -35,6 +35,9 @@ public:
 	void AddHit(float fHit) { m_fAssessHit += fHit; }
 	void AddDodge(float fDodge) { m_fAssessDodge += fDodge; }
 	void AddAttack(float fAttack) { m_fAssessAttack += fAttack; }
+	float GetHit(void) { return m_fAssessHit; }
+	float GetDodge(void) { return m_fAssessDodge; }
+	float GetAttack(void) { return m_fAssessAttack; }
 
 private:
 	enum PARAM
@@ -52,6 +55,7 @@ private:
 	float m_fAssessDodge;	// 回避率の評価
 	float m_fAssessAttack;	// 攻撃効率の評価
 	CObject2D *m_apGauge[PARAM_MAX];	// ゲージのポインタ
+	CObject2D *m_apFrame[PARAM_MAX];	// フレームのポインタ
 };
 
 #endif

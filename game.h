@@ -25,6 +25,7 @@ class CDefend;
 class CEdit;
 class CMeshWall;
 class CPause;
+class CRank;
 
 //*****************************************************
 // クラスの定義
@@ -53,6 +54,7 @@ public:
 	static CTimer *GetTimer(void) { return m_pTimer; }
 	static CDefend *GetDefend(void) { return m_pDefend; }
 	static CEdit *GetEdit(void) { return m_pEdit; }
+	static CRank *GetRank(void) { return m_pRank; }
 	static void ReleasePlayer(void);
 	static void ReleaseScore(void);
 	static void ReleaseTimer(void);
@@ -84,6 +86,7 @@ private:
 	static CTimer *m_pTimer;	// タイマーのポインタ
 	static CDefend *m_pDefend;	// 護衛対象へのポインタ
 	static CEdit *m_pEdit;	// エディターへのポインタ
+	static CRank *m_pRank;	// ランクへのポインタ
 	static STATE m_state;	// 状態
 	CMeshWall *m_apMeshWall[WALLTYPE_MAX];	// 壁のポインタ
 	bool m_bPhoto;	// フォトモードかどうか

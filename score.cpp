@@ -13,12 +13,15 @@
 #include "renderer.h"
 #include "game.h"
 #include "texture.h"
+#include "rank.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define NUM_PLACE	(6)	// 桁数
-#define SCORE_SPEED	(13)	// スコアの変わるスピード	
+#define SCORE_SPEED	(71)	// スコアの変わるスピード
+#define RANK_BONUS	(0.05f)	// 1ランクにおけるボーナス倍率
+#define RANK_RATE	(0.0004f)	// ランクの上がる倍率
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -71,22 +74,7 @@ void CScore::Uninit(void)
 void CScore::Update(void)
 {
 	//スコア値上昇演出==============================
-	if (m_nScore < m_nSocreDest)
-	{//上昇
-		m_nScore += SCORE_SPEED;
-		if (m_nScore > m_nSocreDest)
-		{//停止
-			m_nScore = m_nSocreDest;
-		}
-	}
-	else if (m_nScore > m_nSocreDest)
-	{//減少
-		m_nScore -= SCORE_SPEED;
-		if (m_nScore < m_nSocreDest)
-		{//停止
-			m_nScore = m_nSocreDest;
-		}
-	}
+	m_nScore += (m_nSocreDest - m_nScore) * 0.1f;
 
 	if (m_pObjNumber != nullptr)
 	{
@@ -99,6 +87,16 @@ void CScore::Update(void)
 //=====================================================
 void CScore::AddScore(int nValue)
 {
+	// ランク取得
+	CRank *pRank = CGame::GetRank();
+
+	if (pRank != nullptr)
+	{// ランクによるボーナス
+		nValue += (int)(nValue * RANK_BONUS * pRank->GetRank());
+
+		pRank->AddProgress(nValue * RANK_RATE);
+	}
+
 	m_nSocreDest += nValue;
 }
 
