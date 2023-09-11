@@ -23,6 +23,8 @@
 #define BETWEEN_HEIGHT	(50.0f)	// ゲージ間の幅
 #define FRAME_HEIGHT	(10.0f)	// フレームの縦の長さ
 #define FRAME_WIDTH	(SCREEN_WIDTH / 3)	// フレームの横幅
+#define FRAME_PATH	"data\\TEXTURE\\UI\\frame04.png"	// フレームのパス
+#define GAUGE_PATH	"data\\TEXTURE\\UI\\gauge00.png"	// ゲージのパス
 
 //=====================================================
 // コンストラクタ
@@ -32,8 +34,7 @@ CAssess::CAssess(int nPriority)
 	m_fAssessHit = 0.0f;
 	m_fAssessDodge = 0.0f;
 	m_fAssessAttack = 0.0f;
-	ZeroMemory(&m_apGauge[0], PARAM_MAX);
-	ZeroMemory(&m_apFrame[0], PARAM_MAX);
+	ZeroMemory(&m_apParam[0], PARAM_MAX);
 }
 
 //=====================================================
@@ -51,34 +52,48 @@ HRESULT CAssess::Init(void)
 {
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
-		if (m_apGauge[nCnt] == nullptr)
-		{// ブーストゲージの生成
-			m_apGauge[nCnt] = CObject2D::Create(7);
+		if (m_apParam[nCnt] != nullptr)
+		{
+			continue;
+		}
+		else
+		{
+			m_apParam[nCnt] = new Param;
+		}
 
-			if (m_apGauge[nCnt] != nullptr)
+		if (m_apParam[nCnt]->pGauge == nullptr)
+		{// ブーストゲージの生成
+			m_apParam[nCnt]->pGauge = CObject2D::Create(7);
+
+			if (m_apParam[nCnt]->pGauge != nullptr)
 			{
-				m_apGauge[nCnt]->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
-				m_apGauge[nCnt]->SetSize(GAUGE_WIDTH, GAUGE_HEIGHT);
-				m_apGauge[nCnt]->SetVtx();
+				// テクスチャ番号取得
+				int nIdx = CManager::GetTexture()->Regist(GAUGE_PATH);
+
+				m_apParam[nCnt]->pGauge->SetIdxTexture(nIdx);
+				m_apParam[nCnt]->pGauge->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				m_apParam[nCnt]->pGauge->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
+				m_apParam[nCnt]->pGauge->SetSize(GAUGE_WIDTH, GAUGE_HEIGHT);
+				m_apParam[nCnt]->pGauge->SetVtx();
 			}
 		}
 
-		if (m_apFrame[nCnt] == nullptr)
+		if (m_apParam[nCnt]->pFrame == nullptr)
 		{// パラメーターフレームの生成
-			m_apFrame[nCnt] = CObject2D::Create(7);
+			m_apParam[nCnt]->pFrame = CObject2D::Create(7);
 
-			if (m_apFrame[nCnt] != nullptr)
+			if (m_apParam[nCnt]->pFrame != nullptr)
 			{
 				// テクスチャ番号取得
-				int nIdx = CManager::GetTexture()->Regist("data\\TEXTURE\\UI\\frame04.png");
+				int nIdx = CManager::GetTexture()->Regist(FRAME_PATH);
 
-				m_apFrame[nCnt]->SetIdxTexture(nIdx);
-				m_apFrame[nCnt]->SetVtx();
-				m_apFrame[nCnt]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				m_apParam[nCnt]->pFrame->SetIdxTexture(nIdx);
+				m_apParam[nCnt]->pFrame->SetVtx();
+				m_apParam[nCnt]->pFrame->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-				m_apFrame[nCnt]->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
-				m_apFrame[nCnt]->SetSize(FRAME_WIDTH * 0.5f, FRAME_HEIGHT);
-				m_apFrame[nCnt]->SetVtx();
+				m_apParam[nCnt]->pFrame->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
+				m_apParam[nCnt]->pFrame->SetSize(FRAME_WIDTH * 0.5f, FRAME_HEIGHT);
+				m_apParam[nCnt]->pFrame->SetVtx();
 			}
 		}
 	}
@@ -93,18 +108,24 @@ void CAssess::Uninit(void)
 {
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
-		if (m_apGauge[nCnt] != nullptr)
+		if (m_apParam[nCnt] != nullptr)
 		{
-			m_apGauge[nCnt]->Uninit();
+			if (m_apParam[nCnt]->pGauge != nullptr)
+			{// ゲージの破棄
+				m_apParam[nCnt]->pGauge->Uninit();
 
-			m_apGauge[nCnt] = nullptr;
-		}
+				m_apParam[nCnt]->pGauge = nullptr;
+			}
 
-		if (m_apFrame[nCnt] != nullptr)
-		{
-			m_apFrame[nCnt]->Uninit();
+			if (m_apParam[nCnt]->pFrame != nullptr)
+			{// フレームの破棄
+				m_apParam[nCnt]->pFrame->Uninit();
 
-			m_apFrame[nCnt] = nullptr;
+				m_apParam[nCnt]->pFrame = nullptr;
+			}
+
+			// パラメーター情報の破棄
+			delete m_apParam[nCnt];
 		}
 	}
 
@@ -137,13 +158,13 @@ void CAssess::ManageGauge(void)
 
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
-		if (m_apGauge[nCnt] != nullptr)
+		if (m_apParam[nCnt]->pGauge != nullptr)
 		{
 			float fWidth = aParam[nCnt] * GAUGE_WIDTH * 0.5f;
 
 			// サイズ設定
-			m_apGauge[nCnt]->SetSize(fWidth, GAUGE_HEIGHT);
-			m_apGauge[nCnt]->SetVtx();
+			m_apParam[nCnt]->pGauge->SetSize(fWidth, GAUGE_HEIGHT);
+			m_apParam[nCnt]->pGauge->SetVtx();
 		}
 	}
 }

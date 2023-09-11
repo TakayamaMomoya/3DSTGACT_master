@@ -48,14 +48,27 @@ private:
 		PARAM_MAX
 	};
 
+	enum GAUGESTATE
+	{
+		GAUGESTATE_EXTEND = 0,	// 伸びる状態
+		GAUGESTATE_SHRINK,	// 縮む状態
+		GAUGESTATE_MAX
+	};
+
+	struct Param
+	{
+		CObject2D *pGauge;	// ゲージのポインタ
+		CObject2D *pFrame;	// フレームのポインタ
+		GAUGESTATE state;	// 状態
+	};
+
 	void ManageGauge(void);	// ゲージの管理
 	void LimitAssess(void);	// 評価の制限
 
 	float m_fAssessHit;	// ヒット率の評価
 	float m_fAssessDodge;	// 回避率の評価
 	float m_fAssessAttack;	// 攻撃効率の評価
-	CObject2D *m_apGauge[PARAM_MAX];	// ゲージのポインタ
-	CObject2D *m_apFrame[PARAM_MAX];	// フレームのポインタ
+	Param *m_apParam[PARAM_MAX];	// パラメーターの情報
 };
 
 #endif
