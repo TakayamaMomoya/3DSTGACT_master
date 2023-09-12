@@ -23,7 +23,7 @@
 // マクロ定義
 //*****************************************************
 #define SPEED_MOVE	(5.5f)	// 移動速度
-#define ATTACK_FREQ	(180)	// 攻撃する頻度
+#define ATTACK_FREQ	(30)	// 攻撃する頻度
 #define BULLET_SPEED	(90.0f)	// 弾のスピード
 #define INITIAL_HEIGHT	(300.0f)	// 初期の高さ
 #define ATTACK_RANGE	(7000.0f)	// 攻撃する距離

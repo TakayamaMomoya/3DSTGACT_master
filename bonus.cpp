@@ -72,33 +72,7 @@ CBonus::CBonus(int nPriority) : CObject(nPriority)
 //=====================================================
 CBonus::~CBonus()
 {
-	if (m_pHead == this)
-	{// 先頭アドレスの破棄
-		// 先頭アドレスを次のアドレスに引き継ぐ
-		m_pHead = m_pNext;
 
-		if (m_pNext != nullptr)
-		{
-			m_pNext->m_pPrev = nullptr;
-		}
-	}
-	else if (m_pTail == this)
-	{// 最後尾アドレスの破棄
-		if (m_pPrev != nullptr)
-		{// 最後尾アドレスを前のアドレスに引き継ぐ
-			m_pTail = m_pPrev;
-
-			m_pPrev->m_pNext = nullptr;
-		}
-	}
-	else
-	{// 真ん中のアドレスの破棄
-	 // 前のアドレスから次のアドレスをつなぐ
-		m_pPrev->m_pNext = m_pNext;
-
-		// 次のアドレスから前のアドレスをつなぐ
-		m_pNext->m_pPrev = m_pPrev;
-	}
 }
 
 //=====================================================
@@ -136,6 +110,34 @@ void CBonus::Uninit(void)
 		m_pCaption->Uninit();
 
 		m_pCaption = nullptr;
+	}
+
+	if (m_pHead == this)
+	{// 先頭アドレスの破棄
+	 // 先頭アドレスを次のアドレスに引き継ぐ
+		m_pHead = m_pNext;
+
+		if (m_pNext != nullptr)
+		{
+			m_pNext->m_pPrev = nullptr;
+		}
+	}
+	else if (m_pTail == this)
+	{// 最後尾アドレスの破棄
+		if (m_pPrev != nullptr)
+		{// 最後尾アドレスを前のアドレスに引き継ぐ
+			m_pTail = m_pPrev;
+
+			m_pPrev->m_pNext = nullptr;
+		}
+	}
+	else
+	{// 真ん中のアドレスの破棄
+	 // 前のアドレスから次のアドレスをつなぐ
+		m_pPrev->m_pNext = m_pNext;
+
+		// 次のアドレスから前のアドレスをつなぐ
+		m_pNext->m_pPrev = m_pPrev;
 	}
 
 	Release();
@@ -266,7 +268,7 @@ CBonus *CBonus::Create(TYPE type)
 
 	if (pBonus != nullptr)
 	{
-		pBonus->m_pCaption = CObject2D::Create(6);
+		pBonus->m_pCaption = CObject2D::Create(7);
 
 		if (pBonus->m_pCaption != nullptr)
 		{

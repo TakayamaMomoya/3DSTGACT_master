@@ -75,6 +75,7 @@ public:
 	static bool IsCrossTrigger(D3DXVECTOR3 posTarget, D3DXVECTOR3 posTargetOld,D3DXVECTOR3 vecSorce, D3DXVECTOR3 vecDest);
 	bool TriggerCube(TAG tag);
 	bool ChckObstclBtwn(CObject *pObject,D3DXVECTOR3 vecDiff);
+	static int GetNumAll(void) { return m_nNumAll; }
 
 private:
 	D3DXVECTOR3 m_pos;	// èÍèä
@@ -83,6 +84,7 @@ private:
 	TYPE m_type;
 	static CCollision *m_apCollision[NUM_OBJECT];
 	int m_nID;	// î‘çÜ
+	static int m_nNumAll;
 	CObject *m_pObjectOwner;
 	CObject *m_pObjectOther;
 };

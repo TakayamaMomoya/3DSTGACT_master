@@ -905,7 +905,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\Visual Studio 2015\\Projects\\プログラミング応用DirectX\\07_alpha\\data\\TEXTURE\\MATERIAL\\coc_white.jpg";
+    "data\\TEXTURE\\MATERIAL\\coc_white.jpg";
    }
   }
   Material {
@@ -914,7 +914,7 @@ Mesh {
    0.000000;0.000000;0.000000;;
    0.000000;0.000000;0.000000;;
    TextureFilename {
-    "C:\\Users\\student\\Documents\\Visual Studio 2015\\Projects\\プログラミング応用DirectX\\07_alpha\\data\\TEXTURE\\MATERIAL\\conc_flore.jpg";
+    "data\\TEXTURE\\MATERIAL\\conc_flore.jpg";
    }
   }
   Material {

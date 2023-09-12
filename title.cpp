@@ -48,7 +48,7 @@ CTitle::~CTitle()
 HRESULT CTitle::Init(void)
 {
 	// ƒƒS‚Ì¶¬
-	CObject2D *pObject2D = CObject2D::Create();
+	CObject2D *pObject2D = CObject2D::Create(7);
 	pObject2D->SetSize(300.0f, 200.0f);
 	pObject2D->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.7f, 200.0f, 0.0f));
 

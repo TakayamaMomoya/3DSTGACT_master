@@ -24,6 +24,7 @@
 // 静的メンバ変数宣言
 //*****************************************************
 CCollision *CCollision::m_apCollision[NUM_OBJECT] = {};	// 当たり判定管理用の配列
+int CCollision::m_nNumAll = 0;
 
 //=====================================================
 // コンストラクタ
@@ -44,6 +45,8 @@ CCollision::CCollision()
 			// ID記憶
 			m_nID = nCnt;
 
+			m_nNumAll++;
+
 			break;
 		}
 	}
@@ -54,7 +57,7 @@ CCollision::CCollision()
 //=====================================================
 CCollision::~CCollision()
 {
-
+	m_nNumAll--;
 }
 
 //=====================================================
@@ -97,7 +100,7 @@ void CCollision::DeleteAll(void)
 	{
 		if (m_apCollision[nCnt] != nullptr)
 		{// 削除する
-			m_apCollision[nCnt] = nullptr;
+			m_apCollision[nCnt]->Uninit();
 		}
 	}
 }
@@ -517,7 +520,7 @@ CCollisionSphere *CCollisionSphere::Create(TAG tag, TYPE type, CObject *obj)
 	if (pCollision == nullptr)
 	{
 		// インスタンス生成
-		pCollision = new CCollisionSphere;
+		//pCollision = new CCollisionSphere;
 
 		if (pCollision != nullptr)
 		{
@@ -818,7 +821,7 @@ CCollisionCube *CCollisionCube::Create(TAG tag, CObject *obj)
 	if (pCollision == nullptr)
 	{
 		// インスタンス生成
-		pCollision = new CCollisionCube;
+		//pCollision = new CCollisionCube;
 
 		if (pCollision != nullptr)
 		{

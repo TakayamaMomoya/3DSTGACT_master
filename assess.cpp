@@ -25,13 +25,20 @@
 #define FRAME_WIDTH	(SCREEN_WIDTH / 3)	// フレームの横幅
 #define FRAME_PATH	"data\\TEXTURE\\UI\\frame04.png"	// フレームのパス
 #define GAUGE_PATH	"data\\TEXTURE\\UI\\gauge00.png"	// ゲージのパス
+#define TURN_RATE	(4.0f)	// ゲージの動きが反転するまでの範囲
+#define GAUGE_SPEED	(0.05f)	// ゲージの動く速度
+#define EXTEND_SPEED	(0.2f)	// ゲージの伸びる速度
+#define SHRINK_SPEED	(0.03f)	// ゲージの縮む速度
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CAssess::CAssess(int nPriority)
 {
-	ZeroMemory(&m_apParam[0], PARAM_MAX);
+	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
+	{
+		m_apParam[nCnt] = nullptr;
+	}
 }
 
 //=====================================================
@@ -56,11 +63,13 @@ HRESULT CAssess::Init(void)
 		else
 		{
 			m_apParam[nCnt] = new Param;
+
+			ZeroMemory(m_apParam[nCnt],sizeof(Param));
 		}
 
 		if (m_apParam[nCnt]->pGauge == nullptr)
 		{// ブーストゲージの生成
-			m_apParam[nCnt]->pGauge = CObject2D::Create(7);
+			m_apParam[nCnt]->pGauge = CObject2D::Create(6);
 
 			if (m_apParam[nCnt]->pGauge != nullptr)
 			{
@@ -70,8 +79,9 @@ HRESULT CAssess::Init(void)
 				m_apParam[nCnt]->pGauge->SetIdxTexture(nIdx);
 				m_apParam[nCnt]->pGauge->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 				m_apParam[nCnt]->pGauge->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
-				m_apParam[nCnt]->pGauge->SetSize(GAUGE_WIDTH, GAUGE_HEIGHT);
+				m_apParam[nCnt]->pGauge->SetSize(0.0f, GAUGE_HEIGHT);
 				m_apParam[nCnt]->pGauge->SetVtx();
+				m_apParam[nCnt]->state = GAUGESTATE_EXTEND;
 			}
 		}
 
@@ -121,8 +131,9 @@ void CAssess::Uninit(void)
 				m_apParam[nCnt]->pFrame = nullptr;
 			}
 
-			// パラメーター情報の破棄
 			delete m_apParam[nCnt];
+
+			m_apParam[nCnt] = nullptr;
 		}
 	}
 
@@ -145,13 +156,10 @@ void CAssess::ManageGauge(void)
 {
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
-		if (m_apParam[nCnt]->pGauge != nullptr)
+		if (m_apParam[nCnt] != nullptr)
 		{
-			float fWidth = m_apParam[nCnt]->fParam * GAUGE_WIDTH * 0.5f;
-
-			// サイズ設定
-			m_apParam[nCnt]->pGauge->SetSize(fWidth, GAUGE_HEIGHT);
-			m_apParam[nCnt]->pGauge->SetVtx();
+			// ゲージの脈動
+			//PalsingGauge(m_apParam[nCnt]);
 		}
 	}
 }
@@ -169,12 +177,35 @@ void CAssess::PalsingGauge(Param *pParam)
 	// 変数宣言
 	CObject2D *pObj;
 	float fWidth;
-	float fWidthDest = pParam->fParam * GAUGE_WIDTH * 0.5f;
 
 	pObj = pParam->pGauge;
 	
 	// 幅取得
 	fWidth = pObj->GetWidth();
+
+	float fWidthDiff = pParam->fWidthDest - fWidth;
+
+	if (TURN_RATE * TURN_RATE > fWidthDiff * fWidthDiff)
+	{// 差分が設定よりも小さくなったら反転
+		SetWidthDest(pParam);
+	}
+	else
+	{// サイズの設定
+		if (pParam->state == GAUGESTATE_EXTEND)
+		{
+			fWidthDiff *= EXTEND_SPEED;
+		}
+		else
+		{
+			fWidthDiff *= SHRINK_SPEED;
+		}
+
+		if (pParam->pGauge != nullptr)
+		{// ゲージ設定
+			pParam->pGauge->SetSize(fWidth + fWidthDiff, GAUGE_HEIGHT);
+			pParam->pGauge->SetVtx();
+		}
+	}
 }
 
 //=====================================================
@@ -183,7 +214,7 @@ void CAssess::PalsingGauge(Param *pParam)
 void CAssess::SetWidthDest(Param *pParam)
 {
 	// 目的値を設定
-	pParam->fParam = pParam->fParam * GAUGE_WIDTH * 0.5f;
+	pParam->fWidthDest = pParam->fParam * GAUGE_WIDTH * 0.5f;
 
 	float fWidthDest = pParam->fWidthDest;
 
@@ -191,19 +222,22 @@ void CAssess::SetWidthDest(Param *pParam)
 	{
 	case GAUGESTATE_EXTEND:
 
-		// 長めの位置に目的値を設定
-		fWidthDest += (float)(rand() / 5) * 0.01f;
+		pParam->state = GAUGESTATE_SHRINK;
 
 		break;
 	case GAUGESTATE_SHRINK:
 
 		// 短めの位置に目的値を設定
-		fWidthDest -= (float)(rand() / 5) * 0.01f;
+		fWidthDest *= 0.6f;
+
+		pParam->state = GAUGESTATE_EXTEND;
 
 		break;
 	default:
 		break;
 	}
+
+	pParam->fWidthDest = fWidthDest;
 }
 
 //=====================================================

@@ -28,7 +28,7 @@
 //*****************************************************
 #define SPEED_MOVE	(6.0f)	// 移動速度
 #define SPEED_FIGHTER	(30.0f)	// 戦闘機の移動速度
-#define ATTACK_FREQ	(180)	// 攻撃する頻度
+#define ATTACK_FREQ	(20)	// 攻撃する頻度
 #define BULLET_SPEED	(30.0f)	// 弾のスピード
 #define INITIAL_HEIGHT	(300.0f)	// 初期の高さ
 #define HEIGHT_FIGHTER	(900.0f)	// 戦闘機の初期の高さ

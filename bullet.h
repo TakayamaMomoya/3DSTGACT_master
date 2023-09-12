@@ -41,7 +41,7 @@ public:
 		TYPE_MAX
 	}TYPE;
 
-	CBullet(int nPriority = 4);	// コンストラクタ
+	CBullet(int nPriority = 7);	// コンストラクタ
 	~CBullet();	// デストラクタ
 
 	static CBullet *Create(D3DXVECTOR3 pos, D3DXVECTOR3 move, int nLife, TYPE type, bool bPierce = false, float fRadius = 10.0f, float fDamage = 5.0f, D3DXCOLOR col = { 1.0f,1.0f,1.0f,1.0f });

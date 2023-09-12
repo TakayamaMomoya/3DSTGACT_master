@@ -27,7 +27,7 @@
 class COrbit : public CObject
 {
 public:
-	COrbit(int nPriority = 5);	// コンストラクタ
+	COrbit(int nPriority = 7);	// コンストラクタ
 	~COrbit();	// デストラクタ
 
 	HRESULT Init(void);

@@ -397,6 +397,10 @@ CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, 
 				break;
 			}
 
+		}
+
+		if (pBullet->m_pCollisionSphere != nullptr)
+		{
 			pBullet->m_pCollisionSphere->SetPosition(pBullet->GetPosition());
 
 			pBullet->m_pCollisionSphere->SetRadius(fRadius * 1.5f);

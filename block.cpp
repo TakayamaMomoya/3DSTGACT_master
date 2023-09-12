@@ -62,9 +62,6 @@ CBlock::~CBlock()
 //=====================================================
 HRESULT CBlock::Init(void)
 {
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
 	// 継承クラスの初期化
 	CObjectX::Init();
 

@@ -60,7 +60,6 @@
 int CEnemy::m_nNumAll = 0;	// 総数
 int CEnemy::m_nNumWave = 0;	// ウェーブ数
 CEnemy::WAVEINFO *CEnemy::m_pWaveInfo = nullptr;	// 敵情報へのポインタ
-CEnemy *CEnemy::m_apEnemy[NUM_OBJECT] = {};	// 敵情報を格納する配列
 CEnemy *CEnemy::m_pHead = nullptr;	// 先頭のアドレス
 CEnemy *CEnemy::m_pTail = nullptr;	// 最後尾のアドレス
 
@@ -82,18 +81,6 @@ CEnemy::CEnemy()
 	m_pCollisionSphere = nullptr;
 	m_state = STATE_NORMAL;
 	m_moveState = MOVESTATE_NONE;
-
-	for (int nCntEnemy = 0; nCntEnemy < NUM_OBJECT; nCntEnemy++)
-	{
-		if (m_apEnemy[nCntEnemy] == nullptr)
-		{
-			m_apEnemy[nCntEnemy] = this;
-
-			m_nId = nCntEnemy;
-
-			break;
-		}
-	}
 
 	// 値のクリア
 	m_pPrev = nullptr;
@@ -223,9 +210,6 @@ HRESULT CEnemy::Init(void)
 	// 変数宣言
 	float fRadius = GetRadiusMax();
 
-	// デバイスの取得
-	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
 	// 継承クラスの初期化
 	CMotion::Init();
 
@@ -285,11 +269,6 @@ void CEnemy::Uninit(void)
 		m_pShadow->Uninit();
 
 		m_pShadow = nullptr;
-	}
-
-	if (m_apEnemy[m_nId] != nullptr)
-	{// 削除処理
-		m_apEnemy[m_nId] = nullptr;
 	}
 
 	if (m_pExplSpawner != nullptr)
@@ -695,11 +674,9 @@ void CEnemy::SetSpherePosition(D3DXVECTOR3 pos)
 HRESULT CEnemy::Load(void)
 {
 	// 変数宣言
-	char cTemp[256];
-	int nCntParticle = 1;
+	char cTemp[256] = {};
 	int nCntWave = 0;
 	int nCntEnemy = 0;
-	PARTICLE_INFO *pInfo = nullptr;
 
 	// ファイルから読み込む
 	FILE *pFile = fopen("data\\enemywave.txt", "r");

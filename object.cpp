@@ -31,6 +31,11 @@ CObject::CObject(int nPriority)
 	m_pNext = nullptr;
 	m_bDeath = false;
 
+	if (nPriority == 7)
+	{
+		int n = 10;
+	}
+
 	m_nPriority = nPriority;
 
 	if (m_apTop[nPriority] == nullptr)
@@ -84,28 +89,24 @@ void CObject::Delete(void)
 
 	if (m_apTop[m_nPriority] == this)
 	{// 先頭アドレスの破棄
-		//if (m_pNext != nullptr)
-		{// 先頭アドレスを次のアドレスに引き継ぐ
-			m_apTop[m_nPriority] = m_pNext;
-
-			if (m_pNext != nullptr)
-			{
-				m_pNext->m_pPrev = nullptr;
-			}
+		if (m_pNext != nullptr)
+		{
+			m_pNext->m_pPrev = nullptr;
 		}
+
+		// 先頭アドレスを次のアドレスに引き継ぐ
+		m_apTop[m_nPriority] = m_pNext;
 	}
 	
 	if (m_apCur[m_nPriority] == this)
 	{// 最後尾アドレスの破棄
 		if (m_pPrev != nullptr)
-		{// 最後尾アドレスを前のアドレスに引き継ぐ
-			m_apCur[m_nPriority] = m_pPrev;
-
-			if (m_pPrev != nullptr)
-			{
-				m_pPrev->m_pNext = nullptr;
-			}
+		{
+			m_pPrev->m_pNext = nullptr;
 		}
+
+		// 最後尾アドレスを前のアドレスに引き継ぐ
+		m_apCur[m_nPriority] = m_pPrev;
 	}
 
 	// 自身の破棄

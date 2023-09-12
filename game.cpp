@@ -217,7 +217,6 @@ void CGame::Uninit(void)
 	{// 護衛対象の終了・破棄
 		m_pDefend->Uninit();
 
-		delete m_pDefend;
 		m_pDefend = nullptr;
 	}
 
@@ -562,6 +561,11 @@ void CGame::ManageState(void)
 {
 	// フェード取得
 	CFade *pFade = CManager::GetFade();
+
+	if (pFade != nullptr)
+	{
+		//pFade->SetFade(CScene::MODE_GAME);
+	}
 
 	int nTime = 0;
 
