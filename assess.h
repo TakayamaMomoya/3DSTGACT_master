@@ -24,22 +24,6 @@ class CObject2D;
 class CAssess : public CObject
 {
 public:
-	CAssess(int nPriority = 3);	// コンストラクタ
-	~CAssess();	// デストラクタ
-
-	static CAssess *Create(void);
-	HRESULT Init(void);
-	void Uninit(void);
-	void Update(void);
-	void Draw(void);
-	void AddHit(float fHit) { m_fAssessHit += fHit; }
-	void AddDodge(float fDodge) { m_fAssessDodge += fDodge; }
-	void AddAttack(float fAttack) { m_fAssessAttack += fAttack; }
-	float GetHit(void) { return m_fAssessHit; }
-	float GetDodge(void) { return m_fAssessDodge; }
-	float GetAttack(void) { return m_fAssessAttack; }
-
-private:
 	enum PARAM
 	{
 		PARAM_HIT = 0,	// 命中率
@@ -48,6 +32,18 @@ private:
 		PARAM_MAX
 	};
 
+	CAssess(int nPriority = 3);	// コンストラクタ
+	~CAssess();	// デストラクタ
+
+	static CAssess *Create(void);
+	HRESULT Init(void);
+	void Uninit(void);
+	void Update(void);
+	void Draw(void);
+	void AddParam(float fValue, PARAM param);
+	float GetParam(PARAM param);
+
+private:
 	enum GAUGESTATE
 	{
 		GAUGESTATE_EXTEND = 0,	// 伸びる状態
@@ -60,14 +56,14 @@ private:
 		CObject2D *pGauge;	// ゲージのポインタ
 		CObject2D *pFrame;	// フレームのポインタ
 		GAUGESTATE state;	// 状態
+		float fParam;	// パラメーター値
+		float fWidthDest;	// 幅の目的値
 	};
 
 	void ManageGauge(void);	// ゲージの管理
-	void LimitAssess(void);	// 評価の制限
+	void PalsingGauge(Param *pParam);	// ゲージの脈動
+	void SetWidthDest(Param *pParam);	// 目的の幅設定
 
-	float m_fAssessHit;	// ヒット率の評価
-	float m_fAssessDodge;	// 回避率の評価
-	float m_fAssessAttack;	// 攻撃効率の評価
 	Param *m_apParam[PARAM_MAX];	// パラメーターの情報
 };
 

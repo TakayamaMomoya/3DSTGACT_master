@@ -193,7 +193,7 @@ void CRank::AddProgress(float fValue)
 
 	if (pAssess != nullptr)
 	{
-		fAve = (pAssess->GetAttack() + pAssess->GetDodge() + pAssess->GetHit()) / 3;
+		fAve = (pAssess->GetParam(CAssess::PARAM_ATTACK) + pAssess->GetParam(CAssess::PARAM_DODGE) + pAssess->GetParam(CAssess::PARAM_HIT)) / 3;
 	}
 
 	m_fProgress += fValue * fAve + fValue;

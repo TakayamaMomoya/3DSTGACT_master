@@ -334,17 +334,17 @@ void CBonus::BonusScore(TYPE type)
 	{
 	case CBonus::TYPE_DOGDE:
 
-		pAssess->AddDodge(ASSESS_DODGE);
+		pAssess->AddParam(ASSESS_DODGE,CAssess::PARAM_DODGE);
 
 		break;
 	case CBonus::TYPE_MISSILE:
 
-		pAssess->AddHit(ASSESS_MISSILE);
+		pAssess->AddParam(ASSESS_MISSILE, CAssess::PARAM_HIT);
 
 		break;
 	case CBonus::TYPE_MANUALHIT:
 
-		pAssess->AddHit(ASSESS_MANUALHIT);
+		pAssess->AddParam(ASSESS_MANUALHIT, CAssess::PARAM_HIT);
 
 		break;
 	default:

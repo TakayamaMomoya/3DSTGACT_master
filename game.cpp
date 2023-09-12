@@ -628,7 +628,7 @@ void CGame::TimeBonus(void)
 
 		if (pAssess != nullptr)
 		{
-			pAssess->AddAttack((float)nBonus * RATE_BONUS);
+			pAssess->AddParam((float)nBonus * RATE_BONUS, CAssess::PARAM_ATTACK);
 		}
 	}
 }

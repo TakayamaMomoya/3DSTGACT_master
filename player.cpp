@@ -1589,7 +1589,7 @@ void CPlayer::Hit(float fDamage)
 
 	if (m_pAssess != nullptr)
 	{// ダメージによる評価ペナルティ
-		m_pAssess->AddDodge(-DAMAGE_PENALTY);
+		m_pAssess->AddParam(-DAMAGE_PENALTY, CAssess::PARAM_HIT);
 	}
 
 	if (m_nLife <= 0)
@@ -1616,11 +1616,11 @@ void CPlayer::SetNumHit(int nNumHit)
 
 		if (nDiff > 0)
 		{// 加算されていたら
-			m_pAssess->AddHit(HIT_ADD);
+			m_pAssess->AddParam(HIT_ADD, CAssess::PARAM_HIT);
 		}
 		else
 		{
-			m_pAssess->AddHit(-HIT_ADD);
+			m_pAssess->AddParam(-HIT_ADD, CAssess::PARAM_HIT);
 		}
 	}
 

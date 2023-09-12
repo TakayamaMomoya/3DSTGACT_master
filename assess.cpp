@@ -31,9 +31,6 @@
 //=====================================================
 CAssess::CAssess(int nPriority)
 {
-	m_fAssessHit = 0.0f;
-	m_fAssessDodge = 0.0f;
-	m_fAssessAttack = 0.0f;
 	ZeroMemory(&m_apParam[0], PARAM_MAX);
 }
 
@@ -137,9 +134,6 @@ void CAssess::Uninit(void)
 //=====================================================
 void CAssess::Update(void)
 {
-	// 評価の制限
-	LimitAssess();
-
 	// ゲージの管理
 	ManageGauge();
 }
@@ -149,18 +143,11 @@ void CAssess::Update(void)
 //=====================================================
 void CAssess::ManageGauge(void)
 {
-	float aParam[PARAM_MAX] =
-	{
-		m_fAssessHit,
-		m_fAssessDodge,
-		m_fAssessAttack
-	};
-
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
 		if (m_apParam[nCnt]->pGauge != nullptr)
 		{
-			float fWidth = aParam[nCnt] * GAUGE_WIDTH * 0.5f;
+			float fWidth = m_apParam[nCnt]->fParam * GAUGE_WIDTH * 0.5f;
 
 			// サイズ設定
 			m_apParam[nCnt]->pGauge->SetSize(fWidth, GAUGE_HEIGHT);
@@ -170,36 +157,88 @@ void CAssess::ManageGauge(void)
 }
 
 //=====================================================
-// 評価の制限
+// ゲージの脈動
 //=====================================================
-void CAssess::LimitAssess(void)
+void CAssess::PalsingGauge(Param *pParam)
 {
-	if (m_fAssessAttack >= 1.0f)
+	if (pParam->pGauge == nullptr)
 	{
-		m_fAssessAttack = 1.0f;
-	}
-	else if (m_fAssessAttack < 0.0f)
-	{
-		m_fAssessAttack = 0.0f;
+		return;
 	}
 
-	if (m_fAssessHit >= 1.0f)
+	// 変数宣言
+	CObject2D *pObj;
+	float fWidth;
+	float fWidthDest = pParam->fParam * GAUGE_WIDTH * 0.5f;
+
+	pObj = pParam->pGauge;
+	
+	// 幅取得
+	fWidth = pObj->GetWidth();
+}
+
+//=====================================================
+// 目的の幅を決める処理
+//=====================================================
+void CAssess::SetWidthDest(Param *pParam)
+{
+	// 目的値を設定
+	pParam->fParam = pParam->fParam * GAUGE_WIDTH * 0.5f;
+
+	float fWidthDest = pParam->fWidthDest;
+
+	switch (pParam->state)
 	{
-		m_fAssessHit = 1.0f;
+	case GAUGESTATE_EXTEND:
+
+		// 長めの位置に目的値を設定
+		fWidthDest += (float)(rand() / 5) * 0.01f;
+
+		break;
+	case GAUGESTATE_SHRINK:
+
+		// 短めの位置に目的値を設定
+		fWidthDest -= (float)(rand() / 5) * 0.01f;
+
+		break;
+	default:
+		break;
 	}
-	else if (m_fAssessHit < 0.0f)
+}
+
+//=====================================================
+// パラメーター加算処理
+//=====================================================
+void CAssess::AddParam(float fValue, PARAM param)
+{
+	if (m_apParam[param] != nullptr)
 	{
-		m_fAssessHit = 0.0f;
+		m_apParam[param]->fParam += fValue;
+
+		if (m_apParam[param]->fParam >= 1.0f)
+		{
+			m_apParam[param]->fParam = 1.0f;
+		}
+		else if (m_apParam[param]->fParam < 0.0f)
+		{
+			m_apParam[param]->fParam = 0.0f;
+		}
+	}
+}
+
+//=====================================================
+// パラメーター取得処理
+//=====================================================
+float CAssess::GetParam(PARAM param)
+{
+	float fParam = 0.0f;
+
+	if (m_apParam[param] != nullptr)
+	{
+		fParam = m_apParam[param]->fParam;
 	}
 
-	if (m_fAssessDodge >= 1.0f)
-	{
-		m_fAssessDodge = 1.0f;
-	}
-	else if (m_fAssessDodge < 0.0f)
-	{
-		m_fAssessDodge = 0.0f;
-	}
+	return fParam;
 }
 
 //=====================================================
@@ -207,7 +246,7 @@ void CAssess::LimitAssess(void)
 //=====================================================
 void CAssess::Draw(void)
 {
-	CManager::GetDebugProc()->Print("\n命中率：[%f]", m_fAssessHit);
+
 }
 
 //=====================================================
