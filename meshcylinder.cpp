@@ -80,21 +80,27 @@ HRESULT CMeshCylinder::Init(void)
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * (MESH_U + 1) * (MESH_V + 1),
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		NULL);
+	if (m_pVtxBuff == nullptr)
+	{
+		//頂点バッファの生成
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * (MESH_U + 1) * (MESH_V + 1),
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_3D,
+			D3DPOOL_MANAGED,
+			&m_pVtxBuff,
+			NULL);
+	}
 
-	//インデックスバッファの生成
-	pDevice->CreateIndexBuffer(sizeof(WORD) * ((MESH_U + 1) * (MESH_V + 1) + ((MESH_V + 1) - 2) * (MESH_U + 1) + (((MESH_V + 1) - 2) * 2)),
-		D3DUSAGE_WRITEONLY,
-		D3DFMT_INDEX16,
-		D3DPOOL_MANAGED,
-		&m_pIdxBuff,
-		NULL);
+	if (m_pIdxBuff == nullptr)
+	{
+		//インデックスバッファの生成
+		pDevice->CreateIndexBuffer(sizeof(WORD) * ((MESH_U + 1) * (MESH_V + 1) + ((MESH_V + 1) - 2) * (MESH_U + 1) + (((MESH_V + 1) - 2) * 2)),
+			D3DUSAGE_WRITEONLY,
+			D3DFMT_INDEX16,
+			D3DPOOL_MANAGED,
+			&m_pIdxBuff,
+			NULL);
+	}
 
 	//頂点情報のポインタ
 	VERTEX_3D *pVtx;

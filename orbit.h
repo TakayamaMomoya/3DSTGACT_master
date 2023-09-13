@@ -27,7 +27,7 @@
 class COrbit : public CObject
 {
 public:
-	COrbit(int nPriority = 7);	// コンストラクタ
+	COrbit(int nPriority = 6);	// コンストラクタ
 	~COrbit();	// デストラクタ
 
 	HRESULT Init(void);
@@ -37,7 +37,6 @@ public:
 
 	void SetPositionOffset(D3DXMATRIX mtxWorld, int nIdxOrbit);
 	static COrbit *Create(D3DXMATRIX mtxWorld, D3DXVECTOR3 posOffset1, D3DXVECTOR3 posOffset2, D3DXCOLOR col, int nNumEdge);
-	static COrbit *GetOrbit(int nIdx) { return m_apOrbit[nIdx]; }
 	bool IsEnd(void) { return m_bEnd; }
 	void SetEnd(bool bEnd) { m_bEnd = bEnd; }
 
@@ -54,7 +53,6 @@ private:
 	D3DXMATRIX m_aMtxOffset[NUM_OFFSET];	// オフセットのマトリックス
 	int m_nNumEdge;	//辺の数
 	int m_nID;	// 番号
-	static COrbit *m_apOrbit[MAX_ORBIT];	// 管理用の配列
 	bool m_bEnd;	// 終了してるかどうか
 };
 

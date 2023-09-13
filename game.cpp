@@ -35,6 +35,8 @@
 #include "dustmanager.h"
 #include "assess.h"
 #include "rank.h"
+#include "dust.h"
+#include "effect3D.h"
 
 //*****************************************************
 // マクロ定義
@@ -89,9 +91,6 @@ HRESULT CGame::Init(void)
 	{// プレイヤー生成
 		m_pPlayer = CPlayer::Create();
 	}
-
-	// スコア読込処理
-	CScore::Load();
 
 	if (m_pScore == nullptr)
 	{// スコア生成
@@ -276,10 +275,7 @@ void CGame::Uninit(void)
 	// 敵破棄
 	CEnemy::Unload();
 
-	// スコア破棄処理
-	CScore::Unload();
-
-	// オブジェクト全破棄
+	// オブジェクト全棄
 	CObject::ReleaseAll();
 }
 
@@ -374,65 +370,80 @@ void CGame::Update(void)
 			pCamera->Quake();
 		}
 	}
+/*
+	CBullet::Create
+	(
+		D3DXVECTOR3(0.0f, 0.0f, 0.0f),
+		D3DXVECTOR3(0.0f, 0.0f, -10.0f),
+		30,
+		CBullet::TYPE_PLAYER,
+		true,
+		30,
+		30
+	);
 
-	m_nCntSecond++;
+	CDust::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f));
 
-	if (m_nCntSecond >= 60)
-	{
-		m_nTimerWave++;
-
-		m_nCntSecond = 0;
-	}
-
-	if (CEnemy::GetNumAll() == 0)
-	{// 敵スポーン
-		CEnemy::SpawnEnemy(3);
-
-		TimeBonus();
-
-		m_nTimerWave = 0;
-	}
-
-#ifdef _DEBUG
-	if (m_pEdit != nullptr)
-	{
-		m_pEdit->Update();
-	}
-
-	if (pKeyboard != nullptr)
-	{
-		if (pKeyboard->GetTrigger(DIK_F))
-		{// フォトモード起動
-			m_bPhoto = m_bPhoto ? false : true;
+	CEffect3D::Create(D3DXVECTOR3(0.0f, 0.0f, 0.0f), 20, 10, D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+*/
+		m_nCntSecond++;
+	
+		if (m_nCntSecond >= 60)
+		{
+			m_nTimerWave++;
+	
+			m_nCntSecond = 0;
 		}
-	}
-#endif
-
-	// 状態管理
-	ManageState();
-
-	// プレイヤー移動制限処理
-	LimitPlayerPos();
-
-	// 壁の管理
-	ManageWall();
-
-	if (pKeyboard != nullptr)
-	{
-		if (pKeyboard->GetTrigger(DIK_P) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
-		{// ポーズ切り替え
-			TogglePause(m_pPause);
+	
+		if (CEnemy::GetNumAll() == 0)
+		{// 敵スポーン
+			CEnemy::SpawnEnemy(3);
+	
+			TimeBonus();
+	
+			m_nTimerWave = 0;
 		}
-	}
-
-	if (m_pPause != nullptr)
-	{// ポーズ更新
-		m_pPause->Update();
-	}
-
-#ifdef _DEBUG	// デバッグ処理
-	Debug();
-#endif
+	
+	#ifdef _DEBUG
+		if (m_pEdit != nullptr)
+		{
+			m_pEdit->Update();
+		}
+	
+		if (pKeyboard != nullptr)
+		{
+			if (pKeyboard->GetTrigger(DIK_F))
+			{// フォトモード起動
+				m_bPhoto = m_bPhoto ? false : true;
+			}
+		}
+	#endif
+	
+		// 状態管理
+		ManageState();
+	
+		// プレイヤー移動制限処理
+		LimitPlayerPos();
+	
+		// 壁の管理
+		ManageWall();
+	
+		if (pKeyboard != nullptr)
+		{
+			if (pKeyboard->GetTrigger(DIK_P) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
+			{// ポーズ切り替え
+				TogglePause(m_pPause);
+			}
+		}
+	
+		if (m_pPause != nullptr)
+		{// ポーズ更新
+			m_pPause->Update();
+		}
+	
+	#ifdef _DEBUG	// デバッグ処理
+		Debug();
+	#endif
 }
 
 //=====================================================

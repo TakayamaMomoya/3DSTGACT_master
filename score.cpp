@@ -23,11 +23,6 @@
 #define RANK_BONUS	(0.05f)	// 1ランクにおけるボーナス倍率
 #define RANK_RATE	(0.0004f)	// ランクの上がる倍率
 
-//*****************************************************
-// 静的メンバ変数宣言
-//*****************************************************
-LPDIRECT3DTEXTURE9 CScore::m_pTexture = nullptr;	// テクスチャのポインタ
-
 //=====================================================
 // コンストラクタ
 //=====================================================
@@ -74,7 +69,7 @@ void CScore::Uninit(void)
 void CScore::Update(void)
 {
 	//スコア値上昇演出==============================
-	m_nScore += (m_nSocreDest - m_nScore) * 0.1f;
+	m_nScore += (int)((m_nSocreDest - m_nScore) * 0.1f);
 
 	if (m_pObjNumber != nullptr)
 	{
@@ -94,10 +89,15 @@ void CScore::AddScore(int nValue)
 	{// ランクによるボーナス
 		nValue += (int)(nValue * RANK_BONUS * pRank->GetRank());
 
-		pRank->AddProgress(nValue * RANK_RATE);
+		pRank->AddProgress(nValue * RANK_RATE);	
 	}
 
 	m_nSocreDest += nValue;
+
+	if (m_nSocreDest >1000000)
+	{
+		m_nSocreDest = 999999;
+	}
 }
 
 //=====================================================
@@ -134,37 +134,4 @@ CScore *CScore::Create(void)
 	}
 
 	return pScore;
-}
-
-//=====================================================
-// 読込処理
-//=====================================================
-HRESULT CScore::Load(void)
-{
-	if (m_pTexture == nullptr)
-	{
-		// デバイスの取得
-		LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
-
-		D3DXCreateTextureFromFile
-		(
-			pDevice,
-			"data\\TEXTURE\\UI\\scoreBack.png",
-			&m_pTexture
-		);
-	}
-
-	return S_OK;
-}
-
-//=====================================================
-// テクスチャ破棄
-//=====================================================
-void CScore::Unload(void)
-{
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		m_pTexture = nullptr;
-	}
 }

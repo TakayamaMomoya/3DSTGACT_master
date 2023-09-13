@@ -16,7 +16,7 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define MAX_TEX	(56)
+#define MAX_TEX	(128)
 #define MAX_STRING	(256)
 
 //*****************************************************
@@ -32,6 +32,7 @@ public:
 	void Unload(void);
 	int Regist(const char *pFileName);
 	LPDIRECT3DTEXTURE9 GetAddress(int nIdx);
+	static int GetNumAll(void) { return m_nNumAll; }
 
 private:
 	LPDIRECT3DTEXTURE9 m_apTexture[MAX_TEX];	// テクスチャの配列

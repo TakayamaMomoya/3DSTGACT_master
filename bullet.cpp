@@ -42,16 +42,19 @@ int CBullet::m_nNumAll = 0;	// 総数
 //=====================================================
 // コンストラクタ
 //=====================================================
-CBullet::CBullet(int nPriority) : CBillboard(nPriority)
+CBullet::CBullet(int nPriority) : CObject(nPriority)
 {
 	m_nLife = 0;
 	m_nNumHit = 0;
 	m_fDamage = 0.0f;
+	m_fSize = 0.0f;
 	m_type = TYPE_NONE;
 	m_bPierce = false;
 	m_bLock = false;
 	m_move = { 0.0f,0.0f,0.0f };
 	m_rot = { 0.0f,0.0f,0.0f };
+	m_pos = { 0.0f,0.0f,0.0f };
+	m_posOld = { 0.0f,0.0f,0.0f };
 	m_col = { 0.0f,0.0f,0.0f,0.0f };
 	m_pCollisionSphere = nullptr;
 	ZeroMemory(&m_apOrbit[0], sizeof(m_apOrbit));
@@ -76,8 +79,7 @@ HRESULT CBullet::Init(void)
 	// 汎用処理取得
 	CUniversal *pUniversal = CManager::GetUniversal();
 
-	// 継承クラスの初期化
-	CBillboard::Init();
+	m_rot.y = atan2f(m_move.x,m_move.z);
 
 	// タイプの設定
 	SetType(TYPE_BULLET);
@@ -86,31 +88,23 @@ HRESULT CBullet::Init(void)
 
 	if (m_apOrbit[0] == nullptr)
 	{// 軌跡の生成
-		m_apOrbit[0] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), 0.0f, 0.0f), D3DXVECTOR3(-GetWidth(), 0.0f, 0.0f), m_col, EDGE_ORBIT);
+		m_apOrbit[0] = COrbit::Create(m_mtxWorld, D3DXVECTOR3(m_fSize, 0.0f, 0.0f), D3DXVECTOR3(-m_fSize, 0.0f, 0.0f), m_col, EDGE_ORBIT);
 	}
 
 	if (m_apOrbit[1] == nullptr)
 	{// 軌跡の生成
-		m_apOrbit[1] = COrbit::Create(GetMatrix(), D3DXVECTOR3(0.0f, GetWidth(), 0.0f), D3DXVECTOR3(0.0f, -GetWidth(), 0.0f), m_col, EDGE_ORBIT);
+		m_apOrbit[1] = COrbit::Create(m_mtxWorld, D3DXVECTOR3(0.0f, m_fSize, 0.0f), D3DXVECTOR3(0.0f, -m_fSize, 0.0f), m_col, EDGE_ORBIT);
 	}
 
 	if (m_apOrbit[2] == nullptr)
 	{// 軌跡の生成
-		m_apOrbit[2] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), GetWidth(), 0.0f), D3DXVECTOR3(-GetWidth(), -GetWidth(), 0.0f), m_col, EDGE_ORBIT);
+		m_apOrbit[2] = COrbit::Create(m_mtxWorld, D3DXVECTOR3(m_fSize, m_fSize, 0.0f), D3DXVECTOR3(-m_fSize, -m_fSize, 0.0f), m_col, EDGE_ORBIT);
 	}
 
 	if (m_apOrbit[3] == nullptr)
 	{// 軌跡の生成
-		m_apOrbit[3] = COrbit::Create(GetMatrix(), D3DXVECTOR3(GetWidth(), -GetWidth(), 0.0f), D3DXVECTOR3(-GetWidth(), GetWidth(), 0.0f), m_col, EDGE_ORBIT);
+		m_apOrbit[3] = COrbit::Create(m_mtxWorld, D3DXVECTOR3(m_fSize, -m_fSize, 0.0f), D3DXVECTOR3(-m_fSize, m_fSize, 0.0f), m_col, EDGE_ORBIT);
 	}
-
-	D3DXMATRIX mtx;
-
-	// マトリックス初期化
-	D3DXMatrixIdentity(&mtx);
-
-	// マトリックスをかけ合わせる
-	pUniversal->SetOffSet(&mtx, GetMatrix(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_rot);
 
 	for (int nCnt = 0; nCnt < 6; nCnt++)
 	{
@@ -118,7 +112,7 @@ HRESULT CBullet::Init(void)
 		{// 軌跡の更新
 			if (m_apOrbit[nCntOrbit] != nullptr)
 			{
-				m_apOrbit[nCntOrbit]->SetPositionOffset(mtx, 0);
+				m_apOrbit[nCntOrbit]->SetPositionOffset(m_mtxWorld, 0);
 			}
 		}
 	}
@@ -150,8 +144,7 @@ void CBullet::Uninit(void)
 		}
 	}
 
-	// 継承クラスの終了
-	CBillboard::Uninit();
+	Release();
 }
 
 //=====================================================
@@ -214,14 +207,13 @@ void CBullet::Update(void)
 	// 変数宣言
 	bool bHit = false;
 
-	// 継承クラスの更新
-	CBillboard::Update();
-
 	// 寿命減衰
 	m_nLife--;
 
+	m_posOld = m_pos;
+
 	// 位置の更新
-	SetPosition(GetPosition() + m_move);
+	m_pos += m_move;
 
 	if (m_pCollisionSphere != nullptr)
 	{// 当たり判定の管理
@@ -230,7 +222,7 @@ void CBullet::Update(void)
 
 		// 当たり判定の位置設定
 		m_pCollisionSphere->SetPositionOld(m_pCollisionSphere->GetPosition());
-		m_pCollisionSphere->SetPosition(GetPosition());
+		m_pCollisionSphere->SetPosition(m_pos);
 
 		switch (m_type)
 		{
@@ -271,11 +263,11 @@ void CBullet::Update(void)
 		if (pMesh != nullptr)
 		{
 			// メッシュフィールドとの当たり判定
-			fHeight = pMesh->GetHeight(GetPosition(), nullptr);
+			fHeight = pMesh->GetHeight(m_pos, nullptr);
 
-			if (fHeight > GetPosition().y)
+			if (fHeight > m_pos.y)
 			{
-				CParticle::Create(GetPosition(), CParticle::TYPE_SAND);
+				CParticle::Create(m_pos, CParticle::TYPE_SAND);
 
 				Death();
 			}
@@ -294,19 +286,11 @@ void CBullet::Update(void)
 		}
 	}
 
-	D3DXMATRIX mtx;
-
-	// マトリックス初期化
-	D3DXMatrixIdentity(&mtx);
-
-	// マトリックスをかけ合わせる
-	pUniversal->SetOffSet(&mtx, GetMatrix(), D3DXVECTOR3(0.0f, 0.0f, 0.0f), m_rot);
-
 	for (int nCntOrbit = 0; nCntOrbit < NUM_ORBIT; nCntOrbit++)
 	{// 軌跡の更新
 		if (m_apOrbit[nCntOrbit] != nullptr)
 		{
-			m_apOrbit[nCntOrbit]->SetPositionOffset(mtx, 0);
+			m_apOrbit[nCntOrbit]->SetPositionOffset(m_mtxWorld, 0);
 		}
 	}
 }
@@ -330,7 +314,7 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 			// 当たったオブジェクトのヒット処理
 			pObj->Hit(m_fDamage);
 
-			CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
+			CParticle::Create(m_pos, CParticle::TYPE_HIT);
 
 			// ヒット数加算
 			m_nNumHit++;
@@ -341,12 +325,12 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 }
 
 //=====================================================
-// 命中したか確認する処理
+// 死亡処理
 //=====================================================
 void CBullet::Death(void)
 {
 	// パーティクル生成
-	CParticle::Create(GetPosition(), CParticle::TYPE_HIT);
+	CParticle::Create(m_pos, CParticle::TYPE_HIT);
 
 	// 終了処理
 	Uninit();
@@ -357,11 +341,26 @@ void CBullet::Death(void)
 //=====================================================
 void CBullet::Draw(void)
 {
-	// 汎用処理取得
-	CUniversal *pUniversal = CManager::GetUniversal();
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	// ビルボードの描画
-	CBillboard::SetMatrix();
+	D3DXMATRIX mtxRot, mtxTrans;
+
+	//ワールドマトリックス初期化
+	D3DXMatrixIdentity(&m_mtxWorld);
+
+	//向きを反映
+	D3DXMatrixRotationYawPitchRoll(&mtxRot,
+		m_rot.y, m_rot.x, m_rot.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxRot);
+
+	//位置を反映
+	D3DXMatrixTranslation(&mtxTrans,
+		m_pos.x, m_pos.y, m_pos.z);
+	D3DXMatrixMultiply(&m_mtxWorld, &m_mtxWorld, &mtxTrans);
+
+	//ワールドマトリックス設定
+	pDevice->SetTransform(D3DTS_WORLD, &m_mtxWorld);
 }
 
 //=====================================================
@@ -375,13 +374,14 @@ CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, 
 	{// インスタンス生成
 		pBullet = new CBullet;
 		pBullet->m_move = move;
-		pBullet->SetPosition(pos);
-		pBullet->SetSize(fRadius, fRadius);
+		pBullet->m_pos = pos;
+		pBullet->m_posOld = pos;
 		pBullet->m_nLife = nLife;
 		pBullet->m_type = type;
 		pBullet->m_bPierce = bPierce;
 		pBullet->m_fDamage = fDamage;
 		pBullet->m_col = col;
+		pBullet->m_fSize = fRadius;
 
 		if (pBullet->m_pCollisionSphere == nullptr)
 		{// 当たり判定生成
@@ -396,22 +396,17 @@ CBullet *CBullet::Create(D3DXVECTOR3 pos,D3DXVECTOR3 move, int nLife,TYPE type, 
 			default:
 				break;
 			}
-
 		}
 
 		if (pBullet->m_pCollisionSphere != nullptr)
 		{
-			pBullet->m_pCollisionSphere->SetPosition(pBullet->GetPosition());
+			pBullet->m_pCollisionSphere->SetPosition(pBullet->m_pos);
 
 			pBullet->m_pCollisionSphere->SetRadius(fRadius * 1.5f);
 		}
 
 		// 初期化処理
 		pBullet->Init();
-
-		// テクスチャの読込
-		int nIdx = CManager::GetTexture()->Regist("data\\TEXTURE\\EFFECT\\bullet000.png");
-		pBullet->SetIdxTexture(nIdx);
 	}
 
 	return pBullet;

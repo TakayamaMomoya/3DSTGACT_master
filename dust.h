@@ -19,7 +19,7 @@
 class CDust : public CBillboard
 {
 public:
-	CDust(int nPriority = 6);	// コンストラクタ
+	CDust(int nPriority = 7);	// コンストラクタ
 	~CDust();	// デストラクタ
 
 	static CDust *Create(D3DXVECTOR3 pos);

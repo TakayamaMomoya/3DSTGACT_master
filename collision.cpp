@@ -520,7 +520,7 @@ CCollisionSphere *CCollisionSphere::Create(TAG tag, TYPE type, CObject *obj)
 	if (pCollision == nullptr)
 	{
 		// インスタンス生成
-		//pCollision = new CCollisionSphere;
+		pCollision = new CCollisionSphere;
 
 		if (pCollision != nullptr)
 		{
@@ -821,7 +821,7 @@ CCollisionCube *CCollisionCube::Create(TAG tag, CObject *obj)
 	if (pCollision == nullptr)
 	{
 		// インスタンス生成
-		//pCollision = new CCollisionCube;
+		pCollision = new CCollisionCube;
 
 		if (pCollision != nullptr)
 		{

@@ -159,7 +159,7 @@ void CAssess::ManageGauge(void)
 		if (m_apParam[nCnt] != nullptr)
 		{
 			// ÉQÅ[ÉWÇÃñ¨ìÆ
-			//PalsingGauge(m_apParam[nCnt]);
+			PalsingGauge(m_apParam[nCnt]);
 		}
 	}
 }

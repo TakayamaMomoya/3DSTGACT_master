@@ -23,6 +23,7 @@ CBillboard::CBillboard(int nPriority) : CObject(nPriority)
 	m_col = { 1.0f,1.0f,1.0f,1.0f };
 	m_width = 0.0f;
 	m_heigth = 0.0f;
+	m_nIdxTexture = -1;
 	m_pVtxBuff = nullptr;
 	m_bZTest = false;
 }
@@ -43,13 +44,16 @@ HRESULT CBillboard::Init(void)
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		nullptr);
+	if (m_pVtxBuff == nullptr)
+	{
+		//頂点バッファの生成
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_3D,
+			D3DPOOL_MANAGED,
+			&m_pVtxBuff,
+			nullptr);
+	}
 
 	//頂点情報のポインタ
 	VERTEX_3D *pVtx;

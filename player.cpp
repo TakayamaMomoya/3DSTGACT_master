@@ -39,6 +39,7 @@
 #include "bonus.h"
 #include "assess.h"
 #include "lockon.h"
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
@@ -215,7 +216,7 @@ HRESULT CPlayer::Init(void)
 	m_pAssess = CAssess::Create();
 
 	// コックピットの生成
-	//m_pCockpit = CCockPit::Create();
+	m_pCockpit = CCockPit::Create();
 
 	// レーダーの生成
 	m_pRader = CRader::Create();
@@ -1585,7 +1586,7 @@ void CPlayer::Boost(void)
 //=====================================================
 void CPlayer::Hit(float fDamage)
 {
-	//m_nLife -= (int)fDamage;
+	m_nLife -= (int)fDamage;
 
 	if (m_pAssess != nullptr)
 	{// ダメージによる評価ペナルティ
@@ -1644,6 +1645,8 @@ void CPlayer::Draw(void)
 	CManager::GetDebugProc()->Print("\nプレイヤー体力[%d]", m_nLife);
 	CManager::GetDebugProc()->Print("\nプレイヤージャンプ[%d]", m_bJump);
 	CManager::GetDebugProc()->Print("\n当たり判定数[%d]", CCollision::GetNumAll());
+	CManager::GetDebugProc()->Print("\nテクスチャ数[%d]", CTexture::GetNumAll());
+	CManager::GetDebugProc()->Print("\nモデル数[%d]", CModel::GetNumAll());
 	CManager::GetDebugProc()->Print("\nリセット[F3]");
 #else
 	CManager::GetDebugProc()->Print("\n\n\n\n\n\n\n\n\n\n\n");

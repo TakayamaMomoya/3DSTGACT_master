@@ -60,7 +60,7 @@ CTexture *CManager::m_pTexture = nullptr;	// テクスチャ管理へのポインタ
 CUniversal *CManager::m_pUniversal = nullptr;	// 汎用処理へのポインタ
 CScene *CManager::m_pScene = nullptr;	// シーンへのポインタ
 CFade *CManager::m_pFade = nullptr;	// フェードへのポインタ
-CScene::MODE CManager::m_mode = CScene::MODE_TITLE;	// 現在のモード
+CScene::MODE CManager::m_mode = CScene::MODE_GAME;	// 現在のモード
 int CManager::m_nScore = 0;	// スコア保存用
 
 //=====================================================
@@ -230,9 +230,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// 爆発読込処理
 	CExplosion::Load();
 
-	// スコア読込処理
-	CScore::Load();
-
 	SetMode(m_mode);
 
 	return S_OK;
@@ -362,9 +359,6 @@ void CManager::Uninit(void)
 	// エフェクト破棄処理
 	CEffect2D::Unload();
 	CEffect3D::Unload();
-
-	// スコア破棄処理
-	CScore::Unload();
 
 	// モデル破棄
 	CModel::Unload();

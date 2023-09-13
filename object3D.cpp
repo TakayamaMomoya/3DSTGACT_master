@@ -45,13 +45,16 @@ HRESULT CObject3D::Init(void)
 	// デバイスの取得
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		nullptr);
+	if (m_pVtxBuff == nullptr)
+	{
+		//頂点バッファの生成
+		pDevice->CreateVertexBuffer(sizeof(VERTEX_3D) * 4,
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_3D,
+			D3DPOOL_MANAGED,
+			&m_pVtxBuff,
+			nullptr);
+	}
 
 	//頂点情報のポインタ
 	VERTEX_3D *pVtx;

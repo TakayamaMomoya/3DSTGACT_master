@@ -33,7 +33,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CMissile::CMissile()
+CMissile::CMissile(int nPriority) : CObjectX(nPriority)
 {
 	m_nDeathTimer = 0;
 	m_pCollisionSphere = nullptr;

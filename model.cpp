@@ -19,6 +19,7 @@
 //*****************************************************
 char CModel::m_aPath[NUM_MODEL][256] = {};
 CModel::Model *CModel::m_apModel[NUM_MODEL] = {};
+int CModel::m_nNumAll = 0;
 
 //=====================================================
 // コンストラクタ
@@ -107,6 +108,8 @@ int CModel::Load(char *pPath)
 			// パス保存
 			strcpy(&m_aPath[nCntModel][0], pPath);
 
+			m_nNumAll++;
+
 			break;
 		}
 	}
@@ -143,6 +146,8 @@ void CModel:: Unload(void)
 
 			delete m_apModel[nCntModel];
 			m_apModel[nCntModel] = nullptr;
+
+			m_nNumAll--;
 		}
 	}
 }

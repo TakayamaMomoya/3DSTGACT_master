@@ -12,7 +12,6 @@
 // インクルード
 //*****************************************************
 #include "object2D.h"
-#include "billboard.h"
 #include "collision.h"
 
 //*****************************************************
@@ -30,7 +29,7 @@ class COrbit;
 //*****************************************************
 // クラスの定義
 //*****************************************************
-class CBullet : public CBillboard
+class CBullet : public CObject
 {
 public:
 	typedef enum
@@ -54,14 +53,19 @@ public:
 	static int GetNumAll(void) { return m_nNumAll; }
 	bool IsLock(void) { return m_bLock; }
 	void EnableLock(bool bLock) { m_bLock = bLock; }
+	D3DXVECTOR3 GetPosition(void) { return m_pos; }
+	D3DXVECTOR3 GetPositionOld(void) { return m_posOld; }
 
 private:
 	void ManageHit(void);	// ヒット数管理
 	bool BulletHit(CCollision::TAG tag);
 	void Death(void);
 
+	D3DXMATRIX m_mtxWorld;	// ワールドマトリックス
 	D3DXVECTOR3 m_move;	// 移動量
 	D3DXVECTOR3 m_rot;	// 向き
+	D3DXVECTOR3 m_pos;	// 位置
+	D3DXVECTOR3 m_posOld;	// 前回の位置
 	int m_nLife;	// 寿命
 	TYPE m_type;	// 種類
 	static int m_nNumAll;	// 総数
@@ -72,6 +76,7 @@ private:
 	int m_nNumHit;	// 命中回数
 	float m_fDamage;	// 与ダメージ
 	bool m_bLock;	// ロックオン弾かどうか
+	float m_fSize;	// 弾のサイズ
 };
 
 #endif

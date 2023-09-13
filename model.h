@@ -16,7 +16,6 @@
 //*****************************************************
 // マクロ定義
 //*****************************************************
-#define NUM_TEX	(5)	// テクスチャの数
 #define NUM_MODEL	(256)	// モデルの数
 
 //*****************************************************
@@ -40,10 +39,12 @@ public:
 	static void Unload(void);
 	static void Init(int nIdx);
 	static Model *GetModel(int nIdx) { return m_apModel[nIdx]; }
+	static int GetNumAll(void) { return m_nNumAll; }
 
 private:
 	static Model *m_apModel[NUM_MODEL];	// モデルへのポインタ
 	static char m_aPath[NUM_MODEL][256];	// モデルのファイル名
+	static int m_nNumAll;	// 総数
 };
 
 #endif

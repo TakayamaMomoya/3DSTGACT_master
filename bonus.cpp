@@ -268,7 +268,7 @@ CBonus *CBonus::Create(TYPE type)
 
 	if (pBonus != nullptr)
 	{
-		pBonus->m_pCaption = CObject2D::Create(7);
+		pBonus->m_pCaption = CObject2D::Create(6);
 
 		if (pBonus->m_pCaption != nullptr)
 		{

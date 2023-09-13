@@ -19,11 +19,6 @@
 //******************************************
 #define DELETE_LENGTH	(0.5f)	// 削除する長さ
 
-//******************************************
-// 静的メンバ変数宣言
-//******************************************
-COrbit *COrbit::m_apOrbit[MAX_ORBIT] = {};	// 情報管理用の配列
-
 //==========================================
 // コンストラクタ
 //==========================================
@@ -60,16 +55,19 @@ HRESULT COrbit::Init(void)
 	// テクスチャ読込
 	m_nIdxTexture = CManager::GetTexture()->Regist("data\\TEXTURE\\EFFECT\\orbit001.png");
 
-	//頂点バッファの生成
-	pDevice->CreateVertexBuffer
-	(
-		sizeof(VERTEX_3D) * MAX_EDGE * NUM_OFFSET,
-		D3DUSAGE_WRITEONLY,
-		FVF_VERTEX_3D,
-		D3DPOOL_MANAGED,
-		&m_pVtxBuff,
-		nullptr
-	);
+	if (m_pVtxBuff == nullptr)
+	{
+		//頂点バッファの生成
+		pDevice->CreateVertexBuffer
+		(
+			sizeof(VERTEX_3D) * MAX_EDGE * NUM_OFFSET,
+			D3DUSAGE_WRITEONLY,
+			FVF_VERTEX_3D,
+			D3DPOOL_MANAGED,
+			&m_pVtxBuff,
+			nullptr
+		);
+	}
 
 	VERTEX_3D *pVtx;		//頂点情報のポインタ
 
@@ -108,11 +106,6 @@ void COrbit::Uninit()
 	{//頂点情報破棄
 		m_pVtxBuff->Release();
 		m_pVtxBuff = nullptr;
-	}
-
-	if (m_apOrbit[m_nID] != nullptr)
-	{// 管理配列の終了
-		m_apOrbit[m_nID] = nullptr;
 	}
 
 	// 自身の破棄
@@ -328,18 +321,6 @@ COrbit *COrbit::Create(D3DXMATRIX mtxWorld, D3DXVECTOR3 m_posOffset1, D3DXVECTOR
 			}
 
 			pOrbit->UpdatePolygon();
-		}
-
-		for (int nCnt = 0; nCnt < MAX_ORBIT; nCnt++)
-		{// 軌跡の保存
-			if (m_apOrbit[nCnt] == nullptr)
-			{
-				m_apOrbit[nCnt] = pOrbit;
-				
-				pOrbit->m_nID = nCnt;
-				nCounterOrbit = nCnt;
-				break;
-			}
 		}
 	}
 

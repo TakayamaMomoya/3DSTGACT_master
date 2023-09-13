@@ -42,7 +42,6 @@ HRESULT CTexture::Load(void)
 	// ÉtÉ@ÉCÉãñºÇÃê›íË
 	char *apFileName[MAX_TEX] = 
 	{
-		"data\\TEXTURE\\CHARACTER\\enemy000.png"
 	};
 
 	for ( int nCntTex = 0;nCntTex < MAX_TEX;nCntTex++)
@@ -80,6 +79,7 @@ void CTexture::Unload(void)
 			{
 				m_apTexture[nCntTex]->Release();
 				m_apTexture[nCntTex] = nullptr;
+				m_nNumAll--;
 			}
 		}
 	}

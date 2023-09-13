@@ -22,7 +22,7 @@ class COrbit;
 class CMissile : public CObjectX
 {// プレイヤーに向かう敵
 public:
-	CMissile();	// コンストラクタ
+	CMissile(int nPriority = 5);	// コンストラクタ
 	~CMissile();	// デストラクタ
 
 	HRESULT Init(void);
