@@ -68,6 +68,8 @@
 #define TURN_DOWNER	(D3DX_PI * 0.55f)	// 下半身が反転するまでの差分
 #define TURN_ROT	(D3DX_PI * 0.45f)	// 下半身が反転するまでの差分
 #define LOCKON_ANGLE	(D3DX_PI * 0.13f)	// ロックオンの上下角度
+#define LOCKON_RANGE	(3000.0f)	// ロックオン距離
+#define AIM_LOCKON_RANGE	(LOCKON_RANGE * 1.3f)	// エイム時のロックオン距離
 #define CHARGE_TIMER	(40.0f)	// チャージショットを撃てるまでのカウンタ
 #define BULLET_RADIUS	(30.0f)	// 通常弾の大きさ
 #define CHARGE_RADIUS	(300.0f)	// チャージショットの基準の大きさ

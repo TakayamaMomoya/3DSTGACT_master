@@ -32,7 +32,7 @@
 #define BULLET_SPEED	(30.0f)	// 弾のスピード
 #define INITIAL_HEIGHT	(300.0f)	// 初期の高さ
 #define HEIGHT_FIGHTER	(900.0f)	// 戦闘機の初期の高さ
-#define ATTACK_RANGE	(5000.0f)	// 攻撃する距離
+#define ATTACK_RANGE	(3500.0f)	// 攻撃する距離
 #define DEFAULT_SPEED	(4.0f)	// 基準のスピード
 #define DEFAULT_TILT	(-D3DX_PI * 0.1f)	// 基準の傾き
 #define ROT_DIFF	(D3DX_PI * 0.2f)	// 基準の向き

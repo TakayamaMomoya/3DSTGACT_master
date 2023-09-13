@@ -23,10 +23,10 @@
 // マクロ定義
 //*****************************************************
 #define SPEED_MOVE	(5.5f)	// 移動速度
-#define ATTACK_FREQ	(30)	// 攻撃する頻度
+#define ATTACK_FREQ	(180)	// 攻撃する頻度
 #define BULLET_SPEED	(90.0f)	// 弾のスピード
 #define INITIAL_HEIGHT	(300.0f)	// 初期の高さ
-#define ATTACK_RANGE	(7000.0f)	// 攻撃する距離
+#define ATTACK_RANGE	(5000.0f)	// 攻撃する距離
 #define DEFAULT_SPEED	(4.0f)	// 基準のスピード
 #define DEFAULT_TILT	(-D3DX_PI * 0.1f)	// 基準の傾き
 #define TANK_HEIGHT	(150.0f)	// 高さ

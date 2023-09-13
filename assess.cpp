@@ -29,6 +29,10 @@
 #define GAUGE_SPEED	(0.05f)	// ゲージの動く速度
 #define EXTEND_SPEED	(0.2f)	// ゲージの伸びる速度
 #define SHRINK_SPEED	(0.03f)	// ゲージの縮む速度
+#define SHRINK_RATE	(0.7f)	// ゲージの縮む速度
+#define COL_HIT	(D3DXCOLOR(1.0f,0.9f,0.0f,1.0f))	// ヒットゲージの色
+#define COL_DODGE	(D3DXCOLOR(0.4f,1.0f,0.4f,1.0f))	// 回避ゲージの色
+#define COL_ATTACK	(D3DXCOLOR(1.0f,0.4f,0.4f,1.0f))	// 攻撃効率ゲージの色
 
 //=====================================================
 // コンストラクタ
@@ -54,6 +58,13 @@ CAssess::~CAssess()
 //=====================================================
 HRESULT CAssess::Init(void)
 {
+	D3DXCOLOR aCol[PARAM_MAX] = 
+	{
+		COL_HIT,
+		COL_DODGE,
+		COL_ATTACK
+	};
+
 	for (int nCnt = 0; nCnt < PARAM_MAX; nCnt++)
 	{
 		if (m_apParam[nCnt] != nullptr)
@@ -68,7 +79,7 @@ HRESULT CAssess::Init(void)
 		}
 
 		if (m_apParam[nCnt]->pGauge == nullptr)
-		{// ブーストゲージの生成
+		{// ゲージの生成
 			m_apParam[nCnt]->pGauge = CObject2D::Create(6);
 
 			if (m_apParam[nCnt]->pGauge != nullptr)
@@ -77,7 +88,7 @@ HRESULT CAssess::Init(void)
 				int nIdx = CManager::GetTexture()->Regist(GAUGE_PATH);
 
 				m_apParam[nCnt]->pGauge->SetIdxTexture(nIdx);
-				m_apParam[nCnt]->pGauge->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+				m_apParam[nCnt]->pGauge->SetCol(aCol[nCnt]);
 				m_apParam[nCnt]->pGauge->SetPosition(D3DXVECTOR3(FRAME_WIDTH * 0.5f + FRAME_WIDTH * nCnt, FRAME_HEIGHT, 0.0f));
 				m_apParam[nCnt]->pGauge->SetSize(0.0f, GAUGE_HEIGHT);
 				m_apParam[nCnt]->pGauge->SetVtx();
@@ -228,7 +239,7 @@ void CAssess::SetWidthDest(Param *pParam)
 	case GAUGESTATE_SHRINK:
 
 		// 短めの位置に目的値を設定
-		fWidthDest *= 0.6f;
+		fWidthDest *= SHRINK_RATE;
 
 		pParam->state = GAUGESTATE_EXTEND;
 

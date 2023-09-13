@@ -1,4 +1,7 @@
-﻿  ranking.cpp
-cl : コマンド ライン warning D9028: 簡易リビルド時のエラーです、通常のビルドに戻します
+﻿  dustmanager.cpp
+  dust.cpp
+  コードを生成中...
+  スキップ中... (関連する変更は検出されませんでした)
+  game.cpp
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\Debug\09_master.exe
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\Debug\09_master.pdb (Full PDB)

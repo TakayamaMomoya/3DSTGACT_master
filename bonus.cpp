@@ -27,7 +27,7 @@
 #define DOGDE_SCORE	(2000)	// 至近弾回避のスコア
 #define MISSILE_SCORE	(500)	// ミサイル撃破のスコア
 #define MANUALHIT_SCORE	(1000)	// マニュアル照準のスコア
-#define ASSESS_DODGE	(0.07f)	// 回避の評価単価
+#define ASSESS_DODGE	(0.03f)	// 回避の評価単価
 #define ASSESS_MISSILE	(0.07f)	// ミサイル撃破の評価単価
 #define ASSESS_MANUALHIT	(0.1f)	// マニュアルヒットの評価単価
 
