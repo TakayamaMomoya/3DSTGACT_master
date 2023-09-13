@@ -52,6 +52,12 @@ HRESULT CExplosion::Init(void)
 	// 継承クラスの初期化
 	CBillboard::Init();
 
+	D3DXVECTOR2 leftUp = { 0.125f * m_nPatternAnim,0.0f };
+	D3DXVECTOR2 rightDown = { 0.125f + 0.125f * m_nPatternAnim,1.0f };
+
+	// テクスチャ座標設定
+	SetTex(leftUp, rightDown);
+
 	return S_OK;
 }
 

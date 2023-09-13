@@ -193,6 +193,11 @@ void CMissile::Update(void)
 	if (m_pCollisionSphere != nullptr)
 	{// 球の当たり判定の管理
 		m_pCollisionSphere->SetPosition(GetPosition());
+
+		if (m_pCollisionSphere->TriggerCube(CCollision::TAG_BLOCK))
+		{// ブロックとの当たり判定
+			Death();
+		}
 	}
 
 	// 目標に近ければ爆発

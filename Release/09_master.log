@@ -1,25 +1,9 @@
-﻿  arrow.cpp
-  assess.cpp
-  bonus.cpp
-  bullet.cpp
-  dust.cpp
-  dustmanager.cpp
-  enemy.cpp
-  enemymove.cpp
-  enemytank.cpp
-  game.cpp
-  lockon.cpp
-  manager.cpp
-  meshcylinder.cpp
-  player.cpp
-  rader.cpp
-  ranking.cpp
-  renderer.cpp
-  score.cpp
+﻿  enemytank.cpp
+  explosion.cpp
   コード生成しています。
-  22 of 927 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
+  2 of 927 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    7 functions had inline decision re-evaluated but remain unchanged
+    18 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.exe
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.pdb (Full PDB)
