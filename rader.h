@@ -32,6 +32,6 @@ private:
 	void ChaseTarget(void);
 	void Wave(void);
 
-	D3DXVECTOR3 *m_pPos;
+	D3DXVECTOR3 *m_pPosInitial;	// ’¸“_‚Ì‰ŠúˆÊ’u
 };
 #endif

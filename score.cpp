@@ -20,7 +20,7 @@
 //*****************************************************
 #define NUM_PLACE	(6)	// 桁数
 #define SCORE_SPEED	(71)	// スコアの変わるスピード
-#define RANK_BONUS	(0.02f)	// 1ランクにおけるボーナス倍率
+#define RANK_BONUS	(0.04f)	// 1ランクにおけるボーナス倍率
 #define RANK_RATE	(0.0004f)	// ランクの上がる倍率
 
 //=====================================================
@@ -80,7 +80,7 @@ void CScore::Update(void)
 //=====================================================
 // スコア加算
 //=====================================================
-void CScore::AddScore(int nValue)
+int CScore::AddScore(int nValue)
 {
 	// ランク取得
 	CRank *pRank = CGame::GetRank();
@@ -98,6 +98,8 @@ void CScore::AddScore(int nValue)
 	{
 		m_nSocreDest = 999999;
 	}
+
+	return nValue;
 }
 
 //=====================================================

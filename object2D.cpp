@@ -284,6 +284,11 @@ void CObject2D::SetSize(float width, float height)
 //=====================================================
 void CObject2D::SetTex(D3DXVECTOR2 texLeftUp, D3DXVECTOR2 texRightDown)
 {
+	if (m_pVtxBuff == nullptr)
+	{
+		return;
+	}
+
 	// 頂点情報のポインタ
 	VERTEX_2D *pVtx;
 

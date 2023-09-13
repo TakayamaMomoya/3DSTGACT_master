@@ -73,6 +73,11 @@ HRESULT CNumber::Init(void)
 //=====================================================
 void CNumber::Uninit(void)
 {
+	for (int nCount = 0; nCount < m_nNumPlace; nCount++)
+	{
+		m_apObject[nCount]->Uninit();
+	}
+
 	Release();
 }
 
@@ -122,6 +127,14 @@ void CNumber::SetValue(int nValue,int nNumPlace)
 void CNumber::SetPosition(D3DXVECTOR3 pos)
 {
 	m_pos = pos;
+
+	for (int nCount = 0; nCount < m_nNumPlace; nCount++)
+	{
+		if (m_apObject[nCount] != nullptr)
+		{
+			m_apObject[nCount]->SetPosition(D3DXVECTOR3(pos.x + m_apObject[nCount]->GetWidth() * nCount * 2, pos.y, pos.z));
+		}
+	}
 }
 
 //=====================================================

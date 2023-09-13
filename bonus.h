@@ -17,6 +17,7 @@
 // 前方宣言
 //*****************************************************
 class CObject2D;
+class CNumber;
 
 //*****************************************************
 // クラスの定義
@@ -53,9 +54,11 @@ private:
 
 	void MoveToDest(void);
 	void ManageState(void);
-	void BonusScore(TYPE type);
+	void FollowCaption(void);
+	int BonusScore(TYPE type);
 
 	CObject2D *m_pCaption;	// 見出しのポインタ
+	CNumber *m_pNumber;	// ボーナス数字のポインタ
 	D3DXVECTOR3 m_posDest;	// 目標位置
 	STATE m_state;	// 状態
 	int m_nTimerOut;	// フェードアウトまでのタイマー

@@ -30,6 +30,10 @@
 #define ASSESS_DODGE	(0.03f)	// 回避の評価単価
 #define ASSESS_MISSILE	(0.07f)	// ミサイル撃破の評価単価
 #define ASSESS_MANUALHIT	(0.1f)	// マニュアルヒットの評価単価
+#define NUM_PLACE	(5)	// ボーナス数字の桁数
+#define DIST_NUMBER	(70.0f)	// 数字をずらす距離
+#define NUMBER_WIDTH	(10.0f)	// 数字の幅
+#define NUMBER_HEIGHT	(24.0f)	// 数字の高さ
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -46,6 +50,7 @@ CBonus::CBonus(int nPriority) : CObject(nPriority)
 	m_pPrev = nullptr;
 	m_pNext = nullptr;
 	m_pCaption = nullptr;
+	m_pNumber = nullptr;
 	m_state = STATE_NONE;
 	m_nTimerOut = 0;
 
@@ -112,6 +117,13 @@ void CBonus::Uninit(void)
 		m_pCaption = nullptr;
 	}
 
+	if (m_pNumber != nullptr)
+	{
+		m_pNumber->Uninit();
+
+		m_pNumber = nullptr;
+	}
+
 	if (m_pHead == this)
 	{// 先頭アドレスの破棄
 	 // 先頭アドレスを次のアドレスに引き継ぐ
@@ -153,6 +165,9 @@ void CBonus::Update(void)
 
 	// 目標位置に向かう処理
 	MoveToDest();
+
+	// 数字が見出しについていく処理
+	FollowCaption();
 }
 
 //=====================================================
@@ -243,6 +258,26 @@ void CBonus::MoveToDest(void)
 }
 
 //=====================================================
+// 数字が見出しについていく処理
+//=====================================================
+void CBonus::FollowCaption(void)
+{
+	if (m_pCaption == nullptr || m_pNumber == nullptr)
+	{
+		return;
+	}
+
+	// 見出しの位置取得
+	D3DXVECTOR3 pos = m_pCaption->GetPosition();
+
+	// 少しずらす
+	pos.x += DIST_NUMBER;
+
+	// 数字の位置設定
+	m_pNumber->SetPosition(pos);
+}
+
+//=====================================================
 // 描画処理
 //=====================================================
 void CBonus::Draw(void)
@@ -262,6 +297,7 @@ CBonus *CBonus::Create(TYPE type)
 		"data\\TEXTURE\\UI\\message02.png"
 	};
 
+	int nBonus = 0;
 	CBonus *pBonus = nullptr;
 
 	pBonus = new CBonus;
@@ -271,9 +307,9 @@ CBonus *CBonus::Create(TYPE type)
 		pBonus->m_pCaption = CObject2D::Create(6);
 
 		if (pBonus->m_pCaption != nullptr)
-		{
+		{// 見出しの生成
 			// ボーナス付与
-			pBonus->BonusScore(type);
+			nBonus = pBonus->BonusScore(type);
 
 			pBonus->m_pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f));
 			pBonus->m_pCaption->SetSize(170.0f, 30.0f);
@@ -290,6 +326,14 @@ CBonus *CBonus::Create(TYPE type)
 			pBonus->m_pCaption->SetVtx();
 		}
 
+		pBonus->m_pNumber = CNumber::Create(NUM_PLACE,nBonus);
+
+		if (pBonus->m_pNumber != nullptr)
+		{// ボーナス数字の生成
+			pBonus->m_pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f));
+			pBonus->m_pNumber->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+		}
+
 		// 初期化処理
 		pBonus->Init();
 	}
@@ -300,8 +344,10 @@ CBonus *CBonus::Create(TYPE type)
 //=====================================================
 // スコアボーナス付与
 //=====================================================
-void CBonus::BonusScore(TYPE type)
+int CBonus::BonusScore(TYPE type)
 {
+	int nBonus = 0;
+
 	// スコア取得
 	CScore *pScore = CGame::GetScore();
 
@@ -324,12 +370,12 @@ void CBonus::BonusScore(TYPE type)
 
 	if (pScore != nullptr)
 	{
-		pScore->AddScore(aScore[type]);
+		nBonus = pScore->AddScore(aScore[type]);
 	}
 
 	if (pAssess == nullptr)
 	{
-		return;
+		return nBonus;
 	}
 
 	switch (type)
@@ -352,4 +398,6 @@ void CBonus::BonusScore(TYPE type)
 	default:
 		break;
 	}
+
+	return nBonus;
 }

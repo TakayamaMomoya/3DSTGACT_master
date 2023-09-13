@@ -32,16 +32,17 @@
 #define WAVE_HEIGHT	(50.0f)	// 波打つ高さ
 #define WAVE_LENGTH	(100.0f)	// 波打つ範囲の距離
 #define CHANGE_COl	(0.15f)	// 色の変わる割合
-#define RAND_HEIGHT	(5.0f)	// 振れる幅
+#define RAND_HEIGHT	(10.0f)	// 振れる幅
 #define WAVE_SIZE	(0.04f)	// 波の大きさ
 #define SHAKE_SIZE	(0.005f)	// 揺れの大きさ
+#define WAVE_SPEED	(0.08f)	// 波の動く速度
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CRader::CRader(void)
 {
-	m_pPos = nullptr;
+	m_pPosInitial = nullptr;
 }
 
 //=====================================================
@@ -81,16 +82,16 @@ HRESULT CRader::Init(void)
 	CMeshCylinder::Init();
 
 	// 初期位置情報生成
-	if (m_pPos == nullptr)
+	if (m_pPosInitial == nullptr)
 	{
 		int nNumVtx = GetNumVtx();
 
-		m_pPos = new D3DXVECTOR3[nNumVtx];
+		m_pPosInitial = new D3DXVECTOR3[nNumVtx];
 
-		if (m_pPos != nullptr)
+		if (m_pPosInitial != nullptr)
 		{
 			// 情報初期化
-			ZeroMemory(m_pPos, sizeof(D3DXVECTOR3) * nNumVtx);
+			ZeroMemory(m_pPosInitial, sizeof(D3DXVECTOR3) * nNumVtx);
 
 			// 初期位置代入
 			// 頂点バッファ取得
@@ -104,7 +105,7 @@ HRESULT CRader::Init(void)
 
 			for (int nCnt = 0; nCnt < nNumVtx; nCnt++)
 			{
-				m_pPos[nCnt] = pVtx[nCnt].pos;
+				m_pPosInitial[nCnt] = pVtx[nCnt].pos;
 			}
 
 			// 頂点バッファをアンロック
@@ -121,6 +122,12 @@ HRESULT CRader::Init(void)
 //=====================================================
 void CRader::Uninit(void)
 {
+	if (m_pPosInitial != nullptr)
+	{// 位置情報の破棄
+		delete m_pPosInitial;
+		m_pPosInitial = nullptr;
+	}
+
 	// 継承クラスの終了
 	CMeshCylinder::Uninit();
 }
@@ -187,10 +194,19 @@ void CRader::Wave(void)
 	int nIdx;
 	D3DXVECTOR3 vecDiff;
 	D3DXVECTOR3 pos = pPlayer->GetPosition();
+	D3DXVECTOR3 *pPosDest = nullptr;
 	D3DXCOLOR col = { 1.0f,1.0f,1.0f,1.0f };
 	float fRot;
 	float fRotDiff;
 	float fSin;
+
+	// 頂点数分の目的座標生成
+	pPosDest = new D3DXVECTOR3[GetNumVtx()];
+
+	if (pPosDest == nullptr)
+	{// 生成できなかった場合処理を終了
+		return;
+	}
 
 	// 頂点情報のポインタ
 	VERTEX_3D *pVtx;
@@ -204,9 +220,8 @@ void CRader::Wave(void)
 
 	for (int nCnt = 0; nCnt < MESH_U + 1; nCnt++)
 	{
-		pVtx[nCnt].pos = m_pPos[nCnt];
-		pVtx[nCnt + MESH_U + 1].pos = m_pPos[nCnt + MESH_U + 1];
-		//pVtx[nCnt + MESH_U + 1].pos.y = 0;
+		pPosDest[nCnt] = m_pPosInitial[nCnt];
+		pPosDest[nCnt + MESH_U + 1] = m_pPosInitial[nCnt + MESH_U + 1];
 		pVtx[nCnt].col = col;
 		pVtx[nCnt + MESH_U + 1].col = col;
 	}
@@ -243,15 +258,11 @@ void CRader::Wave(void)
 			float fRate = sinf(fSin * nCnt);
 			float fHeight = fRate * WAVE_HEIGHT + fDiff;
 
-			// 割合と高さをかける
-			//pVtx[nIdx].pos.y += fHeight;
-			//pVtx[nIdx + MESH_U + 1].pos.y += fHeight;
+			pPosDest[nIdx].x += m_pPosInitial[nIdx].x * WAVE_SIZE * fRate + m_pPosInitial[nIdx].x * SHAKE_SIZE * fDiff;
+			pPosDest[nIdx].z += m_pPosInitial[nIdx].z * WAVE_SIZE * fRate + m_pPosInitial[nIdx].z * SHAKE_SIZE * fDiff;
 
-			pVtx[nIdx].pos.x += m_pPos[nIdx].x * WAVE_SIZE * fRate + m_pPos[nIdx].x * SHAKE_SIZE * fDiff;
-			pVtx[nIdx].pos.z += m_pPos[nIdx].z * WAVE_SIZE * fRate + m_pPos[nIdx].z * SHAKE_SIZE * fDiff;
-
-			pVtx[nIdx + MESH_U + 1].pos.x += m_pPos[nIdx].x * WAVE_SIZE * fRate + m_pPos[nIdx].x * SHAKE_SIZE * fDiff;
-			pVtx[nIdx + MESH_U + 1].pos.z += m_pPos[nIdx].z * WAVE_SIZE * fRate + m_pPos[nIdx].z * SHAKE_SIZE * fDiff;
+			pPosDest[nIdx + MESH_U + 1].x += m_pPosInitial[nIdx].x * WAVE_SIZE * fRate + m_pPosInitial[nIdx].x * SHAKE_SIZE * fDiff;
+			pPosDest[nIdx + MESH_U + 1].z += m_pPosInitial[nIdx].z * WAVE_SIZE * fRate + m_pPosInitial[nIdx].z * SHAKE_SIZE * fDiff;
 
 			col = (D3DXCOLOR)pVtx[nIdx].col;
 
@@ -268,11 +279,24 @@ void CRader::Wave(void)
 		pEnemy = pEnemyNext;
 	}
 
+	for (int nCnt = 0; nCnt < MESH_U + 1; nCnt++)
+	{
+		pVtx[nCnt].pos += (pPosDest[nCnt] - pVtx[nCnt].pos) * WAVE_SPEED;
+		pVtx[nCnt + MESH_U + 1].pos += (pPosDest[nCnt + MESH_U + 1] - pVtx[nCnt + MESH_U + 1].pos) * WAVE_SPEED;
+	}
+
+	// 端の頂点同士をつなげる
 	pVtx[MESH_U].pos = pVtx[0].pos;
 	pVtx[MESH_U * 2 + 1].pos = pVtx[MESH_U + 1].pos;
 
 	// 頂点バッファをアンロック
 	pVtxBuff->Unlock();
+
+	if (pPosDest != nullptr)
+	{// 目的座標の破棄
+		delete[] pPosDest;
+		pPosDest = nullptr;
+	}
 }
 
 //=====================================================

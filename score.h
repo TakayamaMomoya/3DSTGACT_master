@@ -27,7 +27,7 @@ public:
 	void Update(void);
 	void Draw(void) {}
 	static CScore *Create(void);
-	void AddScore(int nValue);
+	int AddScore(int nValue);
 	void SetPosition(D3DXVECTOR3 pos) {};
 	D3DXVECTOR3 GetPosition(void) { return D3DXVECTOR3(); }
 	D3DXVECTOR3 GetPositionOld(void) { return D3DXVECTOR3(); };	// ˆÊ’uæ“¾ˆ—
