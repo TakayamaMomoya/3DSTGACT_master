@@ -226,6 +226,11 @@ void CBonus::ManageState(void)
 	{
 		m_pCaption->SetCol(col);
 	}
+
+	if (m_pNumber != nullptr)
+	{
+		m_pNumber->SetColor(col);
+	}
 }
 
 //=====================================================
