@@ -21,7 +21,7 @@
 //=====================================================
 // コンストラクタ
 //=====================================================
-CAnim2D::CAnim2D()
+CAnim2D::CAnim2D(int nPriority) : CObject2D(nPriority)
 {
 	m_nCounterAnim = 0;
 	m_nPatternAnim = 0;
@@ -36,6 +36,25 @@ CAnim2D::CAnim2D()
 CAnim2D::~CAnim2D()
 {
 
+}
+
+//=====================================================
+// 生成処理
+//=====================================================
+CAnim2D *CAnim2D::Create(int nPtnAnim, int nNumAnim, int nTimeAnim, int nNumV)
+{
+	CAnim2D *pAnim2D = nullptr;
+
+	if (pAnim2D != nullptr)
+	{
+		// 初期化処理
+		pAnim2D->Init();
+
+		// アニメーション情報設定
+		SetInfo(nPtnAnim, nNumAnim, nTimeAnim, nNumV);
+	}
+
+	return pAnim2D;
 }
 
 //=====================================================

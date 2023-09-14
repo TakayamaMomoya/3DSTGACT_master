@@ -93,7 +93,7 @@ CShadow *CShadow::Create(D3DXVECTOR3 pos, float width, float height)
 
 	if (pShadow == nullptr)
 	{
-		//pShadow = new CShadow;
+		pShadow = new CShadow;
 
 		if (pShadow != nullptr)
 		{

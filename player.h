@@ -94,6 +94,13 @@ public:
 	CEnemy *GetLockEnemy(void) { return m_pEnemy; }
 
 private:
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何でもない状態
+		STATE_NORMAL,	// 通常状態
+		STATE_DEATH,	// 死亡状態
+	};
+
 	void Input(void);
 	void Turn(D3DXVECTOR3 move,float fRotOld);
 	void Lockon(void);
@@ -107,6 +114,7 @@ private:
 	D3DXVECTOR3 LinePridiction(D3DXVECTOR3 pos, float fSpeedBullet, D3DXVECTOR3 posTarget, D3DXVECTOR3 moveTarget);
 	float PlusMin(float fData1, float fData2);
 	void Boost(void);
+	void Death(void);
 
 	int m_nLife;	// 体力
 	float m_fBoost;	// ブースト残量
@@ -123,6 +131,7 @@ private:
 	bool m_bTurnDowner;	// 下半身が回転しているかどうか
 	CCollisionSphere *m_pCollisionSphere;
 	CCollisionCube *m_pCollisionCube;
+	STATE m_state;	// 状態
 	D3DXMATRIX m_mtxMazzle[2];	// 銃口のマトリックス
 	D3DXVECTOR3 m_offsetMazzle[2];	// 銃口のオフセット位置
 	D3DXVECTOR3 m_posMazzle;	// 銃口座標

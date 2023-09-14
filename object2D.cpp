@@ -321,22 +321,23 @@ void CObject2D::SetAnim(int nAnim,int nNumAnim,int nNumV)
 		// テクスチャ座標
 		pVtx[0].tex = D3DXVECTOR2
 		(
-			(1.0f / nNumV) * nAnim,
-			0.0f + (float)nNumV / (float)nNumAnim *(nAnim / nNumV)
+			(1.0f / nNumAnim) * nAnim,
+			0.0f
 		);
 		pVtx[1].tex = D3DXVECTOR2
 		(
-			1.0f / nNumV + 1.0f / nNumV * nAnim,
-			0.0f + (float)nNumV / (float)nNumAnim *(nAnim / nNumV)
+			1.0f / nNumAnim + 1.0f / nNumAnim * nAnim,
+			0.0f
 		);
 		pVtx[2].tex = D3DXVECTOR2
 		(
-			0.0f + 1.0f / nNumV * nAnim,
-			(float)nNumV / (float)nNumAnim + (float)nNumV / (float)nNumAnim *(nAnim / nNumV)
+			1.0f / nNumAnim * nAnim,
+			1.0f
 		);
 		pVtx[3].tex = D3DXVECTOR2
-		(1.0f / nNumV + 1.0f / nNumV * nAnim,
-			(float)nNumV / (float)nNumAnim + (float)nNumV / (float)nNumAnim *(nAnim / nNumV)
+		(
+			1.0f / nNumAnim + 1.0f / nNumAnim * nAnim,
+			1.0f
 		);
 
 		// 頂点バッファのアンロック

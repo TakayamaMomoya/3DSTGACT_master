@@ -19,7 +19,7 @@
 class CShadow : public CObject3D
 {
 public:
-	CShadow(int nPriority = 5);	// コンストラクタ
+	CShadow(int nPriority = 6);	// コンストラクタ
 	~CShadow();	// デストラクタ
 
 	HRESULT Init(void);

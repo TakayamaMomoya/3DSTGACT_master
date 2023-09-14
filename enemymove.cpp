@@ -532,14 +532,14 @@ void CEnemyAttack::ChasePlayer(void)
 		Tilt(fRotDiff);
 
 		// 状態管理
-		ManageState(length,fRotDiff);
+		ManageState(length, fRotDiff);
 
 		if (m_state != STATE_LEAVE)
 		{
 			if (m_state == STATE_TURN)
 			{
 				// 角度補正
-				SetRot(D3DXVECTOR3(GetRot().x, GetRot().y + fRotDiff * ROLL_FACT, GetRot().z));
+				SetRot(D3DXVECTOR3(GetRot().x, GetRot().y + fRotDiff * 0.02f, GetRot().z));
 			}
 			else
 			{
@@ -560,21 +560,33 @@ void CEnemyAttack::ChasePlayer(void)
 			SetRot(D3DXVECTOR3(GetRot().x, GetRot().y + 6.28f, GetRot().z));
 		}
 
+		SetMove(D3DXVECTOR3
+		(
+			-sinf(GetRot().y) * SPEED_FIGHTER,
+			GetMove().y,
+			-cosf(GetRot().y) * SPEED_FIGHTER
+		));
+
 		if (length > ATTACK_RANGE)
 		{// 目標から離れていたら
-			// 目標方向へ進む
-			SetMove(D3DXVECTOR3
-			(
-				-sinf(GetRot().y) * SPEED_FIGHTER,
-				GetMove().y,
-				-cosf(GetRot().y) * SPEED_FIGHTER
-			));
+		 // 目標方向へ進む
+			
 		}
 		else
 		{// 目標に近づいていたら
 			if (GetCntAttack() >= ATTACK_FREQ)
 			{// 一定時間ごとに攻撃
-				//CEnemy::Create(GetPosition(),TYPE_MISSILE);
+				D3DXVec3Normalize(&vecDest, &vecDest);
+
+				CBullet::Create
+				(// 弾の発射
+					D3DXVECTOR3(GetPosition().x, GetPosition().y, GetPosition().z),
+					vecDest * BULLET_SPEED,
+					300,
+					CBullet::TYPE_ENEMY,
+					false,
+					20.0f
+				);
 
 				SetCntAttack(0);
 			}

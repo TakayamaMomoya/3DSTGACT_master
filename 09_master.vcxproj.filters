@@ -246,6 +246,9 @@
     <ClCompile Include="rank.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
+    <ClCompile Include="noise.cpp">
+      <Filter>ソース ファイル\2D</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="block.h">
@@ -451,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="rank.h">
       <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="noise.h">
+      <Filter>ソース ファイル\2D</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

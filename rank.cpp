@@ -74,7 +74,7 @@ HRESULT CRank::Init(void)
 		m_pGaugeProgress->SetCol(GAUGE_COl);
 	}
 
-	m_pFrame = CObject2D::Create(6);
+	m_pFrame = CObject2D::Create(7);
 
 	if (m_pFrame != nullptr)
 	{

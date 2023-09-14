@@ -40,6 +40,7 @@
 #include "assess.h"
 #include "lockon.h"
 #include "texture.h"
+#include "noise.h"
 
 //*****************************************************
 // マクロ定義
@@ -54,7 +55,7 @@
 #define NORMAL_DAMAGE	(5.0f)	// 通常ショットの威力
 #define ROLL_SPEED	(0.05f)	// 視点操作速度
 #define RAPID_TIME	(10)	// 連射モードにうつる猶予
-#define SPEED_SPRINT	(0.1f)	// ダッシュ時の移動倍率
+#define SPEED_SPRINT	(0.4f)	// ダッシュ時の移動倍率
 #define GRAVITY	(0.98f)	// 重力
 #define JUMP_POW	(1.2f)	// ジャンプ力
 #define JUMP_START_POW	(5.0f)	// 初動のジャンプ力
@@ -78,6 +79,8 @@
 #define RADIUS_SPHERE	(100)	// 球の当たり判定の大きさ
 #define HIT_ADD	(0.025f)	// 命中率の表示
 #define DAMAGE_PENALTY	(0.05f)	// ダメージ時の評価ペナルティ
+#define LIMIT_UPPERROT	(0.5f)	// 上半身の角度制限
+#define LIMIT_CAMERAROT	(0.8f)	// カメラの角度制限
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -103,6 +106,7 @@ CPlayer::CPlayer(int nPriority)
 	m_fParamCost = 0.0f;
 	m_fParamPower = 0.0f;
 	m_fParamRapid = 0.0f;
+	m_state = STATE_NONE;
 	m_bAim = false;
 	m_bLand = false;
 	m_bSprint = false;
@@ -210,6 +214,7 @@ HRESULT CPlayer::Init(void)
 	m_offsetLockon[1] = { -100.0f,0.0f,-200.0f };
 
 	m_boostState = BOOSTSTATE_NONE;
+	m_state = STATE_NORMAL;
 
 	// ゲージの生成
 	CBoost::Create();
@@ -363,8 +368,14 @@ void CPlayer::Update(void)
 	// ブースト量を保存
 	float fBoost = m_fBoost;
 
-	// 操作処理
-	Input();
+	if (m_state != STATE_DEATH)
+	{// 死亡時は反映しない処理
+		// 操作処理
+		Input();
+
+		// モーションの管理
+		ManageMotion();
+	}
 
 	// ブースト管理
 	ManageBoost(fBoost);
@@ -417,9 +428,6 @@ void CPlayer::Update(void)
 			bLandMesh = false;
 		}
 	}
-
-	// モーションの管理
-	ManageMotion();
 
 	// 当たり判定管理
 	ManageCollision(&bLandBlock);
@@ -1024,6 +1032,16 @@ void CPlayer::InputCamera(void)
 	pCameraInfo->rot.x -= vecTurn.x * ROLL_SPEED * 0.3f;
 	pCameraInfo->rot.y += vecTurn.y * ROLL_SPEED;
 
+	// カメラの角度制限
+	if (pCameraInfo->rot.x < D3DX_PI * 0.5f - LIMIT_CAMERAROT)
+	{
+		pCameraInfo->rot.x = D3DX_PI * 0.5f - LIMIT_CAMERAROT;
+	}
+	else if (pCameraInfo->rot.x > D3DX_PI * 0.5f + LIMIT_CAMERAROT)
+	{
+		pCameraInfo->rot.x = D3DX_PI * 0.5f + LIMIT_CAMERAROT;
+	}
+
 	if (m_pBodyUpper != nullptr)
 	{// 上半身の回転
 		D3DXVECTOR3 rotUpper = D3DXVECTOR3(pCameraInfo->rot.x - D3DX_PI * 0.5f, pCameraInfo->rot.y - m_pBodyDowner->GetRot().y, m_pBodyUpper->GetRot().z);
@@ -1032,6 +1050,16 @@ void CPlayer::InputCamera(void)
 		pUniversal->LimitRot(&rotUpper.x);
 		pUniversal->LimitRot(&rotUpper.y);
 		pUniversal->LimitRot(&rotUpper.z);
+
+		// 上半身の角度制限
+		if (rotUpper.x < -LIMIT_UPPERROT)
+		{
+			rotUpper.x = -LIMIT_UPPERROT;
+		}
+		else if (rotUpper.x > LIMIT_UPPERROT)
+		{
+			rotUpper.x = LIMIT_UPPERROT;
+		}
 
 		// 上半身の回転
 		m_pBodyUpper->SetRot(rotUpper);
@@ -1588,7 +1616,28 @@ void CPlayer::Boost(void)
 //=====================================================
 void CPlayer::Hit(float fDamage)
 {
+	if (m_state == STATE_DEATH)
+	{
+		return;
+	}
+
+	// 体力減少
 	m_nLife -= (int)fDamage;
+
+	// 被弾時のノイズ演出
+	CNoise *pNoise = nullptr;
+
+	// ライフが減っている割合を算出
+	float fRate = (float)(INITIAL_LIFE_PLAYER - m_nLife) / (float)INITIAL_LIFE_PLAYER;
+
+	pNoise = CNoise::Create();
+
+	if (pNoise != nullptr)
+	{// ノイズの不透明度設定
+		D3DXCOLOR col = { 1.0f, 1.0f, 1.0f, fRate };
+
+		pNoise->SetCol(col);
+	}
 
 	if (m_pAssess != nullptr)
 	{// ダメージによる評価ペナルティ
@@ -1604,8 +1653,29 @@ void CPlayer::Hit(float fDamage)
 		// 爆発パーティクル
 		CParticle::Create(pos, CParticle::TYPE_EXPLOSION);
 
-		Uninit();
+		pNoise = CNoise::Create(600);
+
+		Death();
 	}
+}
+
+//=====================================================
+// 死亡処理
+//=====================================================
+void CPlayer::Death(void)
+{
+	if (m_pBodyDowner != nullptr && m_pBodyUpper != nullptr)
+	{
+		m_pBodyDowner->SetMotion(6);
+
+		m_pBodyUpper->SetMotion(4);
+	}
+
+	m_move = { 0.0f,0.0f,0.0f };
+
+	m_bSprint = false;
+
+	m_state = STATE_DEATH;
 }
 
 //=====================================================
@@ -1635,11 +1705,15 @@ void CPlayer::SetNumHit(int nNumHit)
 //=====================================================
 void CPlayer::Draw(void)
 {
+	// カメラ取得
+	CCamera::Camera *pCameraInfo = CManager::GetCamera()->GetCamera();
+
 	// マトリックスの設定
 	SetMatrix();
 
 #ifdef _DEBUG
 	CManager::GetDebugProc()->Print("\nプレイヤーの位置：[%f,%f,%f]", GetPosition().x, GetPosition().y, GetPosition().z);
+	CManager::GetDebugProc()->Print("\nカメラの角度：[%f,%f,%f]", pCameraInfo->rot.x, pCameraInfo->rot.y, pCameraInfo->rot.z);
 	CManager::GetDebugProc()->Print("\n連射力：[%f]", m_fParamRapid);
 	CManager::GetDebugProc()->Print("\n攻撃力：[%f]", m_fParamPower);
 	CManager::GetDebugProc()->Print("\n効率：[%f]", m_fParamCost);

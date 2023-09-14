@@ -133,6 +133,7 @@ void CNumber::SetPosition(D3DXVECTOR3 pos)
 		if (m_apObject[nCount] != nullptr)
 		{
 			m_apObject[nCount]->SetPosition(D3DXVECTOR3(pos.x + m_apObject[nCount]->GetWidth() * nCount * 2, pos.y, pos.z));
+			m_apObject[nCount]->SetVtx();
 		}
 	}
 }

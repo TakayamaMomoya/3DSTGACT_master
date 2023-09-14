@@ -24,9 +24,9 @@
 #define IN_SPEED	(0.03f)	// フェードインのスピード
 #define OUT_SPEED	(0.07f)	// フェードアウトのスピード
 #define TIME_FADE	(60)	// フェードアウトまでのフレーム数
-#define DOGDE_SCORE	(2000)	// 至近弾回避のスコア
+#define DOGDE_SCORE	(1000)	// 至近弾回避のスコア
 #define MISSILE_SCORE	(500)	// ミサイル撃破のスコア
-#define MANUALHIT_SCORE	(1000)	// マニュアル照準のスコア
+#define MANUALHIT_SCORE	(2000)	// マニュアル照準のスコア
 #define ASSESS_DODGE	(0.03f)	// 回避の評価単価
 #define ASSESS_MISSILE	(0.07f)	// ミサイル撃破の評価単価
 #define ASSESS_MANUALHIT	(0.1f)	// マニュアルヒットの評価単価
@@ -331,12 +331,19 @@ CBonus *CBonus::Create(TYPE type)
 			pBonus->m_pCaption->SetVtx();
 		}
 
-		pBonus->m_pNumber = CNumber::Create(NUM_PLACE,nBonus);
+		pBonus->m_pNumber = CNumber::Create(NUM_PLACE, nBonus);
 
 		if (pBonus->m_pNumber != nullptr)
 		{// ボーナス数字の生成
-			pBonus->m_pCaption->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, 600.0f, 0.0f));
+			// 見出しの位置取得
+			D3DXVECTOR3 pos = pBonus->m_pCaption->GetPosition();
+
+			// 少しずらす
+			pos.x += DIST_NUMBER;
+
+			// 数字の位置設定
 			pBonus->m_pNumber->SetSizeAll(NUMBER_WIDTH, NUMBER_HEIGHT);
+			pBonus->m_pNumber->SetPosition(pos);
 		}
 
 		// 初期化処理

@@ -16,9 +16,10 @@
 class CAnim2D : public CObject2D
 {
 public:
-	CAnim2D();	// コンストラクタ
+	CAnim2D(int nPriotity = 5);	// コンストラクタ
 	~CAnim2D();	// デストラクタ
 
+	CAnim2D *Create(int nPtnAnim, int nNumAnim, int nTimeAnim, int nNumV);
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);

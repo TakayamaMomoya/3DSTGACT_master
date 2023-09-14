@@ -37,6 +37,7 @@
 #include "rank.h"
 #include "dust.h"
 #include "effect3D.h"
+#include "noise.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -659,7 +660,10 @@ void CGame::Debug(void)
 
 	if (pKeyboard != nullptr)
 	{
-
+		if (pKeyboard->GetTrigger(DIK_Y))
+		{
+			CNoise::Create();
+		}
 	}
 }
 

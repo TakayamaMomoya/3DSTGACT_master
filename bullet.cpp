@@ -316,6 +316,11 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 
 			CParticle::Create(m_pos, CParticle::TYPE_HIT);
 
+			if (tag == CCollision::TAG_MISSILE)
+			{
+				CBonus::Create(CBonus::TYPE_MISSILE);
+			}
+
 			// ÉqÉbÉgêîâ¡éZ
 			m_nNumHit++;
 		}
