@@ -1675,21 +1675,6 @@ void CPlayer::Hit(float fDamage)
 	// 体力減少
 	m_nLife -= (int)fDamage;
 
-	// 被弾時のノイズ演出
-	CNoise *pNoise = nullptr;
-
-	// ライフが減っている割合を算出
-	float fRate = (float)(INITIAL_LIFE_PLAYER - m_nLife) / (float)INITIAL_LIFE_PLAYER;
-
-	pNoise = CNoise::Create();
-
-	if (pNoise != nullptr)
-	{// ノイズの不透明度設定
-		D3DXCOLOR col = { 1.0f, 1.0f, 1.0f, fRate };
-
-		pNoise->SetCol(col);
-	}
-
 	if (m_pAssess != nullptr)
 	{// ダメージによる評価ペナルティ
 		m_pAssess->AddParam(-DAMAGE_PENALTY, CAssess::PARAM_HIT);
@@ -1702,11 +1687,15 @@ void CPlayer::Hit(float fDamage)
 
 		m_nLife = 0;
 
-		pNoise = CNoise::Create(TIME_DEATH);
+		CNoise::Create(TIME_DEATH);
 
 		CExplSpawner::Create(pos, 500.0f, TIME_DEATH, nullptr);
 
 		Death();
+	}
+	else
+	{
+		CNoise::Create();
 	}
 }
 

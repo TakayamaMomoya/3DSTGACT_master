@@ -31,7 +31,7 @@ CNoise::CNoise(int nPriority) : CAnim2D(nPriority)
 {
 	m_nLife = 0;
 	m_nAlpha = 0;
-	m_nAddAlpha = 0;
+	m_fAddAlpha = 0.0f;
 
 	m_nNumAll++;
 }
@@ -61,7 +61,7 @@ HRESULT CNoise::Init(void)
 	// 位置設定
 	SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
 
-	SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
+	SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.0f));
 
 	return S_OK;
 }
@@ -85,12 +85,34 @@ void CNoise::Update(void)
 
 	m_nLife--;
 
-	m_nAlpha += m_nAddAlpha;
+	// 色を変える処理
+	ChangeCol();
 
 	if (m_nLife <= 0)
 	{
 		Uninit();
 	}
+}
+
+//=====================================================
+// 色を変える処理
+//=====================================================
+void CNoise::ChangeCol(void)
+{
+	D3DXCOLOR col;
+
+	col = GetCol();
+
+	col.a += m_fAddAlpha;
+
+	if (col.a > 1.0f)
+	{
+		col.a = 1.0f;
+
+		m_fAddAlpha = -1.0f / (m_nLife * (1.0f - m_fPeakAlpha));
+	}
+
+	SetCol(col);
 }
 
 //=====================================================
@@ -102,23 +124,23 @@ void CNoise::Draw(void)
 	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
 
 	// アルファテストの有効化
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
-	pDevice->SetRenderState(D3DRS_ALPHAREF, m_nAlpha);
+	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	//pDevice->SetRenderState(D3DRS_ALPHAREF, m_nAlpha);
 
 	// 継承クラスの描画
 	CAnim2D::Draw();
 
 	// アルファテストの無効化
-	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
-	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
-	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
+	//pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	//pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
+	//pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 }
 
 //=====================================================
 // 生成処理
 //=====================================================
-CNoise *CNoise::Create(int nLife)
+CNoise *CNoise::Create(int nLife, float fPeakAlpha)
 {
 	CNoise *pNoise = nullptr;
 
@@ -131,7 +153,11 @@ CNoise *CNoise::Create(int nLife)
 
 		pNoise->m_nLife = nLife;
 
-		pNoise->m_nAddAlpha = 255 / nLife;
+		//pNoise->m_nAddAlpha = 255 / nLife;
+
+		pNoise->m_fPeakAlpha = fPeakAlpha;
+
+		pNoise->m_fAddAlpha = 1.0f / (nLife * fPeakAlpha);
 
 		// テクスチャの読込
 		int nIdx = CManager::GetTexture()->Regist("data\\TEXTURE\\EFFECT\\noise00.png");
