@@ -41,6 +41,7 @@
 #include "lockon.h"
 #include "texture.h"
 #include "noise.h"
+#include "explosionspawner.h"
 
 //*****************************************************
 // マクロ定義
@@ -81,6 +82,7 @@
 #define DAMAGE_PENALTY	(0.05f)	// ダメージ時の評価ペナルティ
 #define LIMIT_UPPERROT	(0.5f)	// 上半身の角度制限
 #define LIMIT_CAMERAROT	(0.8f)	// カメラの角度制限
+#define TIME_DEATH	(240)	// 死ぬまでのフレーム数
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -88,6 +90,7 @@
 CPlayer::CPlayer(int nPriority)
 {
 	m_nLife = 0;
+	m_nCntDeath = 0;
 	m_fBoost = 0.0f;
 	m_nTimerRapid = 0;
 	m_nTimerShot = 0;
@@ -313,17 +316,10 @@ void CPlayer::Uninit(void)
 void CPlayer::Update(void)
 {
 	// 変数宣言
-	bool bLandMesh = false;
-	bool bLandBlock = false;
-	bool bRay = false;
 	float fMoveFact = MOVE_FACT;
-	float fLength = 0.0f;
 
 	// カメラ取得
 	CCamera *pCamera = CManager::GetCamera();
-
-	// 汎用処理の取得
-	CUniversal *pUniversal = CManager::GetUniversal();
 
 	// マウスカーソルを画面中心に固定する
 	SetCursorPos((int)(SCREEN_WIDTH * 0.5f), (int)(SCREEN_HEIGHT * 0.5f));
@@ -340,27 +336,16 @@ void CPlayer::Update(void)
 	{
 		// 落下の無効化
 		SetMove(D3DXVECTOR3(GetMove().x, GetMove().y + (0 - GetMove().y) * 0.2f, GetMove().z));
+
+		// ブーストの設定
+		Boost();
 	}
 
-	// 銃口のオフセット位置を設定
-	CParts *pParts = nullptr;
+	// オフセット管理
+	ManageOffset();
 
-	if (m_pBodyUpper != nullptr)
-	{
-		pParts = m_pBodyUpper->GetParts(8)->m_pParts;
-	}
-
-	if (pParts != nullptr)
-	{
-		pUniversal->SetOffSet(&m_mtxMazzle[0], *pParts->GetMatrix(), m_offsetMazzle[0]);
-		pUniversal->SetOffSet(&m_mtxMazzle[1], m_mtxMazzle[0],m_offsetMazzle[1]);
-
-		m_posMazzle = { m_mtxMazzle[0]._41, m_mtxMazzle[0]._42, m_mtxMazzle[0]._43 };
-	}
-
-	// ロックオンのオフセット設定
-	pUniversal->SetOffSet(&m_mtxLockon[0], *m_pBodyUpper->GetMatrix(), m_offsetLockon[0]);
-	pUniversal->SetOffSet(&m_mtxLockon[1], *m_pBodyUpper->GetMatrix(), m_offsetLockon[1]);
+	// 状態管理
+	ManageState();
 
 	// 位置を保存
 	SetPositionOld(GetPosition());
@@ -380,74 +365,19 @@ void CPlayer::Update(void)
 	// ブースト管理
 	ManageBoost(fBoost);
 
-	// 移動量加算
-	SetPosition(GetPosition() + GetMove());
-
 	if (m_bSprint || m_bLand == false)
 	{
 		fMoveFact = SPRINT_FACT;
 	}
 
+	// 位置加算
+	SetPosition(GetPosition() + GetMove());
+
 	// 移動量減衰
 	SetMove(D3DXVECTOR3(GetMove().x * fMoveFact, GetMove().y, GetMove().z * fMoveFact));
 
-	// メッシュフィールドとの当たり判定
-	D3DXVECTOR3 move = GetMove();
-	D3DXVECTOR3 nor;
-	CMeshField *pMesh = CGame::GetMeshField();
-	float fHeight = 0.0f;
-
-	if (m_pShadow != nullptr)
-	{
-		// 影の位置設定
-		m_pShadow->SetPosition(D3DXVECTOR3(GetPosition().x, m_pShadow->GetPosition().y, GetPosition().z));
-	}
-
-	if (pMesh != nullptr)
-	{// メッシュとの当たり判定
-		fHeight = pMesh->GetHeight(GetPosition(), &move, nullptr);
-
-		if (fHeight >= GetPosition().y)
-		{// プレイヤーの位置設定
-			SetPosition(D3DXVECTOR3(GetPosition().x, fHeight, GetPosition().z));
-
-			SetMove(move);
-
-			move = GetMove();
-
-			if (move.y <= 0.0f)
-			{
-				SetMove(D3DXVECTOR3(move.x, 0.0f, move.z));
-			}
-
-			// 着地状態にする
-			bLandMesh = true;
-		}
-		else
-		{
-			bLandMesh = false;
-		}
-	}
-
 	// 当たり判定管理
-	ManageCollision(&bLandBlock);
-
-	if (bLandBlock || bLandMesh)
-	{// 着地条件をひとつクリアしていれば着地状態にする
-		m_bLand = true;
-
-		m_nCounterAir = 0;
-	}
-	else
-	{
-		m_bLand = false;
-	}
-
-	if (m_bSprint)
-	{
-		// ブーストの設定
-		Boost();
-	}
+	ManageCollision();
 }
 
 //=====================================================
@@ -484,12 +414,47 @@ void CPlayer::ManageBoost(float fBoostOld)
 }
 
 //=====================================================
+// オフセットの管理
+//=====================================================
+void CPlayer::ManageOffset(void)
+{
+	// 汎用処理の取得
+	CUniversal *pUniversal = CManager::GetUniversal();
+
+	// 銃口のオフセット位置を設定
+	CParts *pParts = nullptr;
+
+	if (m_pBodyUpper != nullptr)
+	{
+		pParts = m_pBodyUpper->GetParts(8)->m_pParts;
+	}
+
+	if (pParts != nullptr)
+	{
+		pUniversal->SetOffSet(&m_mtxMazzle[0], *pParts->GetMatrix(), m_offsetMazzle[0]);
+		pUniversal->SetOffSet(&m_mtxMazzle[1], m_mtxMazzle[0], m_offsetMazzle[1]);
+
+		m_posMazzle = { m_mtxMazzle[0]._41, m_mtxMazzle[0]._42, m_mtxMazzle[0]._43 };
+	}
+
+	// ロックオンのオフセット設定
+	pUniversal->SetOffSet(&m_mtxLockon[0], *m_pBodyUpper->GetMatrix(), m_offsetLockon[0]);
+	pUniversal->SetOffSet(&m_mtxLockon[1], *m_pBodyUpper->GetMatrix(), m_offsetLockon[1]);
+}
+
+//=====================================================
 // 当たり判定管理
 //=====================================================
-void CPlayer::ManageCollision(bool *pLand)
+void CPlayer::ManageCollision(void)
 {
+	bool bLandMesh;
+	bool bLandBlock = false;
+
 	// スコア取得
 	CScore *pScore = CGame::GetScore();
+
+	// メッシュフィールドとの判定
+	bLandMesh = CollisionField();
 
 	if (m_pCollisionCube != nullptr)
 	{// 当たり判定の管理
@@ -504,7 +469,7 @@ void CPlayer::ManageCollision(bool *pLand)
 		D3DXVECTOR3 move = GetMove();
 
 		// 押し出しの当たり判定
-		*pLand = m_pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
+		bLandBlock = m_pCollisionCube->CubeCollision(CCollision::TAG_BLOCK, &move);
 
 		SetMove(move);
 	}
@@ -532,6 +497,61 @@ void CPlayer::ManageCollision(bool *pLand)
 
 		m_pCollisionSphere->SetRadius(RADIUS_SPHERE);
 	}
+
+	if (bLandBlock || bLandMesh)
+	{// 着地条件をひとつクリアしていれば着地状態にする
+		m_bLand = true;
+
+		m_nCounterAir = 0;
+	}
+	else
+	{
+		m_bLand = false;
+	}
+}
+
+//=====================================================
+// メッシュフィールドとの判定
+//=====================================================
+bool CPlayer::CollisionField(void)
+{
+	bool bLandMesh = false;
+
+	// メッシュフィールドとの当たり判定
+	D3DXVECTOR3 move = GetMove();
+	D3DXVECTOR3 nor;
+	CMeshField *pMesh = CGame::GetMeshField();
+	float fHeight = 0.0f;
+
+	if (m_pShadow != nullptr)
+	{
+		// 影の位置設定
+		m_pShadow->SetPosition(D3DXVECTOR3(GetPosition().x, m_pShadow->GetPosition().y, GetPosition().z));
+	}
+
+	if (pMesh != nullptr)
+	{// メッシュとの当たり判定
+		fHeight = pMesh->GetHeight(GetPosition(), &move, nullptr);
+
+		if (fHeight >= GetPosition().y)
+		{// プレイヤーの位置設定
+			SetPosition(D3DXVECTOR3(GetPosition().x, fHeight, GetPosition().z));
+
+			SetMove(move);
+
+			move = GetMove();
+
+			if (move.y <= 0.0f)
+			{
+				SetMove(D3DXVECTOR3(move.x, 0.0f, move.z));
+			}
+
+			// 着地状態にする
+			bLandMesh = true;
+		}
+	}
+
+	return bLandMesh;
 }
 
 //=====================================================
@@ -1289,6 +1309,37 @@ void CPlayer::SetMatrix(void)
 }
 
 //=====================================================
+// 状態管理
+//=====================================================
+void CPlayer::ManageState(void)
+{
+	switch (m_state)
+	{
+	case CPlayer::STATE_NORMAL:
+		break;
+	case CPlayer::STATE_DEATH:
+
+		m_nCntDeath++;
+
+		if (m_nCntDeath >= TIME_DEATH)
+		{
+			// 腰の位置取得
+			D3DXVECTOR3 pos = { m_mtxWaist._41,m_mtxWaist._42, m_mtxWaist._43 };
+
+			// 爆発パーティクル
+			CParticle::Create(pos, CParticle::TYPE_EXPLOSION);
+
+			// 終了処理
+			Uninit();
+		}
+
+		break;
+	default:
+		break;
+	}
+}
+
+//=====================================================
 // モーション管理
 //=====================================================
 void CPlayer::ManageMotion(void)
@@ -1646,14 +1697,14 @@ void CPlayer::Hit(float fDamage)
 
 	if (m_nLife <= 0)
 	{// 死亡判定
-		m_nLife = 0;
-
+		// 腰の位置取得
 		D3DXVECTOR3 pos = { m_mtxWaist._41,m_mtxWaist._42, m_mtxWaist._43 };
 
-		// 爆発パーティクル
-		CParticle::Create(pos, CParticle::TYPE_EXPLOSION);
+		m_nLife = 0;
 
-		pNoise = CNoise::Create(600);
+		pNoise = CNoise::Create(TIME_DEATH);
+
+		CExplSpawner::Create(pos, 500.0f, TIME_DEATH, nullptr);
 
 		Death();
 	}
@@ -1666,6 +1717,8 @@ void CPlayer::Death(void)
 {
 	if (m_pBodyDowner != nullptr && m_pBodyUpper != nullptr)
 	{
+		m_pBodyUpper->SetRot(D3DXVECTOR3(0.0f,0.0f,0.0f));
+
 		m_pBodyDowner->SetMotion(6);
 
 		m_pBodyUpper->SetMotion(4);

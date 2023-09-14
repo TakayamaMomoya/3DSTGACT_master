@@ -31,6 +31,8 @@ public:
 
 private:
 	int m_nLife;	// 寿命
+	int m_nAlpha;	// アルファテストの値
+	int m_nAddAlpha;	// アルファテストの加算値
 	static int m_nNumAll;	// 総数
 };
 

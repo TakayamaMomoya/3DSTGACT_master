@@ -104,9 +104,12 @@ private:
 	void Input(void);
 	void Turn(D3DXVECTOR3 move,float fRotOld);
 	void Lockon(void);
+	void ManageState(void);
+	void ManageOffset(void);
 	void ManageMotion(void);
 	void ManageBoost(float fBoostOld);
-	void ManageCollision(bool *pLand);
+	void ManageCollision(void);
+	bool CollisionField(void);
 	void InputMove(void);
 	void InputShot(void);
 	void InputCamera(void);
@@ -117,6 +120,7 @@ private:
 	void Death(void);
 
 	int m_nLife;	// 体力
+	int m_nCntDeath;	// 死亡までのカウンター
 	float m_fBoost;	// ブースト残量
 	int m_nTimerRapid;	// 連射するまでの猶予のカウンター
 	int m_nTimerShot;	// 単発で撃てる間隔

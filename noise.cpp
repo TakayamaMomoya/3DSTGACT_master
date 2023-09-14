@@ -30,6 +30,8 @@ int CNoise::m_nNumAll = 0;	// 総数
 CNoise::CNoise(int nPriority) : CAnim2D(nPriority)
 {
 	m_nLife = 0;
+	m_nAlpha = 0;
+	m_nAddAlpha = 0;
 
 	m_nNumAll++;
 }
@@ -51,13 +53,15 @@ HRESULT CNoise::Init(void)
 	CAnim2D::Init();
 
 	// 情報設定
-	SetInfo(0,6,2,1);
+	SetInfo(0,6,3,1);
 
 	// サイズ設定
 	SetSize(SCREEN_WIDTH * 0.5f,SCREEN_HEIGHT * 0.5f);
 
 	// 位置設定
 	SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f, 0.0f));
+
+	SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 0.5f));
 
 	return S_OK;
 }
@@ -81,6 +85,8 @@ void CNoise::Update(void)
 
 	m_nLife--;
 
+	m_nAlpha += m_nAddAlpha;
+
 	if (m_nLife <= 0)
 	{
 		Uninit();
@@ -92,8 +98,21 @@ void CNoise::Update(void)
 //=====================================================
 void CNoise::Draw(void)
 {
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
+	// アルファテストの有効化
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, TRUE);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_GREATER);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, m_nAlpha);
+
 	// 継承クラスの描画
 	CAnim2D::Draw();
+
+	// アルファテストの無効化
+	pDevice->SetRenderState(D3DRS_ALPHATESTENABLE, FALSE);
+	pDevice->SetRenderState(D3DRS_ALPHAFUNC, D3DCMP_ALWAYS);
+	pDevice->SetRenderState(D3DRS_ALPHAREF, 0);
 }
 
 //=====================================================
@@ -111,6 +130,8 @@ CNoise *CNoise::Create(int nLife)
 		pNoise->Init();
 
 		pNoise->m_nLife = nLife;
+
+		pNoise->m_nAddAlpha = 255 / nLife;
 
 		// テクスチャの読込
 		int nIdx = CManager::GetTexture()->Regist("data\\TEXTURE\\EFFECT\\noise00.png");
