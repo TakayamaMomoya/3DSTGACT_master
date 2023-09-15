@@ -20,7 +20,7 @@
 #include "game.h"
 #include "meshfield.h"
 #include "particle.h"
-#include "debrisspawner.h"
+#include "smokespawner.h"
 #include "missile.h"
 
 //*****************************************************
@@ -315,7 +315,7 @@ void CEnemyMove::Fall(void)
 
 		if (fHeight >= GetPosition().y)
 		{// メッシュフィールドに当たったら爆発
-			CDebrisSpawner::Create(GetPosition(), 15.0f, 1, 3);
+			CSmokeSpawner::Create(GetPosition(), 15.0f, 1, 3);
 
 			CParticle::Create(GetPosition(), CParticle::TYPE_SAND);
 

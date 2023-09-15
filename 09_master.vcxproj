@@ -166,8 +166,10 @@
     <ClCompile Include="camera.cpp" />
     <ClCompile Include="cockpit.cpp" />
     <ClCompile Include="collision.cpp" />
-    <ClCompile Include="smoke.cpp" />
+    <ClCompile Include="debris.cpp" />
     <ClCompile Include="debrisspawner.cpp" />
+    <ClCompile Include="smoke.cpp" />
+    <ClCompile Include="smokespawner.cpp" />
     <ClCompile Include="debugproc.cpp" />
     <ClCompile Include="defend.cpp" />
     <ClCompile Include="dust.cpp" />
@@ -237,8 +239,10 @@
     <ClInclude Include="camera.h" />
     <ClInclude Include="cockpit.h" />
     <ClInclude Include="collision.h" />
-    <ClInclude Include="smoke.h" />
+    <ClInclude Include="debris.h" />
     <ClInclude Include="debrisspawner.h" />
+    <ClInclude Include="smoke.h" />
+    <ClInclude Include="smokespawner.h" />
     <ClInclude Include="debugproc.h" />
     <ClInclude Include="defend.h" />
     <ClInclude Include="dust.h" />

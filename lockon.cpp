@@ -85,6 +85,11 @@ void CLockon::Uninit(void)
 //=====================================================
 void CLockon::Update(void)
 {
+	if (m_pLockOn == nullptr)
+	{
+		return;
+	}
+
 	D3DXVECTOR3 vecDiff;
 	D3DXVECTOR3 pos;
 

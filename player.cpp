@@ -42,6 +42,8 @@
 #include "texture.h"
 #include "noise.h"
 #include "explosionspawner.h"
+#include "smokespawner.h"
+#include "debrisspawner.h"
 
 //*****************************************************
 // マクロ定義
@@ -1342,6 +1344,10 @@ void CPlayer::ManageState(void)
 
 			// 爆発パーティクル
 			CParticle::Create(pos, CParticle::TYPE_EXPLOSION);
+
+			// 煙と破片の召喚
+			CSmokeSpawner::Create(pos, 15.0f, 1, 6);
+			CDebrisSpawner::Create(pos, 18.0f, 1, 12);
 
 			// 終了処理
 			Uninit();

@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// 破片スポナー処理[particle.cpp]
+// 破片スポナー処理[debrisspawner.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -10,6 +10,7 @@
 //*****************************************************
 #include "debrisspawner.h"
 #include "smoke.h"
+#include "debris.h"
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -23,7 +24,7 @@ CDebrisSpawner::CDebrisSpawner()
 }
 
 //=====================================================
-//	デストラクタ
+// デストラクタ
 //=====================================================
 CDebrisSpawner::~CDebrisSpawner()
 {
@@ -31,7 +32,7 @@ CDebrisSpawner::~CDebrisSpawner()
 }
 
 //=====================================================
-//	初期化処理
+// 初期化処理
 //=====================================================
 HRESULT CDebrisSpawner::Init(void)
 {
@@ -39,7 +40,7 @@ HRESULT CDebrisSpawner::Init(void)
 }
 
 //=====================================================
-//	終了処理
+// 終了処理
 //=====================================================
 void CDebrisSpawner::Uninit(void)
 {
@@ -47,14 +48,14 @@ void CDebrisSpawner::Uninit(void)
 }
 
 //=====================================================
-//	更新処理
+// 更新処理
 //=====================================================
 void CDebrisSpawner::Update(void)
 {
 	D3DXVECTOR3 move;
 	float fRot,fSpeed;
 	int nLife;
-	CSmoke *pDebris;
+	CDebris *pDebris;
 
 	for (int nCnt = 0; nCnt < m_nNumDebris; nCnt++)
 	{
@@ -66,7 +67,7 @@ void CDebrisSpawner::Update(void)
 		move.y = fSpeed;
 		move.z = cosf(fRot) * fSpeed;
 
-		pDebris = CSmoke::Create(m_pos, nLife);
+		pDebris = CDebris::Create(m_pos, nLife);
 
 		pDebris->SetMove(move);
 	}
@@ -81,7 +82,7 @@ void CDebrisSpawner::Update(void)
 }
 
 //=====================================================
-//	位置設定処理
+// 位置設定処理
 //=====================================================
 void CDebrisSpawner::SetPosition(D3DXVECTOR3 pos)
 {
@@ -89,7 +90,7 @@ void CDebrisSpawner::SetPosition(D3DXVECTOR3 pos)
 }
 
 //=====================================================
-//	生成処理
+// 生成処理
 //=====================================================
 CDebrisSpawner *CDebrisSpawner::Create(D3DXVECTOR3 pos,float fSpeed,int nLife, int nNumDebris)
 {

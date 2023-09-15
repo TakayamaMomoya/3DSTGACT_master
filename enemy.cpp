@@ -29,6 +29,7 @@
 #include "player.h"
 #include "game.h"
 #include "explosionspawner.h"
+#include "smokespawner.h"
 #include "debrisspawner.h"
 #include "player.h"
 #include "enemymove.h"
@@ -630,8 +631,10 @@ void CEnemy::Death(void)
 {
 	// ©•ª‚Ì”š”­
 	CParticle::Create(GetPosition(), CParticle::TYPE_EXPLOSION);
-	//CParticle::Create(GetPosition(), CParticle::TYPE_EXPLSMOKE);
+
 	CExplosion::Create(GetPosition())->SetSize(300.0f, 300.0f);
+
+	CDebrisSpawner::Create(GetPosition(), 12.0f, 1, 12);
 
 	// ©g‚ÌI—¹
 	Uninit();

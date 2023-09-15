@@ -26,6 +26,7 @@
 #include "game.h"
 #include "player.h"
 #include "bonus.h"
+#include "debrisspawner.h"
 
 //*****************************************************
 // マクロ定義
@@ -320,6 +321,8 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 			{
 				CBonus::Create(CBonus::TYPE_MISSILE);
 			}
+
+			CDebrisSpawner::Create(GetPosition(), 7.0f, 1, 3);
 
 			// ヒット数加算
 			m_nNumHit++;
