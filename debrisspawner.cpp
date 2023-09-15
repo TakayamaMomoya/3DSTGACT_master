@@ -9,7 +9,7 @@
 // インクルード
 //*****************************************************
 #include "debrisspawner.h"
-#include "debris.h"
+#include "smoke.h"
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -54,7 +54,7 @@ void CDebrisSpawner::Update(void)
 	D3DXVECTOR3 move;
 	float fRot,fSpeed;
 	int nLife;
-	CDebris *pDebris;
+	CSmoke *pDebris;
 
 	for (int nCnt = 0; nCnt < m_nNumDebris; nCnt++)
 	{
@@ -66,7 +66,7 @@ void CDebrisSpawner::Update(void)
 		move.y = fSpeed;
 		move.z = cosf(fRot) * fSpeed;
 
-		pDebris = CDebris::Create(m_pos, nLife);
+		pDebris = CSmoke::Create(m_pos, nLife);
 
 		pDebris->SetMove(move);
 	}

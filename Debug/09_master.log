@@ -1,7 +1,8 @@
-﻿  noise.cpp
-  game.cpp
+﻿  smoke.cpp
   コードを生成中...
-  スキップ中... (関連する変更は検出されませんでした)
-  player.cpp
+  コンパイル中...
+  debrisspawner.cpp
+  コードを生成中...
+cl : コマンド ライン warning D9028: 簡易リビルド時のエラーです、通常のビルドに戻します
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\Debug\09_master.exe
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\Debug\09_master.pdb (Full PDB)

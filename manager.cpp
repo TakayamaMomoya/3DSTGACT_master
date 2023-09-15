@@ -224,12 +224,6 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// “Gî•ñ“Ç
 	CEnemy::Load();
 
-	// ’e“Çˆ—
-	CBullet::Load();
-
-	// ”š”­“Çˆ—
-	CExplosion::Load();
-
 	SetMode(m_mode);
 
 	return S_OK;
@@ -338,27 +332,8 @@ void CManager::Uninit(void)
 		m_pTexture = nullptr;
 	}
 
-	// ’e”jŠü
-	CBullet::Unload();
-
-	// ƒvƒŒƒCƒ„[”jŠü
-	CPlayer::Unload();
-
-	// ”š”­”jŠü
-	CExplosion::Unload();
-
 	// “G”jŠü
 	CEnemy::Unload();
-
-	// ”wŒi”jŠüˆ—
-	CBg::Unload();
-
-	// ‘½d”wŒi”jŠüˆ—
-	CBgMulti::Unload();
-
-	// ƒGƒtƒFƒNƒg”jŠüˆ—
-	CEffect2D::Unload();
-	CEffect3D::Unload();
 
 	// ƒ‚ƒfƒ‹”jŠü
 	CModel::Unload();

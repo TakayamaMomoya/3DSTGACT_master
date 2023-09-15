@@ -180,9 +180,6 @@
     <ClCompile Include="objectX.cpp">
       <Filter>ソース ファイル\3D</Filter>
     </ClCompile>
-    <ClCompile Include="debris.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="debrisspawner.cpp">
       <Filter>ソース ファイル</Filter>
     </ClCompile>
@@ -248,6 +245,9 @@
     </ClCompile>
     <ClCompile Include="noise.cpp">
       <Filter>ソース ファイル\2D</Filter>
+    </ClCompile>
+    <ClCompile Include="smoke.cpp">
+      <Filter>ソース ファイル</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -389,9 +389,6 @@
     <ClInclude Include="objectX.h">
       <Filter>ソース ファイル\3D</Filter>
     </ClInclude>
-    <ClInclude Include="debris.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="debrisspawner.h">
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
@@ -457,6 +454,9 @@
     </ClInclude>
     <ClInclude Include="noise.h">
       <Filter>ソース ファイル\2D</Filter>
+    </ClInclude>
+    <ClInclude Include="smoke.h">
+      <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
   </ItemGroup>
 </Project>

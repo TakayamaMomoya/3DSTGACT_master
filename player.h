@@ -65,7 +65,6 @@ public:
 	void Update(void);
 	void Draw(void);
 	HRESULT Load(void);	// ì«çû
-	static void Unload(void);
 	void Hit(float fDamage);
 	bool IsAim(void) { return m_bAim; }
 	void SetPosition(D3DXVECTOR3 pos) { m_pos = pos; }

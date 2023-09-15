@@ -27,8 +27,6 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void);
-	static HRESULT Load(void);	// ì«çû
-	static void Unload(void);
 	static int GetNumAll(void) { return m_nNumAll; }
 
 private:

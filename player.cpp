@@ -302,6 +302,20 @@ void CPlayer::Uninit(void)
 
 		m_pRader = nullptr;
 	}
+
+	if (m_pLockon != nullptr)
+	{// ロックオンの終了
+		m_pLockon->Uninit();
+
+		m_pLockon = nullptr;
+	}
+
+	if (m_pAssess != nullptr)
+	{// 評価の終了
+		m_pAssess->Uninit();
+
+		m_pAssess = nullptr;
+	}
 	
 	// プレイヤーの終了
 	CGame::ReleasePlayer();
@@ -1889,12 +1903,4 @@ HRESULT CPlayer::Load(void)
 	}
 
 	return S_OK;
-}
-
-//=====================================================
-// テクスチャ破棄
-//=====================================================
-void CPlayer::Unload(void)
-{
-
 }
