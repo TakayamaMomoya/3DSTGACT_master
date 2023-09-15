@@ -49,7 +49,7 @@ HRESULT CTitle::Init(void)
 {
 	// ƒƒS‚Ì¶¬
 	CObject2D *pObject2D = CObject2D::Create(7);
-	pObject2D->SetSize(300.0f, 200.0f);
+	pObject2D->SetSize(875.0f * 0.45f, 320.0f * 0.45f);
 	pObject2D->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.7f, 200.0f, 0.0f));
 
 	int nIdx = CManager::GetTexture()->Regist(LOGO_PATH);
