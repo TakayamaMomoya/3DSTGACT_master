@@ -19,6 +19,7 @@
 #include "game.h"
 #include <stdio.h>
 #include "effect3D.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -194,6 +195,8 @@ void CMeshField::Uninit(void)
 		m_pIdxBuff = nullptr;
 	}
 
+	
+
 	Release();
 }
 
@@ -210,6 +213,19 @@ void CMeshField::Update(void)
 //=====================================================
 void CMeshField::Edit(void)
 {
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
+	if (pPlayer == nullptr)
+	{
+		return;
+	}
+
 	float fLength;
 	D3DXVECTOR3 vecDiff;
 
@@ -226,7 +242,7 @@ void CMeshField::Edit(void)
 	{
 		for (int nCntVtx = 0; nCntVtx < m_MeshField.nNumVtx; nCntVtx++)
 		{
-			vecDiff = CGame::GetPlayer()->GetPosition() - pVtx[nCntVtx].pos;
+			vecDiff = pPlayer->GetPosition() - pVtx[nCntVtx].pos;
 
 			fLength = D3DXVec3Length(&vecDiff);
 
@@ -241,7 +257,7 @@ void CMeshField::Edit(void)
 	{
 		for (int nCntVtx = 0; nCntVtx < m_MeshField.nNumVtx; nCntVtx++)
 		{
-			vecDiff = CGame::GetPlayer()->GetPosition() - pVtx[nCntVtx].pos;
+			vecDiff = pPlayer->GetPosition() - pVtx[nCntVtx].pos;
 
 			fLength = D3DXVec3Length(&vecDiff);
 

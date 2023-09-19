@@ -19,6 +19,7 @@
 #include "collision.h"
 #include "orbit.h"
 #include "explosion.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -175,12 +176,16 @@ void CMissile::Update(void)
 	// メッシュフィールドとの判定
 	float fHeight;
 	CMeshField *pMesh = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
 
-	pMesh = CGame::GetMeshField();
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	if (pMesh != nullptr)
 	{
-		fHeight = CGame::GetMeshField()->GetHeight(GetPosition(), nullptr);
+		fHeight = pMesh->GetHeight(GetPosition(), nullptr);
 
 		if (fHeight > GetPosition().y)
 		{
@@ -248,7 +253,13 @@ void CMissile::Update(void)
 void CMissile::ChasePlayer(void)
 {
 	// 情報取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	// 計算用変数
 	D3DXVECTOR3 pos;

@@ -27,6 +27,7 @@ class CLight;
 class CTexture;
 class CUniversal;
 class CFade;
+class CObjectManager;
 
 //*****************************************************
 // クラスの定義
@@ -50,6 +51,7 @@ public:
 	static CCamera *GetCamera(void) { return m_pCamera; }
 	static CLight *GetLight(void) { return m_pLight; }
 	static CTexture *GetTexture(void) { return m_pTexture; }
+	static CObjectManager *GetObjectManager(void) { return m_pObjectManager; }
 	static CUniversal *GetUniversal(void) { return m_pUniversal; }
 	static void SetMode(CScene::MODE mode);
 	static CScene::MODE GetMode(void) { return m_mode; }
@@ -71,6 +73,7 @@ private:
 	static CScene *m_pScene;	// 現在のシーン
 	static CScene::MODE m_mode;	// 現在のモード
 	static CFade *m_pFade;	// フェードのポインタ
+	static CObjectManager *m_pObjectManager;	// オブジェクト管理のポインタ
 	static int m_nScore;	// スコア
 };
 

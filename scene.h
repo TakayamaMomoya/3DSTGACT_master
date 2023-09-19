@@ -27,6 +27,7 @@ public:
 	enum MODE
 	{
 		MODE_TITLE = 0,
+		MODE_TUTORIAL,
 		MODE_GAME,
 		MODE_RANKING,
 		MODE_MAX

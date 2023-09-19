@@ -16,6 +16,7 @@
 #include "game.h"
 #include "player.h"
 #include "assess.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -364,7 +365,13 @@ int CBonus::BonusScore(TYPE type)
 	CScore *pScore = CGame::GetScore();
 
 	// プレイヤーの取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	CAssess *pAssess = nullptr;
 

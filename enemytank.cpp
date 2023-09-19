@@ -18,6 +18,7 @@
 #include "universal.h"
 #include "debugproc.h"
 #include "game.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -118,7 +119,13 @@ void CEnemyTank::ChaseDefend(void)
 	}
 
 	// プレイヤー情報取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer != nullptr)
 	{

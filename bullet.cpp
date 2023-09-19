@@ -27,6 +27,7 @@
 #include "player.h"
 #include "bonus.h"
 #include "debrisspawner.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -154,7 +155,13 @@ void CBullet::Uninit(void)
 void CBullet::ManageHit(void)
 {
 	// プレイヤー取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	switch (m_type)
 	{
@@ -258,7 +265,15 @@ void CBullet::Update(void)
 
 	if (bHit == false)
 	{
-		CMeshField *pMesh = CGame::GetMeshField();
+		// メッシュフィールドとの当たり判定
+		CMeshField *pMesh = nullptr;
+		CObjectManager *pObjManager = CManager::GetObjectManager();
+
+		if (pObjManager != nullptr)
+		{// メッシュフィールドの取得
+			pMesh = pObjManager->GetMeshField();
+		}
+
 		float fHeight = 0.0f;
 
 		if (pMesh != nullptr)

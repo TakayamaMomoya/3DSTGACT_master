@@ -18,6 +18,7 @@
 #include "player.h"
 #include "game.h"
 #include "meshfield.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -227,7 +228,13 @@ void CCamera::Control(void)
 void CCamera::FollowPlayer(void)
 {
 	// プレイヤー情報取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer != nullptr)
 	{
@@ -259,7 +266,12 @@ void CCamera::FollowPlayer(void)
 	}
 
 	// メッシュフィールドとの当たり判定
-	CMeshField *pMesh = CGame::GetMeshField();
+	CMeshField *pMesh = nullptr;
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	if (pMesh != nullptr)
 	{// メッシュとの当たり判定

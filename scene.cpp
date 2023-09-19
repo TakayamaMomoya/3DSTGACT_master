@@ -9,6 +9,7 @@
 // インクルード
 //*****************************************************
 #include "scene.h"
+#include "tutorial.h"
 #include "game.h"
 #include "title.h"
 #include "ranking.h"
@@ -82,6 +83,11 @@ CScene *CScene::Create(MODE mode)
 	case CScene::MODE_TITLE:
 
 		pScene = new CTitle;
+
+		break;
+	case CScene::MODE_TUTORIAL:
+
+		pScene = new CTutorial;
 
 		break;
 	case CScene::MODE_GAME:

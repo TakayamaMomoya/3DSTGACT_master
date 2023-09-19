@@ -15,6 +15,7 @@
 #include "number.h"
 #include "player.h"
 #include "game.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -204,7 +205,14 @@ void CCockPit::Update(void)
 //=====================================================
 void CCockPit::ManageLife(void)
 {
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
 	int nLife;
 	int nRate;
 
@@ -230,7 +238,14 @@ void CCockPit::ManageLife(void)
 //=====================================================
 void CCockPit::ManageParam(void)
 {
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
 	float fWidth;
 	D3DXVECTOR3 pos;
 

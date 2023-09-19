@@ -15,6 +15,7 @@
 #include "debugproc.h"
 #include "game.h"
 #include <stdio.h>
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -222,7 +223,13 @@ void CMeshWall::Update(void)
 void CMeshWall::CheckPlayer(void)
 {
 	// プレイヤーの取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer == nullptr)
 	{

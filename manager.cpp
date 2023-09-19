@@ -44,6 +44,7 @@
 #include "universal.h"
 #include "particle.h"
 #include "fade.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -58,9 +59,10 @@ CCamera *CManager::m_pCamera = nullptr;	// カメラのポインタ
 CLight *CManager::m_pLight = nullptr;	// ライトのポインタ
 CTexture *CManager::m_pTexture = nullptr;	// テクスチャ管理へのポインタ
 CUniversal *CManager::m_pUniversal = nullptr;	// 汎用処理へのポインタ
+CObjectManager *CManager::m_pObjectManager = nullptr;	// オブジェクト管理へのポインタ
 CScene *CManager::m_pScene = nullptr;	// シーンへのポインタ
 CFade *CManager::m_pFade = nullptr;	// フェードへのポインタ
-CScene::MODE CManager::m_mode = CScene::MODE_GAME;	// 現在のモード
+CScene::MODE CManager::m_mode = CScene::MODE_TUTORIAL;	// 現在のモード
 int CManager::m_nScore = 0;	// スコア保存用
 
 //=====================================================
@@ -221,6 +223,11 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 		m_pUniversal = new CUniversal;
 	}
 
+	if (m_pObjectManager == nullptr)
+	{// オブジェクト管理の生成
+		m_pObjectManager = new CObjectManager;
+	}
+
 	// 敵情報読込
 	CEnemy::Load();
 
@@ -242,6 +249,12 @@ void CManager::Uninit(void)
 	if (m_pFade != nullptr)
 	{
 		m_pFade->Uninit();
+	}
+
+	if (m_pObjectManager != nullptr)
+	{// オブジェクト管理の削除
+		delete m_pObjectManager;
+		m_pObjectManager = nullptr;
 	}
 
 	// ブロック情報削除

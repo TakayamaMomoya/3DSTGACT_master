@@ -16,6 +16,7 @@
 #include "enemy.h"
 #include "debugproc.h"
 #include "universal.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -152,8 +153,13 @@ void CRader::Update(void)
 //=====================================================
 void CRader::ChaseTarget(void)
 {
-	// 対象オブジェクトの取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer == nullptr)
 	{
@@ -180,8 +186,14 @@ void CRader::Wave(void)
 	LPDIRECT3DVERTEXBUFFER9 pVtxBuff = CMeshCylinder::GetVtxBuff();
 
 	// 中心オブジェクトの取得
-	CPlayer *pPlayer = CGame::GetPlayer();
 	CEnemy *pEnemy = CEnemy::GetEnemy();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer == nullptr)
 	{

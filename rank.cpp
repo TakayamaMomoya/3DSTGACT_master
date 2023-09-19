@@ -18,6 +18,7 @@
 #include "player.h"
 #include "game.h"
 #include "assess.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -180,8 +181,14 @@ void CRank::ManageGauge(void)
 void CRank::AddProgress(float fValue)
 {
 	// 評価取得
-	CPlayer *pPlayer = CGame::GetPlayer();
 	CAssess *pAssess = nullptr;
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer != nullptr)
 	{

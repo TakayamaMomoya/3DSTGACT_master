@@ -38,6 +38,7 @@
 #include "dust.h"
 #include "effect3D.h"
 #include "noise.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -52,8 +53,6 @@
 //*****************************************************
 // 静的メンバ変数宣言
 //*****************************************************
-CPlayer *CGame::m_pPlayer = nullptr;		// プレイヤーのポインタ
-CMeshField *CGame::m_pMeshField = nullptr;	// メッシュフィールドのポインタ
 CScore *CGame::m_pScore = nullptr;	// スコアのポインタ
 CTimer *CGame::m_pTimer = nullptr;	// タイマーのポインタ
 CDefend *CGame::m_pDefend = nullptr;	// 護衛対象へのポインタ
@@ -88,9 +87,12 @@ CGame::~CGame()
 //=====================================================
 HRESULT CGame::Init(void)
 {
-	if (m_pPlayer == nullptr)
-	{// プレイヤー生成
-		m_pPlayer = CPlayer::Create();
+	CPlayer *pPlayer = CPlayer::Create();
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pPlayer != nullptr && pObjManager != nullptr)
+	{// プレイヤーの適用
+		pObjManager->BindPlayer(pPlayer);
 	}
 
 	if (m_pScore == nullptr)
@@ -154,8 +156,13 @@ HRESULT CGame::Init(void)
 	// スカイボックス生成
 	CSkybox::Create();
 
+	CMeshField *pMeshField = CMeshField::Create();
+
 	// メッシュフィールドの生成
-	m_pMeshField = CMeshField::Create();
+	if (pMeshField != nullptr && pObjManager != nullptr)
+	{// メッシュフィールドの適用
+		pObjManager->BindMeshField(pMeshField);
+	}
 
 	// ハリボテ床の生成
 	CField *pField = nullptr;
@@ -204,23 +211,11 @@ void CGame::Uninit(void)
 		m_pPause = nullptr;
 	}
 
-	if (m_pPlayer != nullptr)
-	{// プレイヤーの終了・破棄
-		m_pPlayer = nullptr;
-	}
-
 	if (m_pDefend != nullptr)
 	{// 護衛対象の終了・破棄
 		m_pDefend->Uninit();
 
 		m_pDefend = nullptr;
-	}
-
-	if (m_pMeshField != nullptr)
-	{
-		m_pMeshField->Uninit();
-
-		m_pMeshField = nullptr;
 	}
 
 	if (m_pScore != nullptr)
@@ -265,17 +260,6 @@ void CGame::Uninit(void)
 
 	// オブジェクト全棄
 	CObject::ReleaseAll();
-}
-
-//=====================================================
-// プレイヤー破棄処理
-//=====================================================
-void CGame::ReleasePlayer(void)
-{
-	if (m_pPlayer != nullptr)
-	{
-		m_pPlayer = nullptr;
-	}
 }
 
 //=====================================================
@@ -427,10 +411,18 @@ void CGame::LimitPlayerPos(void)
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
 	D3DXVECTOR3 move = { 0.0f,0.0f,0.0f };
 
-	if (m_pPlayer != nullptr)
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
+	if (pPlayer != nullptr)
 	{
-		pos = m_pPlayer->GetPosition();
-		move = m_pPlayer->GetMove();
+		pos = pPlayer->GetPosition();
+		move = pPlayer->GetMove();
 	}
 	else
 	{
@@ -464,8 +456,8 @@ void CGame::LimitPlayerPos(void)
 		move.y = 0;
 	}
 
-	m_pPlayer->SetPosition(pos);
-	m_pPlayer->SetMove(move);
+	pPlayer->SetPosition(pos);
+	pPlayer->SetMove(move);
 }
 
 //=====================================================
@@ -500,9 +492,17 @@ void CGame::ManageWall(void)
 {
 	D3DXVECTOR3 pos = { 0.0f,0.0f,0.0f };
 
-	if (m_pPlayer != nullptr)
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
+	if (pPlayer != nullptr)
 	{
-		pos = m_pPlayer->GetPosition();
+		pos = pPlayer->GetPosition();
 	}
 
 	if (pos.x > LIMIT_LENGTH - CHENGE_LENGTH)
@@ -546,6 +546,17 @@ void CGame::ManageState(void)
 	// フェード取得
 	CFade *pFade = CManager::GetFade();
 
+	CPlayer *pPlayer = nullptr;
+	CMeshField *pMeshField = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+
+		pMeshField = pObjManager->GetMeshField();
+	}
+
 	if (pFade != nullptr)
 	{
 		//pFade->SetFade(CScene::MODE_GAME);
@@ -568,7 +579,7 @@ void CGame::ManageState(void)
 			}
 		}
 
-		if (m_pPlayer == nullptr)
+		if (pPlayer == nullptr)
 		{
 			// スコアリセット
 			CManager::SetScore(0);
@@ -608,11 +619,19 @@ void CGame::TimeBonus(void)
 {
 	CAssess *pAssess;
 
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
 	int nBonus = BONUS_TIME - m_nTimerWave;
 
-	if (m_pPlayer != nullptr)
+	if (pPlayer != nullptr)
 	{
-		pAssess = m_pPlayer->GetAssess();
+		pAssess = pPlayer->GetAssess();
 
 		if (pAssess != nullptr)
 		{

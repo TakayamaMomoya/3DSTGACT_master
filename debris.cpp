@@ -14,6 +14,7 @@
 #include "particle.h"
 #include "universal.h"
 #include "manager.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -114,7 +115,13 @@ void CDebris::Update(void)
 	SetRot(rot);
 
 	// メッシュフィールドとの当たり判定
-	CMeshField *pMesh = CGame::GetMeshField();
+	CMeshField *pMesh = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	if (pMesh != nullptr)
 	{
@@ -122,7 +129,7 @@ void CDebris::Update(void)
 		pos = GetPosition();
 
 		// 高さの取得
-		float fHeight = CGame::GetMeshField()->GetHeight(pos, &move);
+		float fHeight = pMesh->GetHeight(pos, &move);
 
 		if (fHeight >= pos.y)
 		{// 取得した高さに設定

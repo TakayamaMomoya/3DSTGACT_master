@@ -12,6 +12,8 @@
 #include "player.h"
 #include "game.h"
 #include "enemy.h"
+#include "objectmanager.h"
+#include "manager.h"
 
 //*****************************************************
 // マクロ定義
@@ -94,7 +96,13 @@ void CArrow::Update(void)
 //=====================================================
 void CArrow::RollPlayer(void)
 {
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	D3DXVECTOR3 posTarget;
 	D3DXVECTOR3 vecDiff;

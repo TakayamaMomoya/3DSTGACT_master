@@ -35,6 +35,7 @@
 #include "enemymove.h"
 #include "enemytank.h"
 #include "arrow.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -305,12 +306,16 @@ void CEnemy::Update(void)
 	D3DXVECTOR3 move = GetMove();
 	float fHeight = 0.0f;
 	CMeshField *pMesh = nullptr;
-	
-	pMesh = CGame::GetMeshField();
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	if (pMesh != nullptr)
 	{
-		fHeight = CGame::GetMeshField()->GetHeight(GetPosition(), &move);
+		fHeight = pMesh->GetHeight(GetPosition(), &move);
 	}
 
 	// 位置の更新
@@ -399,9 +404,21 @@ void CEnemy::ManageCollision(void)
 //=====================================================
 void CEnemy::SearchTarget(void)
 {
-	CPlayer *pPlayer = CGame::GetPlayer();
-	CMeshField *pMesh = CGame::GetMeshField();
-	
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
+
+	CMeshField *pMesh = nullptr;
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
+
 	bool bHitMesh = false;
 	bool bHitBlock = false;
 	D3DXVECTOR3 vecDiff;
@@ -601,7 +618,13 @@ void CEnemy::Hit(float fDamage)
 void CEnemy::ManageBonus(void)
 {
 	CScore *pScore = CGame::GetScore();
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	int nScore = 0;
 

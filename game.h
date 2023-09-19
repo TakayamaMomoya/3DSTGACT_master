@@ -17,7 +17,6 @@
 // 前方宣言
 //*****************************************************
 class CPlayer;
-class CMeshField;
 class CScore;
 class CTimer;
 class CGame;
@@ -48,14 +47,11 @@ public:
 	virtual void Uninit(void);
 	virtual void Update();
 	virtual void Draw();
-	static CPlayer *GetPlayer(void) { return m_pPlayer; }
-	static CMeshField *GetMeshField(void) { return m_pMeshField; }
 	static CScore *GetScore(void) { return m_pScore; }
 	static CTimer *GetTimer(void) { return m_pTimer; }
 	static CDefend *GetDefend(void) { return m_pDefend; }
 	static CEdit *GetEdit(void) { return m_pEdit; }
 	static CRank *GetRank(void) { return m_pRank; }
-	static void ReleasePlayer(void);
 	static void ReleaseScore(void);
 	static void ReleaseTimer(void);
 	static void ReleaseDefend(void);
@@ -80,8 +76,6 @@ private:
 	void ManageWall(void);	// 壁の管理
 	void TimeBonus(void);	// タイムボーナスの管理
 
-	static CPlayer *m_pPlayer;	// プレイヤーのクラス
-	static CMeshField *m_pMeshField;	// メッシュフィールドへのポインタ
 	static CScore *m_pScore;	// スコアのポインタ
 	static CTimer *m_pTimer;	// タイマーのポインタ
 	static CDefend *m_pDefend;	// 護衛対象へのポインタ

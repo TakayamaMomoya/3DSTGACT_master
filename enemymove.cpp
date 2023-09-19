@@ -22,6 +22,7 @@
 #include "particle.h"
 #include "smokespawner.h"
 #include "missile.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -190,7 +191,13 @@ void CEnemyMove::Tilt(void)
 void CEnemyMove::ChaseTarget(void)
 {
 	// プレイヤー情報取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer != nullptr)
 	{
@@ -305,13 +312,19 @@ void CEnemyMove::Fall(void)
 	SetRot(rot);
 
 	// メッシュフィールドとの当たり判定
-	CMeshField *pMesh = CGame::GetMeshField();
+	CMeshField *pMesh = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	CParticle::Create(GetPosition(), CParticle::TYPE_SMOKE);
 
 	if (pMesh != nullptr)
 	{
-		float  fHeight = CGame::GetMeshField()->GetHeight(GetPosition(), &move);
+		float  fHeight = pMesh->GetHeight(GetPosition(), &move);
 
 		if (fHeight >= GetPosition().y)
 		{// メッシュフィールドに当たったら爆発
@@ -501,7 +514,13 @@ void CEnemyAttack::ManageState(float fLength,float fRotDiff)
 void CEnemyAttack::ChasePlayer(void)
 {
 	// プレイヤー情報取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer != nullptr)
 	{

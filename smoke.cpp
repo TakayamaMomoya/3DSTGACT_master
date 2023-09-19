@@ -12,6 +12,8 @@
 #include "game.h"
 #include "meshfield.h"
 #include "particle.h"
+#include "objectmanager.h"
+#include "manager.h"
 
 //*****************************************************
 // マクロ定義
@@ -85,8 +87,13 @@ void CSmoke::Update(void)
 
 	SetMove(move);
 
-	// メッシュフィールドとの当たり判定
-	CMeshField *pMesh = CGame::GetMeshField();
+	CMeshField *pMesh = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	if (pMesh != nullptr)
 	{
@@ -94,7 +101,7 @@ void CSmoke::Update(void)
 		pos = GetPosition();
 
 		// 高さの取得
-		float fHeight = CGame::GetMeshField()->GetHeight(pos, &move);
+		float fHeight = pMesh->GetHeight(pos, &move);
 
 		if (fHeight >= pos.y)
 		{// 取得した高さに設定

@@ -44,6 +44,7 @@
 #include "explosionspawner.h"
 #include "smokespawner.h"
 #include "debrisspawner.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -320,7 +321,12 @@ void CPlayer::Uninit(void)
 	}
 	
 	// プレイヤーの終了
-	CGame::ReleasePlayer();
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pObjManager->ReleasePlayer();
+	}
 
 	// 自身の破棄
 	Release();
@@ -536,8 +542,15 @@ bool CPlayer::CollisionField(void)
 	// メッシュフィールドとの当たり判定
 	D3DXVECTOR3 move = GetMove();
 	D3DXVECTOR3 nor;
-	CMeshField *pMesh = CGame::GetMeshField();
 	float fHeight = 0.0f;
+
+	CMeshField *pMeshFiled = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールド取得
+		pMeshFiled = pObjManager->GetMeshField();
+	}
 
 	if (m_pShadow != nullptr)
 	{
@@ -545,9 +558,9 @@ bool CPlayer::CollisionField(void)
 		m_pShadow->SetPosition(D3DXVECTOR3(GetPosition().x, m_pShadow->GetPosition().y, GetPosition().z));
 	}
 
-	if (pMesh != nullptr)
+	if (pMeshFiled != nullptr)
 	{// メッシュとの当たり判定
-		fHeight = pMesh->GetHeight(GetPosition(), &move, nullptr);
+		fHeight = pMeshFiled->GetHeight(GetPosition(), &move, nullptr);
 
 		if (fHeight >= GetPosition().y)
 		{// プレイヤーの位置設定

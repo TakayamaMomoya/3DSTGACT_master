@@ -14,6 +14,7 @@
 #include "texture.h"
 #include "meshfield.h"
 #include "game.h"
+#include "objectmanager.h"
 
 //=====================================================
 // コンストラクタ
@@ -57,8 +58,15 @@ void CShadow::Uninit(void)
 void CShadow::Update(void)
 {
 	// 変数宣言
-	CMeshField *pMesh = CGame::GetMeshField();
 	float fHeight = 0.0f;
+
+	CMeshField *pMesh = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// メッシュフィールドの取得
+		pMesh = pObjManager->GetMeshField();
+	}
 
 	// 継承クラスの更新
 	CObject3D::Update();

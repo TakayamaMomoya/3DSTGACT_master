@@ -17,6 +17,7 @@
 #include "game.h"
 #include "inputkeyboard.h"
 #include "debugproc.h"
+#include "objectmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -148,7 +149,13 @@ void CBoost::Update(void)
 	CPlayer::BOOSTSTATE boostState;
 
 	// プレイヤーの取得
-	CPlayer *pPlayer = CGame::GetPlayer();
+	CPlayer *pPlayer = nullptr;
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+	}
 
 	if (pPlayer != nullptr)
 	{// プレイヤー情報の取得
