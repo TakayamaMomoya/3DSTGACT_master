@@ -12,25 +12,18 @@
 #include "renderer.h"
 #include "tutorial.h"
 #include "player.h"
-#include "enemy.h"
-#include "score.h"
-#include "block.h"
 #include "object.h"
-#include "defend.h"
-#include "field.h"
 #include "meshfield.h"
-#include "skybox.h"
 #include "universal.h"
 #include "particle.h"
-#include "edit.h"
 #include "inputkeyboard.h"
 #include "inputjoypad.h"
 #include "fade.h"
-#include "meshwall.h"
 #include "camera.h"
-#include "pause.h"
 #include "dustmanager.h"
 #include "objectmanager.h"
+#include "tutorialmanager.h"
+#include "tutorialplayer.h"
 
 //*****************************************************
 // マクロ定義
@@ -42,12 +35,17 @@
 #define BONUS_TIME	(40)	// ボーナスが付与される最低限のタイム
 #define RATE_BONUS	(0.015f)	// 1秒当たりのタイムボーナス
 
+//*****************************************************
+// 静的メンバ変数宣言
+//*****************************************************
+CTutorialManager *CTutorial::m_pTutorialManager = nullptr;	// チュートリアル管理のポインタ
+
 //=====================================================
 // コンストラクタ
 //=====================================================
 CTutorial::CTutorial()
 {
-	m_progress = PROGRESS_START;
+
 }
 
 //=====================================================
@@ -63,23 +61,18 @@ CTutorial::~CTutorial()
 //=====================================================
 HRESULT CTutorial::Init(void)
 {
-	CPlayer *pPlayer = CPlayer::Create();
 	CMeshField *pMeshField = CMeshField::Create();
 	CObjectManager *pObjManager = CManager::GetObjectManager();
 
+	CTutorialPlayer *pPlayer = CTutorialPlayer::Create();
+
 	if (pPlayer != nullptr && pObjManager != nullptr)
 	{// プレイヤーの適用
-		pObjManager->BindPlayer(pPlayer);
+		pObjManager->BindPlayer((CPlayer*)pPlayer);
 	}
-
-	// 敵情報読込
-	CEnemy::Load();
 
 	// パーティクルの読込
 	CParticle::Load();
-
-	// スカイボックス生成
-	//CSkybox::Create();
 
 	// メッシュフィールドの生成
 	if (pMeshField != nullptr && pObjManager != nullptr)
@@ -93,6 +86,12 @@ HRESULT CTutorial::Init(void)
 	// 塵管理の生成
 	CDustManager::Create();
 
+	// チュートリアル管理の生成
+	if (m_pTutorialManager == nullptr)
+	{
+		m_pTutorialManager = CTutorialManager::Create();
+	}
+
 	return S_OK;
 }
 
@@ -101,15 +100,6 @@ HRESULT CTutorial::Init(void)
 //=====================================================
 void CTutorial::Uninit(void)
 {
-	// ブロック情報削除
-	CBlock::DeleteAll();
-
-	// ブロック番号削除
-	CBlock::DeleteIdx();
-
-	// 敵破棄
-	CEnemy::Unload();
-
 	// オブジェクト全棄
 	CObject::ReleaseAll();
 }
@@ -221,24 +211,6 @@ void CTutorial::ManageState(void)
 void CTutorial::Debug(void)
 {
 
-}
-
-//=====================================================
-// 進行状況の進行
-//=====================================================
-void CTutorial::AddProgress(ACTION action)
-{
-	switch (m_progress)
-	{
-	case CTutorial::PROGRESS_START:
-		break;
-	case CTutorial::PROGRESS_SHOT:
-		break;
-	case CTutorial::PROGRESS_MAX:
-		break;
-	default:
-		break;
-	}
 }
 
 //=====================================================
