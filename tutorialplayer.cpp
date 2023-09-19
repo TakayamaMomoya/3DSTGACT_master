@@ -45,6 +45,8 @@
 #include "smokespawner.h"
 #include "debrisspawner.h"
 #include "objectmanager.h"
+#include "tutorial.h"
+#include "tutorialmanager.h"
 
 //*****************************************************
 // マクロ定義
@@ -822,6 +824,14 @@ void CTutorialPlayer::InputShot(void)
 	CCamera *pCamera = CManager::GetCamera();
 	CBullet *pBullet = nullptr;
 
+	// チュートリアル管理の取得
+	CTutorialManager *pTutorialManager = CTutorial::GetTutorialManager();
+
+	if (pTutorialManager == nullptr)
+	{
+		return;
+	}
+
 	// 銃口の位置、向きを取得
 	D3DXVECTOR3 posMazzle = { m_mtxMazzle[0]._41,m_mtxMazzle[0]._42 ,m_mtxMazzle[0]._43 };
 	D3DXVECTOR3 DestMazzle = { m_mtxMazzle[1]._41,m_mtxMazzle[1]._42 ,m_mtxMazzle[1]._43 };
@@ -854,7 +864,7 @@ void CTutorialPlayer::InputShot(void)
 				if ((pMouse->GetRepeat(CInputMouse::BUTTON_LMB) >= CHARGE_TIMER && pMouse->GetRelease(CInputMouse::BUTTON_LMB)) ||
 					(pJoypad->GetRepeat(CInputJoypad::PADBUTTONS_RB, 0) >= CHARGE_TIMER && pJoypad->GetRelease(CInputJoypad::PADBUTTONS_RB, 0)))
 				{// タメ撃ちの弾発射
-				 // 弾の発射
+					// 弾の発射
 					pBullet = CBullet::Create
 					(
 						posMazzle,
@@ -886,6 +896,9 @@ void CTutorialPlayer::InputShot(void)
 					pCamera->SetQuake(0.025f, 0.025f, 15);
 
 					CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+					// チュートリアルに信号を送る
+					pTutorialManager->AddProgress(CTutorialManager::ACTION_CHARGE);
 				}
 				else
 				{
@@ -927,6 +940,9 @@ void CTutorialPlayer::InputShot(void)
 						pCamera->SetQuake(0.01f, 0.01f, 15);
 
 						CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+						// チュートリアルに信号を送る
+						pTutorialManager->AddProgress(CTutorialManager::ACTION_SHOT);
 					}
 				}
 
@@ -988,6 +1004,9 @@ void CTutorialPlayer::InputShot(void)
 						}
 
 						CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+						// チュートリアルに信号を送る
+						pTutorialManager->AddProgress(CTutorialManager::ACTION_RAPID);
 					}
 
 					if (pJoypad->GetRepeat(CInputJoypad::PADBUTTONS_RB, 0) % (int)fRapid == 0 && pJoypad->GetPress(CInputJoypad::PADBUTTONS_RB, 0))
@@ -1407,7 +1426,17 @@ void CTutorialPlayer::ManageMotion(void)
 		if (motionDowner != MOTION_SHOT || (motionDowner == MOTION_SHOT && bFinishDowner))
 		{
 			if ((int)fSpeed != 0 && motionDowner != MOTION_BOOST && motionDowner != MOTION_TURNBOOST)
-			{// ある程度動いていれば歩くモーション
+			{// ある程度動いていれば歩くモーション]
+
+				// チュートリアル管理の取得
+				CTutorialManager *pTutorialManager = CTutorial::GetTutorialManager();
+
+				if (pTutorialManager != nullptr)
+				{
+					// チュートリアルに信号を送る
+					pTutorialManager->AddProgress(CTutorialManager::ACTION_MOVE);
+				}
+
 				if (m_pBodyDowner != nullptr)
 				{
 					if (m_bTurnDowner)

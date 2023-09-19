@@ -20,6 +20,7 @@
 #include <stdio.h>
 #include "effect3D.h"
 #include "objectmanager.h"
+#include "texture.h"
 
 //*****************************************************
 // マクロ定義
@@ -39,9 +40,9 @@
 //=====================================================
 CMeshField::CMeshField()
 {
-	ZeroMemory(&m_MeshField,sizeof(m_MeshField));
+	ZeroMemory(&m_MeshField, sizeof(m_MeshField));
 	m_pIdxBuff = nullptr;
-	m_pTexture = nullptr;
+	m_nIdxTexture = -1;
 	m_pVtxBuff = nullptr;
 	m_fLengthMesh = 0.0f;
 	m_nDivNumU = 0;
@@ -75,11 +76,10 @@ HRESULT CMeshField::Init(void)
 	// 読込処理
 	Load();
 
-	// テクスチャ読み込み
-	D3DXCreateTextureFromFile(pDevice,
-		MESHFIELD_TEX_FILE,
-		&m_pTexture);
+	// テクスチャの読込
+	m_nIdxTexture = CManager::GetTexture()->Regist(MESHFIELD_TEX_FILE);
 
+	// 頂点数計算
 	m_MeshField.nNumVtx = (m_nDivNumU + 1) * (m_nDivNumV + 1);
 
 	if (m_pVtxBuff == nullptr)
@@ -177,12 +177,6 @@ HRESULT CMeshField::Init(void)
 //=====================================================
 void CMeshField::Uninit(void)
 {
-	if (m_pTexture != nullptr)
-	{
-		m_pTexture->Release();
-		m_pTexture = nullptr;
-	}
-
 	if (m_pVtxBuff != nullptr)
 	{// 頂点バッファポインタの破棄
 		m_pVtxBuff->Release();
@@ -194,8 +188,6 @@ void CMeshField::Uninit(void)
 		m_pIdxBuff->Release();
 		m_pIdxBuff = nullptr;
 	}
-
-	
 
 	Release();
 }
@@ -793,6 +785,52 @@ bool CMeshField::RayCheck(D3DXVECTOR3 pos, D3DXVECTOR3 vecDir, D3DXVECTOR3 posOw
 }
 
 //=====================================================
+// 色の変更
+//=====================================================
+void CMeshField::SetCol(D3DXCOLOR col)
+{
+	m_col = col;
+
+	// 頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	// 頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 色の変更
+	for (int nCnt = 0; nCnt < m_MeshField.nNumVtx; nCnt++)
+	{
+		// 頂点カラーの設定
+		pVtx[nCnt].col = m_col;
+	}
+
+	// 頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
+
+//=====================================================
+// 高さのリセット
+//=====================================================
+void CMeshField::Reset(void)
+{
+	// 頂点情報のポインタ
+	VERTEX_3D *pVtx;
+
+	// 頂点バッファをロックし、頂点情報へのポインタを取得
+	m_pVtxBuff->Lock(0, 0, (void**)&pVtx, 0);
+
+	// 色の変更
+	for (int nCnt = 0; nCnt < m_MeshField.nNumVtx; nCnt++)
+	{
+		// 頂点カラーの設定
+		pVtx[nCnt].pos.y = 0.0f;
+	}
+
+	// 頂点バッファをアンロック
+	m_pVtxBuff->Unlock();
+}
+
+//=====================================================
 // 描画処理
 //=====================================================
 void CMeshField::Draw(void)
@@ -828,9 +866,10 @@ void CMeshField::Draw(void)
 
 	//頂点フォーマットの設定
 	pDevice->SetFVF(FVF_VERTEX_3D);
-
-	//テクスチャ設定
-	pDevice->SetTexture(0, m_pTexture);
+	
+	// テクスチャ設定
+	LPDIRECT3DTEXTURE9 pTexture = CManager::GetTexture()->GetAddress(m_nIdxTexture);
+	pDevice->SetTexture(0, pTexture);
 
 	//ポリゴン描画
 	pDevice->DrawIndexedPrimitive (D3DPT_TRIANGLESTRIP, 0, 0, m_MeshField.nNumVtx, 0, m_MeshField.nNumIdx - 2);

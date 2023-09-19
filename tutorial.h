@@ -31,6 +31,7 @@ public:
 	virtual void Uninit(void);
 	virtual void Update();
 	virtual void Draw();
+	static CTutorialManager *GetTutorialManager(void) { return m_pTutorialManager; }
 
 private:
 	void Debug(void);	// デバッグ処理

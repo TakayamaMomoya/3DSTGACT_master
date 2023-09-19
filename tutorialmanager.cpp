@@ -1,6 +1,6 @@
 //*****************************************************
 //
-// 評価の処理[assess.cpp]
+// チュートリアル管理[tutorialmanager.cpp]
 // Author:髙山桃也
 //
 //*****************************************************
@@ -9,13 +9,21 @@
 // インクルード
 //*****************************************************
 #include "tutorialmanager.h"
+#include "manager.h"
+#include "debugproc.h"
+
+//*****************************************************
+// マクロ定義
+//*****************************************************
+#define MOVE_PROGRESS	(120)	// 移動を検出するフレーム数
 
 //=====================================================
 // コンストラクタ
 //=====================================================
 CTutorialManager::CTutorialManager(int nPriority)
 {
-
+	m_nCntProgress = 0;
+	m_progress = PROGRESS_START;
 }
 
 //=====================================================
@@ -31,6 +39,8 @@ CTutorialManager::~CTutorialManager()
 //=====================================================
 HRESULT CTutorialManager::Init(void)
 {
+	m_progress = PROGRESS_MOVE;
+
 	return S_OK;
 }
 
@@ -58,6 +68,21 @@ void CTutorialManager::AddProgress(ACTION action)
 	switch (m_progress)
 	{
 	case CTutorialManager::PROGRESS_START:
+		break;
+	case CTutorialManager::PROGRESS_MOVE:
+
+		if (action == ACTION_MOVE)
+		{
+			m_nCntProgress++;
+		}
+
+		if (m_nCntProgress > MOVE_PROGRESS)
+		{// 次の進行状況に移行
+			m_nCntProgress = 0;
+
+			m_progress = PROGRESS_SHOT;
+		}
+
 		break;
 	case CTutorialManager::PROGRESS_SHOT:
 
@@ -90,4 +115,29 @@ CTutorialManager *CTutorialManager::Create(void)
 	}
 
 	return pTutorialManager;
+}
+
+//=====================================================
+// 描画処理
+//=====================================================
+void CTutorialManager::Draw(void)
+{
+#ifdef  _DEBUG
+	Debug();
+#endif //  _DEBUG
+}
+
+//=====================================================
+// デバッグ表示
+//=====================================================
+void CTutorialManager::Debug(void)
+{
+	CDebugProc *pDebugProc = CManager::GetDebugProc();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	pDebugProc->Print("\n現在の進行[%d]",m_progress);
 }

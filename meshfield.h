@@ -43,9 +43,12 @@ public:
 	void SetNormal(void);
 	void Dent(D3DXVECTOR3 pos, float fRadius, float fDepth);
 	bool RayCheck(D3DXVECTOR3 pos, D3DXVECTOR3 vecDir, D3DXVECTOR3 posOwn);
+	void SetCol(D3DXCOLOR col);
+	void SetIdxTexture(int nIdxTexture) { m_nIdxTexture = nIdxTexture; }
+	void Reset(void);
 
 private:
-	LPDIRECT3DTEXTURE9 m_pTexture;	//テクスチャへのポインタ
+	int m_nIdxTexture;	// テクスチャ番号
 	LPDIRECT3DVERTEXBUFFER9 m_pVtxBuff;	//頂点バッファへのポインタ
 	LPDIRECT3DINDEXBUFFER9 m_pIdxBuff;	//インデックスバッファへのポインタ
 	MeshField m_MeshField;	//構造体の情報

@@ -78,13 +78,18 @@ HRESULT CTutorial::Init(void)
 	if (pMeshField != nullptr && pObjManager != nullptr)
 	{
 		pObjManager->BindMeshField(pMeshField);
+
+		pMeshField->SetIdxTexture(-1);
+
+		pMeshField->SetCol(D3DXCOLOR(0.7f, 0.7f, 1.0f, 0.7f));
+
+		pMeshField->Reset();
+
+		pMeshField->SetNormal();
 	}
 
 	// フォグを消す
 	CRenderer::EnableFog(false);
-
-	// 塵管理の生成
-	CDustManager::Create();
 
 	// チュートリアル管理の生成
 	if (m_pTutorialManager == nullptr)
@@ -189,6 +194,13 @@ void CTutorial::LimitPlayerPos(void)
 	if (pos.y > LIMIT_HEIGHT)
 	{// 天井
 		pos.y = LIMIT_HEIGHT;
+
+		move.y = 0;
+	}
+
+	if (pos.y < 0)
+	{// 床
+		pos.y = 0;
 
 		move.y = 0;
 	}

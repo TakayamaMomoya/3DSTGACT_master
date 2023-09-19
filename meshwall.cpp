@@ -200,6 +200,12 @@ void CMeshWall::Uninit(void)
 		m_pVtxBuff = nullptr;
 	}
 
+	if (m_pTexture != nullptr)
+	{// テクスチャの破棄
+		m_pTexture->Release();
+		m_pTexture = nullptr;
+	}
+
 	if (m_pIdxBuff != nullptr)
 	{// インデックスバッファポインタの破棄
 		m_pIdxBuff->Release();

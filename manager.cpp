@@ -62,7 +62,7 @@ CUniversal *CManager::m_pUniversal = nullptr;	// 汎用処理へのポインタ
 CObjectManager *CManager::m_pObjectManager = nullptr;	// オブジェクト管理へのポインタ
 CScene *CManager::m_pScene = nullptr;	// シーンへのポインタ
 CFade *CManager::m_pFade = nullptr;	// フェードへのポインタ
-CScene::MODE CManager::m_mode = CScene::MODE_TUTORIAL;	// 現在のモード
+CScene::MODE CManager::m_mode = CScene::MODE_GAME;	// 現在のモード
 int CManager::m_nScore = 0;	// スコア保存用
 
 //=====================================================
