@@ -25,8 +25,6 @@ public:
 	void Draw(void);
 
 private:
-	void Tilt(void);	// ŒX‚«‚Ì§Œä
-	void ChaseTarget(void);	// ’ÇÕˆ—
 	void Fall(void);	// ’Ä—‚Ì“®‚«
 
 	float m_fAngleFall;	// ’Ä—Šp“x

@@ -34,6 +34,7 @@
 #include "player.h"
 #include "enemymove.h"
 #include "enemytank.h"
+#include "enemytutorial.h"
 #include "arrow.h"
 #include "objectmanager.h"
 
@@ -83,6 +84,7 @@ CEnemy::CEnemy()
 	m_pCollisionSphere = nullptr;
 	m_state = STATE_NORMAL;
 	m_moveState = MOVESTATE_NONE;
+	m_posDest = { 0.0f,0.0f,0.0f };
 
 	// ’l‚ÌƒNƒŠƒA
 	m_pPrev = nullptr;
@@ -178,6 +180,12 @@ CEnemy *CEnemy::Create(D3DXVECTOR3 pos, TYPE type)
 			pEnemy = new CEnemyAttack;
 
 			pEnemy->CMotion::Load("data\\MOTION\\motionFighter.txt");
+
+			break;
+		case TYPE_TUTORIAL:
+			pEnemy = new CEnemyTutorial;
+
+			pEnemy->CMotion::Load("data\\MOTION\\motionHeli.txt");
 
 			break;
 		default:

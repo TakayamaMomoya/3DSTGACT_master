@@ -615,7 +615,7 @@ void CTutorialPlayer::Input(void)
 
 	if (pKeyboard->GetTrigger(DIK_F6))
 	{// “GƒXƒ|[ƒ“
-		CEnemy::Create(GetPosition(), CEnemy::TYPE_MOVE);
+		CEnemy::Create(GetPosition(), CEnemy::TYPE_TUTORIAL);
 	}
 
 	if (pKeyboard->GetTrigger(DIK_B))

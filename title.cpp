@@ -20,6 +20,7 @@
 #include "texture.h"
 #include "camera.h"
 #include "renderer.h"
+#include "menu.h"
 
 //*****************************************************
 // マクロ定義
@@ -31,7 +32,7 @@
 //=====================================================
 CTitle::CTitle()
 {
-
+	m_pMenu = nullptr;
 }
 
 //=====================================================
@@ -76,6 +77,12 @@ HRESULT CTitle::Init(void)
 //=====================================================
 void CTitle::Uninit(void)
 {
+	if (m_pMenu != nullptr)
+	{
+		m_pMenu->Uninit();
+		m_pMenu = nullptr;
+	}
+
 	// オブジェクト全破棄
 	CObject::ReleaseAll();
 }
@@ -102,10 +109,10 @@ void CTitle::Update(void)
 		if (pKeyboard->GetTrigger(DIK_RETURN) || 
 			pMouse->GetTrigger(CInputMouse::BUTTON_LMB) || 
 			pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
-		{// 画面遷移
-			if (pFade != nullptr)
+		{// メニューUIの生成
+			if (m_pMenu == nullptr)
 			{
-				pFade->SetFade(CScene::MODE_GAME);
+				m_pMenu = CMenu::Create();
 			}
 		}
 	}

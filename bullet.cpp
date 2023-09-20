@@ -332,7 +332,7 @@ bool CBullet::BulletHit(CCollision::TAG tag)
 
 			CParticle::Create(m_pos, CParticle::TYPE_HIT);
 
-			if (tag == CCollision::TAG_MISSILE && CGame::GetScore() == nullptr)
+			if (tag == CCollision::TAG_MISSILE && CGame::GetScore() != nullptr)
 			{
 				CBonus::Create(CBonus::TYPE_MISSILE);
 			}

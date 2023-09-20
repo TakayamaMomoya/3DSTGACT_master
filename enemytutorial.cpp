@@ -80,7 +80,7 @@ HRESULT CEnemyTutorial::Init(void)
 
 	// 初期の体力設定
 	SetLife(LIFE_HELI);
-	
+
 	// 墜落時の向き誤差を設定
 	m_fAngleFall = (float)(rand() % (int)(3.14 * 100.0f) - 3.14 * 50.0f) / 100.0f;
 
@@ -120,11 +120,7 @@ void CEnemyTutorial::Update(void)
 
 	if (GetState() != STATE_DEATH)
 	{
-		// 追跡処理
-		CEnemyTutorial::ChaseTarget();
 
-		// 傾きの制御
-		Tilt();
 	}
 	else
 	{
@@ -139,145 +135,8 @@ void CEnemyTutorial::Update(void)
 		}
 	}
 
-	if (GetState() == STATE_DEATH)
-	{
-		// 移動量減衰
-		SetMove(GetMove() *= 0.98f);
-	}
-	else
-	{
-		// 移動量減衰
-		SetMove(D3DXVECTOR3(GetMove().x * 0.98f,0.0f, GetMove().z * 0.98f));
-	}
-
 	// 継承クラスの更新
 	CEnemy::Update();
-}
-
-//=====================================================
-// 傾きの制御処理
-//=====================================================
-void CEnemyTutorial::Tilt(void)
-{
-	// 汎用処理取得
-	CUniversal *pUniversal = CManager::GetUniversal();
-
-	// 変数宣言
-	D3DXVECTOR3 move, rot;
-	float fSpeed,fTilt;
-
-	// 情報取得
-	move = GetMove();
-	rot = GetRot();
-
-	// 速度を取得
-	fSpeed = D3DXVec3Length(&move);
-
-	// 傾き具合を算出
-	fTilt = -D3DX_PI - fSpeed / DEFAULT_SPEED * DEFAULT_TILT;
-
-	if (pUniversal != nullptr)
-	{// 傾く処理
-		pUniversal->FactingRot(&rot.x, fTilt, 0.98f);
-	}
-	
-	// 向きの反映
-	SetRot(rot);
-}
-
-//=====================================================
-// 目標追跡
-//=====================================================
-void CEnemyTutorial::ChaseTarget(void)
-{
-	// プレイヤー情報取得
-	CPlayer *pPlayer = nullptr;
-	CObjectManager *pObjManager = CManager::GetObjectManager();
-
-	if (pObjManager != nullptr)
-	{// プレイヤーの適用
-		pPlayer = pObjManager->GetPlayer();
-	}
-
-	if (pPlayer != nullptr)
-	{
-		if (GetMoveState() == MOVESTATE_CHASE)
-		{
-			SetPosDest(pPlayer->GetPosition());
-		}
-	}
-
-	// 変数宣言
-	D3DXVECTOR3 vecDest;
-
-	// 差分を取得
-	vecDest = GetPosDest() - GetPosition();
-
-	float length = D3DXVec3Length(&vecDest);
-
-	// 目標角度を取得
-	float fRotDest = atan2f(vecDest.x, vecDest.z);
-
-	float fRotDiff = fRotDest - GetRot().y;
-
-	// 角度の修正
-	if (fRotDiff > D3DX_PI)
-	{
-		fRotDiff -= 6.28f;
-	}
-	if (fRotDiff < -D3DX_PI)
-	{
-		fRotDiff += 6.28f;
-	}
-
-	// 角度補正
-	SetRot(D3DXVECTOR3(GetRot().x, GetRot().y + fRotDiff * ROLL_FACT, GetRot().z));
-
-	// 角度の修正
-	if (GetRot().y > D3DX_PI)
-	{
-		// 角度補正
-		SetRot(D3DXVECTOR3(GetRot().x, GetRot().y - 6.28f, GetRot().z));
-	}
-	if (GetRot().y < -D3DX_PI)
-	{
-		// 角度補正
-		SetRot(D3DXVECTOR3(GetRot().x, GetRot().y + 6.28f, GetRot().z));
-	}
-
-	if (length > ATTACK_RANGE)
-	{// 目標から離れていたら
-		// 目標方向へ進む
-		SetMove(D3DXVECTOR3
-		(
-			sinf(GetRot().y) * SPEED_MOVE,
-			GetMove().y,
-			cosf(GetRot().y) * SPEED_MOVE
-		));
-	}
-	else
-	{// 目標に近づいていたら
-		if (GetMoveState() == MOVESTATE_CHASE)
-		{
-			if (GetCntAttack() >= ATTACK_FREQ)
-			{// 一定時間ごとに攻撃
-				CMissile::Create(GetPosition());
-
-				SetCntAttack(0);
-			}
-		}
-		else
-		{
-			SetMove(D3DXVECTOR3
-			(
-				sinf(GetRot().y) * SPEED_MOVE,
-				GetMove().y,
-				cosf(GetRot().y) * SPEED_MOVE
-			));
-		}
-
-	}
-
 }
 
 //=====================================================
@@ -287,7 +146,7 @@ void CEnemyTutorial::Fall(void)
 {
 	// 汎用処理取得
 	CUniversal *pUniversal = CManager::GetUniversal();
-	D3DXVECTOR3 move,rot;
+	D3DXVECTOR3 move, rot;
 
 	// 移動方向取得
 	m_fAngleFall = atan2f(GetMove().x, GetMove().z) + m_fAngleFall;

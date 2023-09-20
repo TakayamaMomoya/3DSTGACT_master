@@ -169,6 +169,7 @@
     <ClCompile Include="debris.cpp" />
     <ClCompile Include="debrisspawner.cpp" />
     <ClCompile Include="enemytutorial.cpp" />
+    <ClCompile Include="menu.cpp" />
     <ClCompile Include="objectmanager.cpp" />
     <ClCompile Include="smoke.cpp" />
     <ClCompile Include="smokespawner.cpp" />
@@ -247,6 +248,7 @@
     <ClInclude Include="debris.h" />
     <ClInclude Include="debrisspawner.h" />
     <ClInclude Include="enemytutorial.h" />
+    <ClInclude Include="menu.h" />
     <ClInclude Include="objectmanager.h" />
     <ClInclude Include="smoke.h" />
     <ClInclude Include="smokespawner.h" />
