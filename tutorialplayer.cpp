@@ -506,20 +506,6 @@ void CTutorialPlayer::ManageCollision(void)
 		m_pCollisionSphere->SetPositionOld(m_pCollisionSphere->GetPosition());
 
 		m_pCollisionSphere->SetPosition(pos);
-
-		m_pCollisionSphere->SetRadius(RADIUS_SPHERE * 4);
-
-		if (m_pCollisionSphere->IsTriggerExit(CCollision::TAG_ENEMYBULLET))
-		{// 至近弾回避の判定
-			CBonus::Create(CBonus::TYPE_DOGDE);
-		}
-
-		if (m_pCollisionSphere->IsTriggerExit(CCollision::TAG_MISSILE))
-		{// 至近弾回避の判定
-			CBonus::Create(CBonus::TYPE_DOGDE);
-		}
-
-		m_pCollisionSphere->SetRadius(RADIUS_SPHERE);
 	}
 
 	if (bLandBlock || bLandMesh)
@@ -644,6 +630,10 @@ void CTutorialPlayer::Input(void)
 //=====================================================
 void CTutorialPlayer::InputMove(void)
 {
+
+	// チュートリアル管理の取得
+	CTutorialManager *pTutorialManager = CTutorial::GetTutorialManager();
+
 	// 情報入手
 	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
 	CInputMouse *pMouse = CManager::GetMouse();
@@ -739,6 +729,12 @@ void CTutorialPlayer::InputMove(void)
 
 				// ダッシュ状態に移行
 				m_bSprint = true;
+
+				if (pTutorialManager != nullptr)
+				{
+					// チュートリアルに信号を送る
+					pTutorialManager->AddProgress(CTutorialManager::ACTION_BOOST);
+				}
 			}
 			else
 			{
@@ -765,9 +761,26 @@ void CTutorialPlayer::InputMove(void)
 		if (pKeyboard->GetPress(DIK_SPACE) || pJoypad->GetPress(CInputJoypad::PADBUTTONS_LB, 0))
 		{// ブーストジャンプ
 			move.y += JUMP_POW;
-			if (m_pBodyDowner->GetMotion() != MOTION_BOOST)
-			{// ブーストモーションへ移行
-				m_pBodyDowner->SetMotion(MOTION_BOOST);
+
+			if (pTutorialManager != nullptr)
+			{
+				// チュートリアルに信号を送る
+				pTutorialManager->AddProgress(CTutorialManager::ACTION_BOOST);
+			}
+
+			if (m_bTurnDowner)
+			{
+				if (m_pBodyDowner->GetMotion() != MOTION_TURNBOOST)
+				{// ブーストモーションへ移行
+					m_pBodyDowner->SetMotion(MOTION_TURNBOOST);
+				}
+			}
+			else
+			{
+				if (m_pBodyDowner->GetMotion() != MOTION_BOOST)
+				{// ブーストモーションへ移行
+					m_pBodyDowner->SetMotion(MOTION_BOOST);
+				}
 			}
 
 			// ブーストの設定
@@ -1426,7 +1439,7 @@ void CTutorialPlayer::ManageMotion(void)
 		if (motionDowner != MOTION_SHOT || (motionDowner == MOTION_SHOT && bFinishDowner))
 		{
 			if ((int)fSpeed != 0 && motionDowner != MOTION_BOOST && motionDowner != MOTION_TURNBOOST)
-			{// ある程度動いていれば歩くモーション]
+			{// ある程度動いていれば歩くモーション
 
 				// チュートリアル管理の取得
 				CTutorialManager *pTutorialManager = CTutorial::GetTutorialManager();
@@ -1744,16 +1757,7 @@ void CTutorialPlayer::Hit(float fDamage)
 
 	if (m_nLife <= 0)
 	{// 死亡判定
-	 // 腰の位置取得
-		D3DXVECTOR3 pos = { m_mtxWaist._41,m_mtxWaist._42, m_mtxWaist._43 };
-
-		m_nLife = 0;
-
-		CNoise::Create(TIME_DEATH);
-
-		CExplSpawner::Create(pos, 500.0f, TIME_DEATH, nullptr);
-
-		Death();
+		m_nLife = INITIAL_LIFE_PLAYER;
 	}
 	else
 	{

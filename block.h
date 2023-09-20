@@ -28,10 +28,10 @@ public:
 		TYPE_BILL002,	// ビル3
 		TYPE_BILL003,	// タンク
 		TYPE_BILL004,	// コンテナ
-		TYPE_BILL005,	// 仮想ブロック
 		TYPE_BASE000,	// 土台
 		TYPE_RADER000,	// レーダー土台
 		TYPE_RADER001,	// レーダーレドーム
+		TYPE_BILL005,	// 仮想ブロック
 		TYPE_MAX
 	}TYPE;
 
