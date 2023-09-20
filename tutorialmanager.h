@@ -46,6 +46,7 @@ public:
 	void Draw(void);
 
 	void AddProgress(ACTION action);
+	PROGRESS GetProgress(void) { return m_progress; }
 
 private:
 	void Debug(void);

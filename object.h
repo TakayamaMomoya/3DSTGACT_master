@@ -60,6 +60,7 @@ public:
 	virtual D3DXVECTOR3 GetPositionOld(void) { return D3DXVECTOR3(); };	// 位置取得処理
 	virtual float GetWidth(void) { return 0.0f; };	// サイズ取得
 	virtual float GetHeight(void) { return 0.0f; }	// サイズ取得
+	void EnableWire(bool bWire) { m_bWire = bWire; }
 	static int GetNumAll(void) { return m_nNumAll; }
 
 protected:
@@ -77,6 +78,7 @@ private:
 	CObject *m_pPrev;	// 前のオブジェクトのアドレス
 	CObject *m_pNext;	// 次のオブジェクトのアドレス
 	bool m_bDeath;	// 死亡フラグ
+	bool m_bWire;	// ワイヤーフレームで表示するかどうか
 };
 
 #endif

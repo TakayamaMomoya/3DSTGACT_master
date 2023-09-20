@@ -127,14 +127,14 @@ void CEdit::Update(void)
 		{// オブジェクト選択処理
 			if (pBlock[m_nIdxObject] != nullptr)
 			{
-				pBlock[m_nIdxObject]->SetEmissiveCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.0f));
+				pBlock[m_nIdxObject]->SetEmissiveCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f));
 			}
 
 			m_nIdxObject = (m_nIdxObject + 1) % CBlock::GetNumAll();
 
 			if (pBlock[m_nIdxObject] != nullptr)
 			{
-				pBlock[m_nIdxObject]->SetEmissiveCol(D3DXCOLOR(1.0f, 0.0f, 0.0f, 0.0f));
+				pBlock[m_nIdxObject]->SetEmissiveCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 			}
 		}
 

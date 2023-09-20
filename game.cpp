@@ -156,23 +156,13 @@ HRESULT CGame::Init(void)
 	// スカイボックス生成
 	CSkybox::Create();
 
-	CMeshField *pMeshField = CMeshField::Create();
+	//CMeshField *pMeshField = CMeshField::Create();
 
-	// メッシュフィールドの生成
-	if (pMeshField != nullptr && pObjManager != nullptr)
-	{// メッシュフィールドの適用
-		pObjManager->BindMeshField(pMeshField);
-	}
-
-	// ハリボテ床の生成
-	CField *pField = nullptr;
-	pField = CField::Create();
-
-	if (pField != nullptr)
-	{
-		pField->SetPosition(D3DXVECTOR3(0.0f, -300.0f, 0.0f));
-		pField->SetSize(5000000.0f, 5000000.0f);
-	}
+	//// メッシュフィールドの生成
+	//if (pMeshField != nullptr && pObjManager != nullptr)
+	//{// メッシュフィールドの適用
+	//	pObjManager->BindMeshField(pMeshField);
+	//}
 
 	// メッシュウォールの生成
 	m_apMeshWall[WALLTYPE_FRONT] = CMeshWall::Create(D3DXVECTOR3(0.0f, 0.0f, -10000.0f), D3DXVECTOR3(0.0f, D3DX_PI, 0.0f));
@@ -189,7 +179,7 @@ HRESULT CGame::Init(void)
 	CDustManager::Create();
 
 	// 敵生成
-	CEnemy::SpawnEnemy(3);
+	//CEnemy::SpawnEnemy(3);
 
 	if (m_pRank == nullptr)
 	{// ランク生成
@@ -354,7 +344,7 @@ void CGame::Update(void)
 
 	if (CEnemy::GetNumAll() == 0)
 	{// 敵スポーン
-		CEnemy::SpawnEnemy(3);
+		//CEnemy::SpawnEnemy(3);
 
 		TimeBonus();
 

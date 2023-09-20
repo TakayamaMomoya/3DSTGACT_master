@@ -874,7 +874,7 @@ void CMeshField::Draw(void)
 	//ƒ|ƒŠƒSƒ“•`‰æ
 	pDevice->DrawIndexedPrimitive (D3DPT_TRIANGLESTRIP, 0, 0, m_MeshField.nNumVtx, 0, m_MeshField.nNumIdx - 2);
 
-	pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+	//pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
 }
 
 //=====================================================

@@ -247,6 +247,7 @@ void CBlock::LoadModel(void)
 		"data\\MODEL\\BLOCK\\bill02.x",	// ビル３
 		"data\\MODEL\\BLOCK\\bill03.x",	// 何かのタンク
 		"data\\MODEL\\BLOCK\\bill04.x",	// コンテナ
+		"data\\MODEL\\BLOCK\\bill05.x",	// 仮想ブロック
 		"data\\MODEL\\BLOCK\\base00.x",	// 土台
 		"data\\MODEL\\BLOCK\\rader00.x",	// レーダー土台
 		"data\\MODEL\\BLOCK\\rader01.x",	// レドーム

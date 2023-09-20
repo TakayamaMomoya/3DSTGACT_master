@@ -32,6 +32,7 @@ public:
 		TYPE_MOVE,	// 移動する敵
 		TYPE_TANK,	// 戦車敵
 		TYPE_ATTACK,	// 攻撃してくる敵
+		TYPE_TUTORIAL,	// チュートリアルの敵
 		TYPE_MAX
 	}TYPE;
 

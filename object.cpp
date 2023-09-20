@@ -13,6 +13,7 @@
 #include "manager.h"
 #include "block.h"
 #include "collision.h"
+#include "renderer.h"
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -30,6 +31,7 @@ CObject::CObject(int nPriority)
 	m_pPrev = nullptr;
 	m_pNext = nullptr;
 	m_bDeath = false;
+	m_bWire = false;
 
 	if (nPriority == 7)
 	{
@@ -223,6 +225,9 @@ void CObject::UpdateAll(void)
 //=====================================================
 void CObject::DrawAll(void)
 {
+	// デバイスの取得
+	LPDIRECT3DDEVICE9 pDevice = CManager::GetRenderer()->GetDevice();
+
 	// カメラの取得
 	CCamera *pCamera = CManager::GetCamera();
 
@@ -241,8 +246,18 @@ void CObject::DrawAll(void)
 			// 次のアドレスを保存
 			CObject *pObjectNext = pObject->m_pNext;
 
+			if (pObject->m_bWire)
+			{
+				pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_WIREFRAME);
+			}
+
 			// 描画処理
 			pObject->Draw();
+
+			if (pObject->m_bWire)
+			{
+				pDevice->SetRenderState(D3DRS_FILLMODE, D3DFILL_SOLID);
+			}
 
 			// 次のアドレスを代入
 			pObject = pObjectNext;
