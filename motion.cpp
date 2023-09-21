@@ -15,6 +15,7 @@
 #include "renderer.h"
 #include "debugproc.h"
 #include "particle.h"
+#include "sound.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -108,6 +109,9 @@ void CMotion::Update(void)
 				pos = D3DXVECTOR3(pMtx->_41, pMtx->_42, pMtx->_43) + m_aMotionInfo[m_motionType].pParticle[nCntParticle].offset;
 
 				CParticle::Create(pos, (CParticle::TYPE)m_aMotionInfo[m_motionType].pParticle[nCntParticle].nType);
+
+				// SEÄ¶
+				CManager::GetSound()->Play(CSound::LABEL_STEP);
 			}
 		}
 	}

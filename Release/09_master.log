@@ -1,39 +1,8 @@
-﻿  arrow.cpp
-  bonus.cpp
-  boost.cpp
-  bullet.cpp
-  camera.cpp
-  cockpit.cpp
-  debris.cpp
-  defend.cpp
-  enemy.cpp
-  enemymove.cpp
-  enemytank.cpp
-  enemytutorial.cpp
-  game.cpp
-  manager.cpp
-  menu.cpp
-  meshcylinder.cpp
-  meshfield.cpp
-  meshwall.cpp
-  missile.cpp
-  pause.cpp
-  コンパイル中...
-  player.cpp
-  rader.cpp
-  rank.cpp
-  result.cpp
-  scene.cpp
-  score.cpp
-  shadow.cpp
-  smoke.cpp
-  timer.cpp
-  title.cpp
-  tutorialplayer.cpp
+﻿  motion.cpp
   コード生成しています。
-  23 of 1059 functions ( 2.2%) were compiled, the rest were copied from previous compilation.
-    3 functions were new in current compilation
-    81 functions had inline decision re-evaluated but remain unchanged
+  2 of 1060 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
+    0 functions were new in current compilation
+    11 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.exe
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.pdb (Full PDB)

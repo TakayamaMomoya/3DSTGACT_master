@@ -18,9 +18,11 @@ public:
 	typedef enum
 	{
 		LABEL_BGM000 = 0,				// タイトルBGM
+		LABEL_BGM001,				// 戦闘BGM
 		LABEL_SHOT,	// 発射音
+		LABEL_STEP,	// 足音
 		LABEL_EXPLOSION,	// 爆発音
-		LABEL_MAX,
+		LABEL_MAX
 	} LABEL;
 
 	typedef enum
@@ -69,8 +71,10 @@ private:
 	SOUNDINFO m_aSoundInfo[LABEL_MAX] =
 	{
 		{ "data/SOUND/BGM/title.wav", -1 },			// タイトル	
+		{ "data/SOUND/BGM/battle.wav", -1 },			// 戦闘
 		{ "data/SOUND/SE/laser000.wav", 0 },			// 発射音レーザー	
-		{ "data/SOUND/SE/explSmall.wav", 0 },			// 爆発音
+		{ "data/SOUND/SE/step.wav", 0 },			// 足音
+		{ "data/SOUND/SE/explSmall.wav", 0 }			// 爆発音
 	};
 };
 

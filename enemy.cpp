@@ -37,6 +37,7 @@
 #include "enemytutorial.h"
 #include "arrow.h"
 #include "objectmanager.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -615,6 +616,9 @@ void CEnemy::Hit(float fDamage)
 		m_pExplSpawner = CExplSpawner::Create(GetPosition(), GetRadiusMax(), TIME_DEATH, &m_pExplSpawner);
 
 		m_nTimerDeath = TIME_DEATH;
+
+		// SE再生
+		CManager::GetSound()->Play(CSound::LABEL_EXPLOSION);
 	}
 	else
 	{
@@ -671,6 +675,9 @@ void CEnemy::Death(void)
 
 	// 自身の終了
 	Uninit();
+
+	// SE再生
+	CManager::GetSound()->Play(CSound::LABEL_EXPLOSION);
 }
 
 //=====================================================

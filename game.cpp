@@ -40,6 +40,7 @@
 #include "noise.h"
 #include "objectmanager.h"
 #include "result.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -183,6 +184,9 @@ HRESULT CGame::Init(void)
 	{// ランク生成
 		m_pRank = CRank::Create();
 	}
+
+	// BGM再生
+	CManager::GetSound()->Play(CSound::LABEL_BGM001);
 
 	return S_OK;
 }

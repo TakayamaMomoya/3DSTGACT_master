@@ -21,6 +21,7 @@
 #include "camera.h"
 #include "renderer.h"
 #include "menu.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -89,6 +90,9 @@ HRESULT CTitle::Init(void)
 
 	// フォグを切る
 	CRenderer::EnableFog(false);
+
+	// BGM再生
+	CManager::GetSound()->Play(CSound::LABEL_BGM000);
 
 	return S_OK;
 }

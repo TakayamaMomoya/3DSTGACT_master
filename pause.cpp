@@ -30,6 +30,7 @@ CPause::CPause()
 {
 	m_menu = MENU_RESUME;
 	ZeroMemory(&m_apMenu[0], sizeof(m_apMenu));
+	m_pBg = nullptr;
 }
 
 //====================================================
@@ -70,11 +71,25 @@ HRESULT CPause::Init(void)
 		"data\\TEXTURE\\UI\\menu_quit.png",
 	};
 
-	for (int nCntMenu = 0; nCntMenu < MENU_MAX; nCntMenu++)
+	// ”wŒi‚Ì¶¬
+	m_pBg = CObject2D::Create(7);
+
+	if (m_pBg != nullptr)
 	{
+		m_pBg->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5f, 0.0f));
+
+		m_pBg->SetSize(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.5f);
+
+		m_pBg->SetCol(D3DXCOLOR(0.0f, 0.0f, 0.0f, 0.6f));
+
+		m_pBg->SetVtx();
+	}
+
+	for (int nCntMenu = 0; nCntMenu < MENU_MAX; nCntMenu++)
+	{// ‘I‘ðŽˆ‚Ì¶¬
 		if (m_apMenu[nCntMenu] == nullptr)
 		{
-			m_apMenu[nCntMenu] = CObject2D::Create(6);
+			m_apMenu[nCntMenu] = CObject2D::Create(7);
 
 			m_apMenu[nCntMenu]->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5f, SCREEN_HEIGHT * 0.4f + MENU_HEIGHT * nCntMenu * 2, 0.0f));
 			
@@ -106,6 +121,12 @@ void CPause::Uninit(void)
 
 			m_apMenu[nCnt] = nullptr;
 		}
+	}
+
+	if (m_pBg != nullptr)
+	{
+		m_pBg->Uninit();
+		m_pBg = nullptr;
 	}
 
 	Release();

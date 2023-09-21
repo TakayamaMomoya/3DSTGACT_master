@@ -49,6 +49,7 @@ private:
 	MENU m_menu;	// 選択項目
 
 	CObject2D *m_apMenu[MENU_MAX];	// メニュー項目の２Dオブジェクト
+	CObject2D *m_pBg;	// 背景のポインタ
 };
 
 #endif

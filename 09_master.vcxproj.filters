@@ -201,9 +201,6 @@
     <ClCompile Include="inputkeyboard.cpp">
       <Filter>ソース ファイル\input</Filter>
     </ClCompile>
-    <ClCompile Include="pause.cpp">
-      <Filter>ソース ファイル</Filter>
-    </ClCompile>
     <ClCompile Include="missile.cpp">
       <Filter>ソース ファイル\enemy</Filter>
     </ClCompile>
@@ -274,6 +271,9 @@
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
     <ClCompile Include="result.cpp">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClCompile>
+    <ClCompile Include="pause.cpp">
       <Filter>ソース ファイル\UI</Filter>
     </ClCompile>
   </ItemGroup>
@@ -437,9 +437,6 @@
     <ClInclude Include="inputmouse.h">
       <Filter>ソース ファイル\input</Filter>
     </ClInclude>
-    <ClInclude Include="pause.h">
-      <Filter>ヘッダー ファイル</Filter>
-    </ClInclude>
     <ClInclude Include="missile.h">
       <Filter>ソース ファイル\enemy</Filter>
     </ClInclude>
@@ -510,6 +507,9 @@
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
     <ClInclude Include="result.h">
+      <Filter>ソース ファイル\UI</Filter>
+    </ClInclude>
+    <ClInclude Include="pause.h">
       <Filter>ソース ファイル\UI</Filter>
     </ClInclude>
   </ItemGroup>

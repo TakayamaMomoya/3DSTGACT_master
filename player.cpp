@@ -892,6 +892,9 @@ void CPlayer::InputShot(void)
 					pCamera->SetQuake(0.025f, 0.025f, 15);
 
 					CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+					// SEÄ¶
+					CManager::GetSound()->Play(CSound::LABEL_SHOT);
 				}
 				else
 				{
@@ -933,6 +936,9 @@ void CPlayer::InputShot(void)
 						pCamera->SetQuake(0.01f, 0.01f, 15);
 
 						CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+						// SEÄ¶
+						CManager::GetSound()->Play(CSound::LABEL_SHOT);
 					}
 				}
 
@@ -994,6 +1000,9 @@ void CPlayer::InputShot(void)
 						}
 
 						CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+						// SEÄ¶
+						CManager::GetSound()->Play(CSound::LABEL_SHOT);
 					}
 
 					if (pJoypad->GetRepeat(CInputJoypad::PADBUTTONS_RB, 0) % (int)fRapid == 0 && pJoypad->GetPress(CInputJoypad::PADBUTTONS_RB, 0))
@@ -1027,6 +1036,9 @@ void CPlayer::InputShot(void)
 						}
 
 						CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+						// SEÄ¶
+						CManager::GetSound()->Play(CSound::LABEL_SHOT);
 					}
 				}
 			}
@@ -1374,6 +1386,9 @@ void CPlayer::ManageState(void)
 			CGame::SetState(CGame::STATE_RESULT);
 
 			CResult::Create(false);
+
+			// SEÄ¶
+			CManager::GetSound()->Play(CSound::LABEL_EXPLOSION);
 		}
 
 		break;
