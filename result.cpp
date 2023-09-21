@@ -23,8 +23,8 @@
 //*****************************************************
 #define MENU_WIDTH	(140.0f)	// 項目の幅
 #define MENU_HEIGHT	(60.0f)	// 項目の高さ
-#define CAPTION_WIDTH	(500.0f)	// 見出しの幅
-#define CAPTION_HEIGHT	(250.0f)	// 見出しの高さ
+#define CAPTION_WIDTH	(918.0f * 0.4f)	// 見出しの幅
+#define CAPTION_HEIGHT	(178.0f * 0.4f)	// 見出しの高さ
 #define CAPTION_PATH "data\\TEXTURE\\UI\\caption01.png"	// 見出しのパス
 
 //====================================================

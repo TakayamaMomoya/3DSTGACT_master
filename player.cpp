@@ -589,6 +589,11 @@ bool CPlayer::CollisionField(void)
 //=====================================================
 void CPlayer::Input(void)
 {
+	if (CGame::GetState() != STATE_NORMAL)
+	{
+		return;
+	}
+
 	// “ü—Íî•ñ“üè
 	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
 
@@ -1365,6 +1370,10 @@ void CPlayer::ManageState(void)
 
 			// I—¹ˆ—
 			Uninit();
+
+			CGame::SetState(CGame::STATE_RESULT);
+
+			CResult::Create(false);
 		}
 
 		break;

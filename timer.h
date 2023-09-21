@@ -31,7 +31,7 @@ public:
 	HRESULT Init(void);
 	void Uninit(void);
 	void Update(void);
-	void Draw(void) {};
+	void Draw(void);
 	static CTimer *Create(void);
 	void AddTimer(int nValue);
 	void SetPosition(D3DXVECTOR3 pos) {};
@@ -47,7 +47,6 @@ private:
 	int m_nSecond;	// 現在の時間(秒)
 	int m_nCntSecond;	// 一秒計測用カウンター
 	int m_nIdxTexture;	// テクスチャ番号
-	static LPDIRECT3DTEXTURE9 m_pTexture;	// テクスチャへのポインタ
 };
 
 #endif

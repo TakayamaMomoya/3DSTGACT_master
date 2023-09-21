@@ -13,17 +13,14 @@
 #include "renderer.h"
 #include "number.h"
 #include "game.h"
+#include "result.h"
+#include "debugproc.h"
 
 //*****************************************************
 // マクロ定義
 //*****************************************************
 #define NUM_PLACE	(2)	// 桁数
 #define INITIAL_TIME	(120)	// 初期の時間
-
-//*****************************************************
-// 静的メンバ変数宣言
-//*****************************************************
-LPDIRECT3DTEXTURE9 CTimer::m_pTexture = nullptr;	// テクスチャのポインタ
 
 //=====================================================
 // コンストラクタ
@@ -70,6 +67,8 @@ void CTimer::Uninit(void)
 	}
 
 	CGame::ReleaseTimer();
+
+	Release();
 }
 
 //=====================================================
@@ -109,10 +108,19 @@ void CTimer::Update(void)
 	{// 秒表示の制御
 		m_pObjSecond->SetValue(nSecond, NUM_PLACE);
 	}
+
+	if (m_nSecond <= 0)
+	{
+		m_nSecond = 0;
+
+		CGame::SetState(CGame::STATE_RESULT);
+
+		CResult::Create(true);
+	}
 }
 
 //=====================================================
-// スコア加算
+// 時間加算
 //=====================================================
 void CTimer::AddTimer(int nValue)
 {
@@ -130,6 +138,8 @@ CTimer *CTimer::Create(void)
 	{
 		pTimer = new CTimer;
 
+		pTimer->Init();
+
 		if (pTimer->m_pObjMinute == nullptr)
 		{// 分表示の終了
 			pTimer->m_pObjMinute = CNumber::Create(NUM_PLACE, pTimer->m_nSecond);
@@ -146,4 +156,19 @@ CTimer *CTimer::Create(void)
 	}
 
 	return pTimer;
+}
+
+//=====================================================
+// 描画処理
+//=====================================================
+void CTimer::Draw(void)
+{
+	CDebugProc *pDebugProc = CManager::GetDebugProc();
+
+	if (pDebugProc == nullptr)
+	{
+		return;
+	}
+
+	pDebugProc->Print("\n現在の秒数[%d]", m_nSecond);
 }

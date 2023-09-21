@@ -113,11 +113,6 @@ HRESULT CGame::Init(void)
 		m_pTimer = CTimer::Create();
 	}
 
-	if (m_pTimer != nullptr)
-	{// タイマー初期化
-		m_pTimer->Init();
-	}
-
 	// 敵情報読込
 	CEnemy::Load();
 
@@ -570,15 +565,14 @@ void CGame::ManageState(void)
 
 		if (m_pTimer != nullptr)
 		{
+			nTime = m_pTimer->GetSecond();
+
 			if (m_pTimer->GetSecond() <= 0)
 			{// タイムアップクリア
 				// スコア保存
 				CManager::SetScore(m_pScore->GetScore());
-
-				m_state = STATE_END;
 			}
 		}
-
 		if (pPlayer == nullptr)
 		{
 			// スコアリセット
@@ -587,18 +581,10 @@ void CGame::ManageState(void)
 
 		break;
 	case CGame::STATE_RESULT:
-		
-		m_nTimerResult++;
-
-		if (m_nTimerResult >= RESULT_TIME * 60)
-		{// リザルト生成
-			CResult::Create();
-
-			m_state = STATE_END;
-		}
 
 		break;
 	case CGame::STATE_END:
+
 
 
 		break;
