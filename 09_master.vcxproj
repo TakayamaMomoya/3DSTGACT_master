@@ -171,6 +171,7 @@
     <ClCompile Include="enemytutorial.cpp" />
     <ClCompile Include="menu.cpp" />
     <ClCompile Include="objectmanager.cpp" />
+    <ClCompile Include="result.cpp" />
     <ClCompile Include="smoke.cpp" />
     <ClCompile Include="smokespawner.cpp" />
     <ClCompile Include="debugproc.cpp" />
@@ -250,6 +251,7 @@
     <ClInclude Include="enemytutorial.h" />
     <ClInclude Include="menu.h" />
     <ClInclude Include="objectmanager.h" />
+    <ClInclude Include="result.h" />
     <ClInclude Include="smoke.h" />
     <ClInclude Include="smokespawner.h" />
     <ClInclude Include="debugproc.h" />

@@ -45,6 +45,7 @@
 #include "smokespawner.h"
 #include "debrisspawner.h"
 #include "objectmanager.h"
+#include "result.h"
 
 //*****************************************************
 // マクロ定義
@@ -1352,6 +1353,9 @@ void CPlayer::ManageState(void)
 
 		if (m_nCntDeath >= TIME_DEATH)
 		{
+			// リザルトの生成
+			CResult::Create();
+
 			// 腰の位置取得
 			D3DXVECTOR3 pos = { m_mtxWaist._41,m_mtxWaist._42, m_mtxWaist._43 };
 
@@ -1725,6 +1729,9 @@ void CPlayer::Hit(float fDamage)
 		CExplSpawner::Create(pos, 500.0f, TIME_DEATH, nullptr);
 
 		Death();
+
+		// ゲームの状態をリザルトにする
+		CGame::SetState(CGame::STATE_RESULT);
 	}
 	else
 	{

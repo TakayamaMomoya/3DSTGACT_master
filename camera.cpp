@@ -285,6 +285,57 @@ void CCamera::FollowPlayer(void)
 }
 
 //====================================================
+// リザルトのカメラ挙動
+//====================================================
+void CCamera::UpdateResult(void)
+{
+	// プレイヤー情報取得
+	CPlayer *pPlayer = nullptr;
+
+	CObjectManager *pObjManager = CManager::GetObjectManager();
+
+	if (pObjManager != nullptr)
+	{// プレイヤーの適用
+		pPlayer = pObjManager->GetPlayer();
+
+		if (pPlayer == nullptr)
+		{
+			return;
+		}
+	}
+
+	//目標の注視点設定
+	m_camera.posRDest =
+	{
+		pPlayer->GetPosition().x,
+		pPlayer->GetPosition().y + 180.0f,
+		pPlayer->GetPosition().z
+	};
+
+	m_camera.fLength = 240;
+
+	//目標の視点設定
+	m_camera.posVDest =
+	{
+		m_camera.posRDest.x + sinf(m_camera.rot.x) * sinf(m_camera.rot.y - D3DX_PI * 0.02f) * m_camera.fLength,
+		m_camera.posRDest.y + cosf(m_camera.rot.x) * m_camera.fLength,
+		m_camera.posRDest.z + sinf(m_camera.rot.x) * cosf(m_camera.rot.y - D3DX_PI * 0.02f) * m_camera.fLength
+	};
+
+	//注視点補正
+	m_camera.posR.x += (m_camera.posRDest.x - m_camera.posR.x) * MOVE_FACT;
+	m_camera.posR.y += (m_camera.posRDest.y - m_camera.posR.y) * MOVE_FACT;
+	m_camera.posR.z += (m_camera.posRDest.z - m_camera.posR.z) * MOVE_FACT;
+
+	//現在の視点補正
+	m_camera.posV.x += (m_camera.posVDest.x - m_camera.posV.x) * MOVE_FACT;
+	m_camera.posV.y += (m_camera.posVDest.y - m_camera.posV.y) * MOVE_FACT;
+	m_camera.posV.z += (m_camera.posVDest.z - m_camera.posV.z) * MOVE_FACT;
+
+	m_camera.rot.y += 0.01f;
+}
+
+//====================================================
 // 振動処理
 //====================================================
 void CCamera::Quake(void)

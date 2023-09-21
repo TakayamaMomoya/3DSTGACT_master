@@ -12,6 +12,7 @@
 #include "manager.h"
 #include "object2D.h"
 #include "inputkeyboard.h"
+#include "inputmouse.h"
 #include "inputjoypad.h"
 #include "texture.h"
 #include "fade.h"
@@ -145,6 +146,7 @@ void CMenu::Input(void)
 {
 	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
 	CInputJoypad *pJoypad = CManager::GetJoypad();
+	CInputMouse *pMouse = CManager::GetMouse();
 
 	CFade *pFade = CManager::GetFade();
 
@@ -160,7 +162,7 @@ void CMenu::Input(void)
 		}
 	}
 
-	if (pKeyboard == nullptr)
+	if (pKeyboard == nullptr || pMouse == nullptr || pJoypad == nullptr)
 	{
 		return;
 	}
@@ -186,7 +188,7 @@ void CMenu::Input(void)
 		m_apMenu[m_menu]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 	}
 
-	if (pKeyboard->GetTrigger(DIK_RETURN) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0))
+	if (pKeyboard->GetTrigger(DIK_RETURN) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
 	{// 選択項目にフェードする
 		Fade(m_menu);
 	}

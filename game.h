@@ -36,6 +36,7 @@ public:
 	{// ó‘Ô
 		STATE_NONE,	// ‰½‚à‚µ‚Ä‚¢‚È‚¢ó‘Ô
 		STATE_NORMAL,	// ’Êíó‘Ô
+		STATE_RESULT,	// ƒŠƒUƒ‹ƒgó‘Ô
 		STATE_END,	// I—¹ó‘Ô
 		STATE_MAX
 	};
@@ -59,6 +60,8 @@ public:
 	static void EnablePause(bool bPause) { m_bPause = bPause; }
 	static bool IsPause(void) { return m_bPause; }
 	static void TogglePause(CPause *pPause);
+	static void SetState(STATE state) { m_state = state; }
+	static STATE GetState(void) { return m_state; }
 
 private:
 	enum WALLTYPE

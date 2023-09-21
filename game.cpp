@@ -39,6 +39,7 @@
 #include "effect3D.h"
 #include "noise.h"
 #include "objectmanager.h"
+#include "result.h"
 
 //*****************************************************
 // マクロ定義
@@ -318,18 +319,25 @@ void CGame::Update(void)
 		// カメラ更新
 		if (pCamera != nullptr)
 		{
-			if (CGame::IsPhoto())
+			if (m_state == STATE_NORMAL)
 			{
-				pCamera->Control();
-			}
-			else
-			{
-				// 追従処理
-				pCamera->FollowPlayer();
-			}
+				if (CGame::IsPhoto())
+				{
+					pCamera->Control();
+				}
+				else
+				{
+					// 追従処理
+					pCamera->FollowPlayer();
+				}
 
-			// カメラ揺れの処理
-			pCamera->Quake();
+				// カメラ揺れの処理
+				pCamera->Quake();
+			}
+			else if (m_state == STATE_RESULT)
+			{
+				pCamera->UpdateResult();
+			}
 		}
 	}
 
@@ -573,9 +581,12 @@ void CGame::ManageState(void)
 		{
 			// スコアリセット
 			CManager::SetScore(0);
-
-			m_state = STATE_END;
 		}
+
+		break;
+	case CGame::STATE_RESULT:
+		
+
 
 		break;
 	case CGame::STATE_END:

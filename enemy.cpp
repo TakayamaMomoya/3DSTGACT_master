@@ -296,6 +296,11 @@ void CEnemy::Uninit(void)
 //=====================================================
 void CEnemy::Update(void)
 {
+	if (CGame::GetState() != CGame::STATE_NORMAL)
+	{
+		return;
+	}
+
 	// 継承クラスの更新
 	CMotion::Update();
 
@@ -347,9 +352,6 @@ void CEnemy::Update(void)
 		// 影の位置設定
 		m_pShadow->SetPosition(D3DXVECTOR3(GetPosition().x, m_pShadow->GetPosition().y, GetPosition().z));
 	}
-
-	// 索敵処理
-	//SearchTarget();
 }
 
 //=====================================================

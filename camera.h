@@ -50,6 +50,7 @@ public:
 	void SetQuake(float fQuakeSizeH, float fQuakeSizeV, int nTime);
 	void Quake(void);
 	void TitleMove(void);
+	void UpdateResult(void);
 
 private:
 	void UpdateTitle(void);

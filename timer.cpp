@@ -77,6 +77,11 @@ void CTimer::Uninit(void)
 //=====================================================
 void CTimer::Update(void)
 {
+	if (CGame::GetState() != CGame::STATE_NORMAL)
+	{
+		return;
+	}
+
 	m_nCntSecond++;
 
 	if (m_nCntSecond > 60)
