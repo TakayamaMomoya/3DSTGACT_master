@@ -185,6 +185,8 @@ HRESULT CGame::Init(void)
 		m_pRank = CRank::Create();
 	}
 
+	CManager::GetSound()->Stop();
+
 	// BGMÄ¶
 	CManager::GetSound()->Play(CSound::LABEL_BGM001);
 

@@ -26,7 +26,7 @@ public:
 	void Uninit(void);
 	void Update(void);
 	void Draw(void) {};
-	static CExplSpawner *Create(D3DXVECTOR3 pos, float fRadius, int nLife, CExplSpawner **pSpawnerOwner = nullptr);
+	static CExplSpawner *Create(D3DXVECTOR3 pos, float fRadius, int nLife);
 	void SetPosition(D3DXVECTOR3 pos);
 	D3DXVECTOR3 GetPosition(void) { return m_pos; }
 	D3DXVECTOR3 GetPositionOld(void) { return D3DXVECTOR3(); }	// 取得処理
@@ -38,7 +38,6 @@ private:
 	float m_fRadius;	// 半径
 	int m_nCntSpawn;	// スポーンカウンター
 	int m_nTimerSpawn;	// スポーンタイマー
-	CExplSpawner **m_ppExplSpawner;	// 爆発のポインタ
 };
 
 #endif

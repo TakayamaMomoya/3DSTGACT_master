@@ -91,6 +91,8 @@ HRESULT CTitle::Init(void)
 	// ƒtƒHƒO‚ðØ‚é
 	CRenderer::EnableFog(false);
 
+	CManager::GetSound()->Stop();
+
 	// BGMÄ¶
 	CManager::GetSound()->Play(CSound::LABEL_BGM000);
 
@@ -140,6 +142,9 @@ void CTitle::Update(void)
 				if (m_pMenu == nullptr)
 				{
 					m_state = STATE_OUT;
+
+					// SEÄ¶
+					CManager::GetSound()->Play(CSound::LABEL_ENTER);
 				}
 			}
 		}

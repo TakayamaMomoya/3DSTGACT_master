@@ -19,6 +19,7 @@
 #include "debugproc.h"
 #include "game.h"
 #include "objectmanager.h"
+#include "sound.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -203,8 +204,10 @@ void CEnemyTank::ChaseDefend(void)
 				);
 
 				SetCntAttack(0);
-			}
 
+				// SEÄ¶
+				CManager::GetSound()->Play(CSound::LABEL_BIGSHOT);
+			}
 		}
 		else
 		{

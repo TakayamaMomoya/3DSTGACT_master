@@ -434,12 +434,6 @@ void CManager::Draw(void)
 //=====================================================
 void CManager::SetMode(CScene::MODE mode)
 {
-	// サウンド停止
-	if (m_pSound != nullptr)
-	{
-		m_pSound->Stop();
-	}
-
 	// シーンを破棄
 	if (m_pScene != nullptr)
 	{

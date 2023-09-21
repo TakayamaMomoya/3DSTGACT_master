@@ -42,6 +42,14 @@ private:
 		MENU_MAX
 	};
 
+	enum STATE
+	{// 状態
+		STATE_NONE = 0,	// 何でもない状態
+		STATE_WAIT,	// 入力待機状態
+		STATE_CURRENT,	// 入力している状態
+		STATE_MAX
+	};
+
 	void Input(void);
 	void Fade(MENU menu);
 	void Create2D(bool bWin);
@@ -51,6 +59,7 @@ private:
 	CObject2D *m_apMenu[MENU_MAX];	// メニュー項目の２Dオブジェクト
 	CObject2D *m_pBg;	// 背景のポインタ
 	CObject2D *m_pCaption;	// 見出しのポインタ
+	STATE m_state;	// 状態
 };
 
 #endif

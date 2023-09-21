@@ -23,6 +23,7 @@
 #include "smokespawner.h"
 #include "missile.h"
 #include "objectmanager.h"
+#include "sound.h"
 
 //*****************************************************
 // ƒ}ƒNƒ’è‹`
@@ -264,6 +265,9 @@ void CEnemyMove::ChaseTarget(void)
 				CMissile::Create(GetPosition());
 
 				SetCntAttack(0);
+
+				// SEÄ¶
+				CManager::GetSound()->Play(CSound::LABEL_MISSILE);
 			}
 		}
 		else

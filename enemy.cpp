@@ -613,7 +613,7 @@ void CEnemy::Hit(float fDamage)
 			pScore->AddScore(m_nScore);
 		}
 
-		m_pExplSpawner = CExplSpawner::Create(GetPosition(), GetRadiusMax(), TIME_DEATH, &m_pExplSpawner);
+		m_pExplSpawner = CExplSpawner::Create(GetPosition(), GetRadiusMax(), TIME_DEATH);
 
 		m_nTimerDeath = TIME_DEATH;
 

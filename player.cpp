@@ -1730,6 +1730,9 @@ void CPlayer::Hit(float fDamage)
 		return;
 	}
 
+	// SEçƒê∂
+	CManager::GetSound()->Play(CSound::LABEL_HIT);
+
 	// ëÃóÕå∏è≠
 	m_nLife -= (int)fDamage;
 
@@ -1747,7 +1750,7 @@ void CPlayer::Hit(float fDamage)
 
 		CNoise::Create(TIME_DEATH);
 
-		CExplSpawner::Create(pos, 500.0f, TIME_DEATH, nullptr);
+		CExplSpawner::Create(pos, 500.0f, TIME_DEATH);
 
 		Death();
 

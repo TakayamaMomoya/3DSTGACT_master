@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "fade.h"
 #include "game.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -33,6 +34,7 @@
 CResult::CResult()
 {
 	m_menu = MENU_REPLAY;
+	m_state = STATE_NONE;
 	ZeroMemory(&m_apMenu[0], sizeof(m_apMenu));
 	m_pBg = nullptr;
 }
@@ -141,6 +143,13 @@ void CResult::Create2D(bool bWin)
 //====================================================
 HRESULT CResult::Init(void)
 {
+	CManager::GetSound()->Stop();
+
+	// BGM再生
+	CManager::GetSound()->Play(CSound::LABEL_BGM002);
+
+	m_state = STATE_WAIT;
+
 	return S_OK;
 }
 
@@ -219,22 +228,35 @@ void CResult::Input(void)
 	// 項目切り替え
 	if (pKeyboard->GetTrigger(DIK_A) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, 0))
 	{
-		m_menu = (MENU)((m_menu + 1) % MENU_MAX);
+		m_menu = MENU_REPLAY;
+
+		if (m_state == STATE_WAIT)
+		{
+			m_state = STATE_CURRENT;
+		}
 	}
 
 	if (pKeyboard->GetTrigger(DIK_D) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_UP, 0))
 	{
-		m_menu = (MENU)((m_menu + MENU_MAX - 1) % MENU_MAX);
+		m_menu = MENU_RANKING;
+
+		if (m_state == STATE_WAIT)
+		{
+			m_state = STATE_CURRENT;
+		}
 	}
 
-	if (m_apMenu[m_menu] != nullptr)
-	{// 選択している項目の色変更
-		m_apMenu[m_menu]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
-	}
+	if (m_state == STATE_CURRENT)
+	{
+		if (m_apMenu[m_menu] != nullptr)
+		{// 選択している項目の色変更
+			m_apMenu[m_menu]->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
+		}
 
-	if (pKeyboard->GetTrigger(DIK_RETURN) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
-	{// 選択項目にフェードする
-		Fade(m_menu);
+		if (pKeyboard->GetTrigger(DIK_RETURN) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
+		{// 選択項目にフェードする
+			Fade(m_menu);
+		}
 	}
 }
 

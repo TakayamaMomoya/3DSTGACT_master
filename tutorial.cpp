@@ -25,6 +25,7 @@
 #include "objectmanager.h"
 #include "tutorialmanager.h"
 #include "tutorialplayer.h"
+#include "game.h"
 
 //*****************************************************
 // マクロ定義
@@ -83,6 +84,8 @@ HRESULT CTutorial::Init(void)
 
 	// パーティクルの読込
 	CParticle::Load();
+
+	CGame::SetState(CGame::STATE_NORMAL);
 
 	// メッシュフィールドの生成
 	if (pMeshField != nullptr && pObjManager != nullptr)

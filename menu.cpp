@@ -17,6 +17,7 @@
 #include "texture.h"
 #include "fade.h"
 #include "game.h"
+#include "sound.h"
 
 //*****************************************************
 // マクロ定義
@@ -176,11 +177,17 @@ void CMenu::Input(void)
 	if (pKeyboard->GetTrigger(DIK_A) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, 0))
 	{
 		m_menu = (MENU)((m_menu + 1) % MENU_MAX);
+
+		// SE再生
+		CManager::GetSound()->Play(CSound::LABEL_SELECT);
 	}
 
 	if (pKeyboard->GetTrigger(DIK_D) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_UP, 0))
 	{
 		m_menu = (MENU)((m_menu + MENU_MAX - 1) % MENU_MAX);
+
+		// SE再生
+		CManager::GetSound()->Play(CSound::LABEL_SELECT);
 	}
 
 	if (m_apMenu[m_menu] != nullptr)
@@ -191,6 +198,9 @@ void CMenu::Input(void)
 	if (pKeyboard->GetTrigger(DIK_RETURN) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_A, 0) || pMouse->GetTrigger(CInputMouse::BUTTON_LMB))
 	{// 選択項目にフェードする
 		Fade(m_menu);
+
+		// SE再生
+		CManager::GetSound()->Play(CSound::LABEL_ENTER);
 	}
 }
 
