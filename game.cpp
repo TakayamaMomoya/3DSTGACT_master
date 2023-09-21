@@ -50,6 +50,7 @@
 #define LIMIT_HEIGHT	(2000)	// 制限高度
 #define BONUS_TIME	(40)	// ボーナスが付与される最低限のタイム
 #define RATE_BONUS	(0.015f)	// 1秒当たりのタイムボーナス
+#define RESULT_TIME	(5)	// リザルト画面表示までのラグ
 
 //*****************************************************
 // 静的メンバ変数宣言
@@ -73,6 +74,7 @@ CGame::CGame()
 	m_bPause = false;
 	m_nTimerWave = 0;
 	m_nCntSecond = 0;
+	m_nTimerResult = 0;
 }
 
 //=====================================================
@@ -586,26 +588,18 @@ void CGame::ManageState(void)
 		break;
 	case CGame::STATE_RESULT:
 		
+		m_nTimerResult++;
 
+		if (m_nTimerResult >= RESULT_TIME * 60)
+		{// リザルト生成
+			CResult::Create();
+
+			m_state = STATE_END;
+		}
 
 		break;
 	case CGame::STATE_END:
 
-		// 遷移タイマーカウント
-		nTime = CScene::GetTimer() + 1;
-
-		SetTimer(nTime);
-
-		if (nTime >= TRANS_TIME)
-		{
-			m_state = STATE_NONE;
-
-			if (pFade != nullptr)
-			{
-				// 画面遷移
-				pFade->SetFade(CScene::MODE_RANKING);
-			}
-		}
 
 		break;
 	default:

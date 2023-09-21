@@ -32,7 +32,7 @@ public:
 	void Update(void);
 	void Draw(void);
 
-	static CResult *Create(void);
+	static CResult *Create(bool bWin = false);
 
 private:
 	enum MENU
@@ -44,6 +44,7 @@ private:
 
 	void Input(void);
 	void Fade(MENU menu);
+	void Create2D(bool bWin);
 
 	MENU m_menu;	// ‘I‘ğ€–Ú
 

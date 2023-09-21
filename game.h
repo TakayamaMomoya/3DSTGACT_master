@@ -91,6 +91,7 @@ private:
 	static CPause *m_pPause;	// ポーズのアドレス
 	int m_nTimerWave;	// ウェーブタイマー
 	int m_nCntSecond;	// 一秒のカウンター
+	int m_nTimerResult;	// リザルトが出るまでの時間
 };
 
 #endif

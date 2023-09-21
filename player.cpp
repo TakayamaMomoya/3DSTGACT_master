@@ -1353,9 +1353,6 @@ void CPlayer::ManageState(void)
 
 		if (m_nCntDeath >= TIME_DEATH)
 		{
-			// ƒŠƒUƒ‹ƒg‚Ì¶¬
-			CResult::Create();
-
 			// ˜‚ÌˆÊ’uæ“¾
 			D3DXVECTOR3 pos = { m_mtxWaist._41,m_mtxWaist._42, m_mtxWaist._43 };
 

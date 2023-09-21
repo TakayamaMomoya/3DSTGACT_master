@@ -35,7 +35,6 @@ CResult::CResult()
 	m_menu = MENU_REPLAY;
 	ZeroMemory(&m_apMenu[0], sizeof(m_apMenu));
 	m_pBg = nullptr;
-	m_pCaption = nullptr;
 }
 
 //====================================================
@@ -49,7 +48,7 @@ CResult::~CResult()
 //====================================================
 // ¶¬ˆ—
 //====================================================
-CResult *CResult::Create(void)
+CResult *CResult::Create(bool bWin)
 {
 	CResult *pResult = nullptr;
 
@@ -58,27 +57,35 @@ CResult *CResult::Create(void)
 	if (pResult != nullptr)
 	{
 		pResult->Init();
+
+		pResult->Create2D(bWin);
 	}
 
 	return pResult;
 }
 
 //====================================================
-// ‰Šú‰»ˆ—
+// ‚QDƒIƒuƒWƒFƒNƒg‚Ì¶¬
 //====================================================
-HRESULT CResult::Init(void)
+void CResult::Create2D(bool bWin)
 {
 	int nIdxTexture;
-	char *pPath[MENU_MAX] = 
+	char *pPath[MENU_MAX] =
 	{
-		"data\\TEXTURE\\UI\\menu_yes.png",
-		"data\\TEXTURE\\UI\\menu_no.png",
+		"data\\TEXTURE\\UI\\menu_retry.png",
+		"data\\TEXTURE\\UI\\menu_quit.png",
+	};
+
+	char *pPathCaption[2] =
+	{
+		"data\\TEXTURE\\UI\\caption02.png",
+		"data\\TEXTURE\\UI\\caption03.png",
 	};
 
 	// ”wŒi‚Ì¶¬
 	m_pBg = CObject2D::Create(7);
 
-	if (m_pCaption != nullptr)
+	if (m_pBg != nullptr)
 	{
 		m_pBg->SetPosition(D3DXVECTOR3(SCREEN_WIDTH * 0.5, SCREEN_HEIGHT * 0.5f, 0.0f));
 
@@ -100,7 +107,7 @@ HRESULT CResult::Init(void)
 
 		m_pCaption->SetCol(D3DXCOLOR(1.0f, 1.0f, 1.0f, 1.0f));
 
-		nIdxTexture = CManager::GetTexture()->Regist(CAPTION_PATH);
+		nIdxTexture = CManager::GetTexture()->Regist(pPathCaption[bWin]);
 
 		m_pCaption->SetIdxTexture(nIdxTexture);
 
@@ -127,6 +134,13 @@ HRESULT CResult::Init(void)
 		}
 	}
 
+}
+
+//====================================================
+// ‰Šú‰»ˆ—
+//====================================================
+HRESULT CResult::Init(void)
+{
 	return S_OK;
 }
 
@@ -149,6 +163,12 @@ void CResult::Uninit(void)
 	{
 		m_pBg->Uninit();
 		m_pBg = nullptr;
+	}
+
+	if (m_pCaption != nullptr)
+	{
+		m_pCaption->Uninit();
+		m_pCaption = nullptr;
 	}
 
 	Release();
