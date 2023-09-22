@@ -39,7 +39,6 @@ private:
 	void LimitPlayerPos(void);	// プレイヤー移動制限
 
 	static CTutorialManager *m_pTutorialManager;	// チュートリアル管理
-
 };
 
 #endif

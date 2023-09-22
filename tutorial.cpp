@@ -47,7 +47,7 @@ CTutorialManager *CTutorial::m_pTutorialManager = nullptr;	// チュートリアル管理
 //=====================================================
 CTutorial::CTutorial()
 {
-
+	m_pTutorialManager = nullptr;
 }
 
 //=====================================================
@@ -73,17 +73,11 @@ HRESULT CTutorial::Init(void)
 		pObjManager->BindPlayer((CPlayer*)pPlayer);
 	}
 
-	// ブロック番号読込
-	CBlock::LoadModel();
-
 	CBlock::Create(D3DXVECTOR3(2000.0f, 0.0f, 0.0f), CBlock::TYPE_BILL005);
 
 	CBlock::Create(D3DXVECTOR3(-2000.0f, 0.0f, 0.0f), CBlock::TYPE_BILL005);
 
 	CBlock::Create(D3DXVECTOR3(0.0f, 0.0f, 2000.0f), CBlock::TYPE_BILL005);
-
-	// パーティクルの読込
-	CParticle::Load();
 
 	CGame::SetState(CGame::STATE_NORMAL);
 
@@ -120,11 +114,14 @@ HRESULT CTutorial::Init(void)
 //=====================================================
 void CTutorial::Uninit(void)
 {
+	if (m_pTutorialManager != nullptr)
+	{
+		m_pTutorialManager->Uninit();
+		m_pTutorialManager = nullptr;
+	}
+
 	// ブロック情報削除
 	CBlock::DeleteAll();
-
-	// ブロック番号削除
-	CBlock::DeleteIdx();
 
 	// オブジェクト全棄
 	CObject::ReleaseAll();

@@ -231,6 +231,12 @@ HRESULT CManager::Init(HINSTANCE hInstance, HWND hWnd, BOOL bWindow)
 	// 敵情報読込
 	CEnemy::Load();
 
+	// パーティクルの読込
+	CParticle::Load();
+
+	// ブロック番号読込
+	CBlock::LoadModel();
+
 	SetMode(m_mode);
 
 	return S_OK;
@@ -262,6 +268,9 @@ void CManager::Uninit(void)
 
 	// ブロック番号削除
 	CBlock::DeleteIdx();
+
+	// 敵破棄
+	CEnemy::Unload();
 
 	// パーティクル情報破棄
 	CParticle::Unload();
@@ -344,9 +353,6 @@ void CManager::Uninit(void)
 		delete m_pTexture;
 		m_pTexture = nullptr;
 	}
-
-	// 敵破棄
-	CEnemy::Unload();
 
 	// モデル破棄
 	CModel::Unload();

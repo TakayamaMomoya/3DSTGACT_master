@@ -27,6 +27,8 @@ int CObject::m_nNumAll = 0;	// 総数
 //=====================================================
 CObject::CObject(int nPriority)
 {
+	m_nNumAll++;
+
 	// 値のクリア
 	m_pPrev = nullptr;
 	m_pNext = nullptr;
@@ -54,8 +56,11 @@ CObject::CObject(int nPriority)
 	// 最後尾のアドレスを自分にする
 	m_apCur[nPriority] = this;
 
-	// 前のオブジェクトの次のアドレスを自分にする
-	m_pPrev->m_pNext = this;
+	if (m_pPrev != nullptr)
+	{
+		// 前のオブジェクトの次のアドレスを自分にする
+		m_pPrev->m_pNext = this;
+	}
 }
 
 //=====================================================
@@ -63,7 +68,7 @@ CObject::CObject(int nPriority)
 //=====================================================
 CObject::~CObject()
 {
-
+	m_nNumAll--;
 }
 
 //=====================================================

@@ -61,6 +61,8 @@ void CScore::Uninit(void)
 	}
 
 	CGame::ReleaseScore();
+
+	Release();
 }
 
 //=====================================================

@@ -114,12 +114,6 @@ HRESULT CGame::Init(void)
 		m_pTimer = CTimer::Create();
 	}
 
-	// 敵情報読込
-	CEnemy::Load();
-
-	// ブロック番号読込
-	CBlock::LoadModel();
-
 #if _DEBUG
 	if (m_pEdit == nullptr)
 	{// エディター生成
@@ -148,9 +142,6 @@ HRESULT CGame::Init(void)
 
 	// ブロック読込処理
 	CBlock::Load();
-
-	// パーティクルの読込
-	CParticle::Load();
 
 	// スカイボックス生成
 	CSkybox::Create();
@@ -245,12 +236,6 @@ void CGame::Uninit(void)
 
 	// ブロック情報削除
 	CBlock::DeleteAll();
-
-	// ブロック番号削除
-	CBlock::DeleteIdx();
-
-	// 敵破棄
-	CEnemy::Unload();
 
 	// オブジェクト全棄
 	CObject::ReleaseAll();

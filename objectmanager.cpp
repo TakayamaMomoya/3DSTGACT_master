@@ -16,6 +16,7 @@
 CObjectManager::CObjectManager()
 {
 	m_pPlayer = nullptr;
+	m_pTutorialPlayer = nullptr;
 	m_pMeshField = nullptr;
 	m_pScore = nullptr;
 	m_pTimer = nullptr;

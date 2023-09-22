@@ -49,6 +49,11 @@ HRESULT CParts::Init(void)
 //====================================================
 void CParts::Uninit(void)
 {
+	if (m_pModel != nullptr)
+	{
+		m_pModel = nullptr;
+	}
+
 	delete this;
 }
 

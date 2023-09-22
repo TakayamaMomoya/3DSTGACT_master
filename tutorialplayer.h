@@ -107,6 +107,7 @@ private:
 	int m_nCounterAir;	// 空中カウンター
 	int m_nNumShot;	// 射撃回数
 	int m_nNumHit;	// 命中回数
+	int m_nCntSound;	// サウンドを流すカウンター
 	CShadow *m_pShadow;	// 影
 	bool m_bAim;	// エイムしているかどうか
 	bool m_bLand;

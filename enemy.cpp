@@ -284,7 +284,6 @@ void CEnemy::Uninit(void)
 
 	if (m_pExplSpawner != nullptr)
 	{
-		m_pExplSpawner->Uninit();
 		m_pExplSpawner = nullptr;
 	}
 

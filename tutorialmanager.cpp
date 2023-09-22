@@ -114,8 +114,8 @@ void CTutorialManager::Update(void)
 	
 	if (m_progress >= PROGRESS_SHOT && CEnemy::GetNumAll() == 0)
 	{// éÀåÇà»ç~ÇÕìGÇèoÇ∑
-		CEnemy::Create(D3DXVECTOR3(500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
-		CEnemy::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
+		//CEnemy::Create(D3DXVECTOR3(500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
+		//CEnemy::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
 	}
 }
 

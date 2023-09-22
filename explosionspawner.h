@@ -33,7 +33,6 @@ public:
 
 private:
 	D3DXVECTOR3 m_pos;	// 位置
-	D3DXVECTOR3 *m_pPosOwner;	// 持ち主の位置
 	int m_nLife;	// 寿命
 	float m_fRadius;	// 半径
 	int m_nCntSpawn;	// スポーンカウンター
