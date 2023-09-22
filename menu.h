@@ -42,13 +42,26 @@ private:
 		MENU_MAX
 	};
 
+	enum STATE
+	{
+		STATE_NONE = 0,	// 何でもない状態
+		STATE_IN,	// フェードイン状態
+		STATE_SELECT,	// 選択状態
+		STATE_OUT,	// フェードアウト状態
+		STATE_MAX
+	};
+
+	void ManageState(void);
+	void FadeIn(void);
 	void Input(void);
+	void FadeOut(void);
 	void Fade(MENU menu);
 
 	MENU m_menu;	// 選択項目
 
 	CObject2D *m_apMenu[MENU_MAX];	// メニュー項目の２Dオブジェクト
 	CObject2D *m_pCaption;	// 見出しのポインタ
+	STATE m_state;	// 状態
 };
 
 #endif
