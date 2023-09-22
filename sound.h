@@ -26,6 +26,7 @@ public:
 		LABEL_MISSILE,	// ミサイル発射
 		LABEL_BIGSHOT,	// 大砲発射
 		LABEL_STEP,	// 足音
+		LABEL_BOOST,	// ブースト
 		LABEL_HIT,	// 被弾音
 		LABEL_EXPLOSION,	// 爆発音
 		LABEL_MAX
@@ -85,6 +86,7 @@ private:
 		{ "data/SOUND/SE/missile.wav", 0 },			// ミサイル発射
 		{ "data/SOUND/SE/shot00.wav", 0 },			// 大砲撃つ	
 		{ "data/SOUND/SE/step.wav", 0 },			// 足音
+		{ "data/SOUND/SE/boost.wav", 0 },			// ブースト
 		{ "data/SOUND/SE/hit.wav", 0 },			// ヒット音
 		{ "data/SOUND/SE/explSmall.wav", 0 }			// 爆発音
 	};

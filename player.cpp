@@ -87,6 +87,7 @@
 #define LIMIT_UPPERROT	(0.5f)	// 上半身の角度制限
 #define LIMIT_CAMERAROT	(0.8f)	// カメラの角度制限
 #define TIME_DEATH	(240)	// 死ぬまでのフレーム数
+#define TIME_SOUND	(7)	// サウンドを流す頻度
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -100,6 +101,7 @@ CPlayer::CPlayer(int nPriority)
 	m_nTimerShot = 0;
 	m_nNumShot = 0;
 	m_nNumHit = 0;
+	m_nCntSound = 0;
 	m_posLockon = { 0.0f,0.0f,0.0f };
 	m_posBoost = { 0.0f,0.0f,0.0f };
 	m_vecBoost = { 0.0f,0.0f,0.0f };
@@ -1692,6 +1694,17 @@ void CPlayer::Boost(void)
 
 		if (pMtxBody != nullptr)
 		{
+			// サウンド再生
+			m_nCntSound++;
+
+			if (m_nCntSound > TIME_SOUND)
+			{
+				m_nCntSound = 0;
+
+				// SE再生
+				CManager::GetSound()->Play(CSound::LABEL_BOOST);
+			}
+
 			// 根元のマトリックスの設定
 			pUniversal->SetOffSet(&mtxBody,*pMtxBody,D3DXVECTOR3(0.0f,30.0f,30.0f));
 

@@ -63,7 +63,7 @@ HRESULT CBoost::Init(void)
 
 	if (m_pObjectGauge == nullptr)
 	{// ブーストゲージの生成
-		m_pObjectGauge = CObject2D::Create(5);
+		m_pObjectGauge = CObject2D::Create(7);
 
 		if (m_pObjectGauge != nullptr)
 		{
@@ -75,7 +75,7 @@ HRESULT CBoost::Init(void)
 
 	if (m_pCaption == nullptr)
 	{// 見出しの生成
-		m_pCaption = CObject2D::Create(5);
+		m_pCaption = CObject2D::Create(7);
 
 		if (m_pCaption != nullptr)
 		{
@@ -92,7 +92,7 @@ HRESULT CBoost::Init(void)
 
 	if (m_pFrame == nullptr)
 	{// フレームの生成
-		m_pFrame = CObject2D::Create(5);
+		m_pFrame = CObject2D::Create(7);
 
 		if (m_pFrame != nullptr)
 		{

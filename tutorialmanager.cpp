@@ -27,6 +27,14 @@
 #define OUT_SPEED	(0.07f)	// フェードアウトのスピード
 #define TIME_FADE	(60)	// フェードアウトまでのフレーム数
 #define RAPID_NUM	(10)	// 連射の進むまでの数
+#define FRAME_PATH	"data\\TEXTURE\\UI\\frame05.png"	// スキップのフレームのパス
+#define GAUGE_WIDTH	(136.0f)	// ゲージの横幅
+#define GAUGE_HEIGTH	(19.0f)	// ゲージの縦の長さ
+#define GAUGE_POS	(D3DXVECTOR3(10.0f,637.0f,0.0f))	// ゲージの位置
+#define FRAME_WIDTH	(150.0f)	// フレームの横幅
+#define FRAME_HEIGHT	(45.0f)	// フレームの縦の長さ
+#define FRAME_POS	(D3DXVECTOR3(155.0f,620.0f,0.0f))	// フレームの位置
+#define TIME_SKIP	(120)	// スキップまでのフレーム数
 
 //=====================================================
 // コンストラクタ
@@ -34,8 +42,11 @@
 CTutorialManager::CTutorialManager(int nPriority)
 {
 	m_nCntProgress = 0;
+	m_nCntSkip = 0;
 	m_progress = PROGRESS_START;
 	m_pCaption = nullptr;
+	m_pFrameSkip = nullptr;
+	m_pGaugeSkip = nullptr;
 	m_state = STATE_NONE;
 }
 
@@ -55,6 +66,9 @@ HRESULT CTutorialManager::Init(void)
 	m_NextProgress = m_progress;
 	m_state = STATE_IN;
 
+	// ゲージの生成
+	CreateGauge();
+
 	return S_OK;
 }
 
@@ -69,6 +83,18 @@ void CTutorialManager::Uninit(void)
 		m_pCaption = nullptr;
 	}
 
+	if (m_pFrameSkip != nullptr)
+	{
+		m_pFrameSkip->Uninit();
+		m_pFrameSkip = nullptr;
+	}
+
+	if (m_pGaugeSkip != nullptr)
+	{
+		m_pGaugeSkip->Uninit();
+		m_pGaugeSkip = nullptr;
+	}
+
 	Release();
 }
 
@@ -77,6 +103,9 @@ void CTutorialManager::Uninit(void)
 //=====================================================
 void CTutorialManager::Update(void)
 {
+	// スキップゲージ管理
+	ManageGauge();
+
 	// 状態管理
 	ManageState();
 
@@ -88,6 +117,60 @@ void CTutorialManager::Update(void)
 		CEnemy::Create(D3DXVECTOR3(500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
 		CEnemy::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
 	}
+}
+
+//=====================================================
+// ゲージ管理
+//=====================================================
+void CTutorialManager::ManageGauge(void)
+{
+	if (m_pGaugeSkip == nullptr)
+	{
+		return;
+	}
+
+	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
+	CInputJoypad *pJoypad = CManager::GetJoypad();
+
+	if (pKeyboard == nullptr || pJoypad == nullptr)
+	{
+		return;
+	}
+
+	if (m_nCntSkip != TIME_SKIP)
+	{
+		if (pKeyboard->GetPress(DIK_TAB) ||
+			pJoypad->GetPress(CInputJoypad::PADBUTTONS_BACK, 0))
+		{// スキップカウンター
+			m_nCntSkip++;
+
+			if (m_nCntSkip >= TIME_SKIP)
+			{
+				m_nCntSkip = TIME_SKIP;
+
+				CFade *pFade = CManager::GetFade();
+
+				if (pFade != nullptr)
+				{
+					pFade->SetFade(CScene::MODE_GAME);
+				}
+			}
+		}
+		else
+		{
+			m_nCntSkip = 0;
+		}
+	}
+
+	float fWidth = (float)m_nCntSkip / (float)TIME_SKIP * GAUGE_WIDTH;
+
+	// 位置設定
+	D3DXVECTOR3 pos = { GAUGE_POS.x + fWidth,GAUGE_POS.y,0.0f };
+
+	// サイズ設定
+	m_pGaugeSkip->SetPosition(pos);
+	m_pGaugeSkip->SetSize(fWidth, GAUGE_HEIGTH);
+	m_pGaugeSkip->SetVtx();
 }
 
 //=====================================================
@@ -148,8 +231,11 @@ void CTutorialManager::TimeTutorial(void)
 	if (m_progress == PROGRESS_START ||
 		m_progress == PROGRESS_PARAM ||
 		m_progress == PROGRESS_ASSESS)
-	{// 時間経過
-		AddProgress(ACTION_TIME);
+	{
+		if (ButtonCheck())
+		{// ボタンを押したら進行
+			AddProgress(ACTION_BUTTON);
+		}
 	}
 
 	if (pKeyboard != nullptr && pJoypad != nullptr && m_progress == PROGRESS_FREE)
@@ -173,12 +259,7 @@ void CTutorialManager::AddProgress(ACTION action)
 	{
 	case CTutorialManager::PROGRESS_START:	// スタート状態
 
-		if (action == ACTION_TIME)
-		{
-			m_nCntProgress++;
-		}
-
-		if (m_nCntProgress > READ_PROGRESS)
+		if (action == ACTION_BUTTON)
 		{// 次の進行状況に移行
 			EndProgress(PROGRESS_MOVE);
 		}
@@ -238,12 +319,7 @@ void CTutorialManager::AddProgress(ACTION action)
 		break;
 	case CTutorialManager::PROGRESS_PARAM:	// パラメーター
 
-		if (action == ACTION_TIME)
-		{
-			m_nCntProgress++;
-		}
-
-		if (m_nCntProgress > READ_PROGRESS)
+		if (action == ACTION_BUTTON)
 		{// 次の進行状況に移行
 			EndProgress(PROGRESS_ASSESS);
 		}
@@ -251,15 +327,11 @@ void CTutorialManager::AddProgress(ACTION action)
 		break;
 	case CTutorialManager::PROGRESS_ASSESS:	// 評価
 
-		if (action == ACTION_TIME)
-		{
-			m_nCntProgress++;
-		}
-
-		if (m_nCntProgress > READ_PROGRESS)
+		if (action == ACTION_BUTTON)
 		{// 次の進行状況に移行
 			EndProgress(PROGRESS_FREE);
 		}
+
 		break;
 	case CTutorialManager::PROGRESS_MAX:
 		break;
@@ -315,6 +387,28 @@ void CTutorialManager::NextProgress(PROGRESS progress)
 }
 
 //=====================================================
+// ボタンを押したかのチェック
+//=====================================================
+bool CTutorialManager::ButtonCheck(void)
+{
+	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
+	CInputJoypad *pJoypad = CManager::GetJoypad();
+
+	if (pKeyboard == nullptr || pJoypad == nullptr)
+	{
+		return false;
+	}
+
+	if (pKeyboard->GetTrigger(DIK_F) ||
+		pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
+	{// チュートリアルを進める
+		return true;
+	}
+
+	return false;
+}
+
+//=====================================================
 // 生成処理
 //=====================================================
 CTutorialManager *CTutorialManager::Create(void)
@@ -353,6 +447,42 @@ CTutorialManager *CTutorialManager::Create(void)
 }
 
 //=====================================================
+// ゲージの生成
+//=====================================================
+void CTutorialManager::CreateGauge(void)
+{
+	if (m_pGaugeSkip == nullptr)
+	{// ゲージの生成
+		m_pGaugeSkip = CObject2D::Create(7);
+
+		if (m_pGaugeSkip != nullptr)
+		{
+			m_pGaugeSkip->SetPosition(D3DXVECTOR3(GAUGE_POS.x, GAUGE_POS.y, 0.0f));
+			m_pGaugeSkip->SetSize(GAUGE_WIDTH, GAUGE_HEIGTH);
+			m_pGaugeSkip->SetCol(D3DXCOLOR(0.5f, 0.5f, 0.5f, 1.0f));
+			m_pGaugeSkip->SetVtx();
+		}
+	}
+
+	if (m_pFrameSkip == nullptr)
+	{// フレームの生成
+		m_pFrameSkip = CObject2D::Create(7);
+
+		if (m_pFrameSkip != nullptr)
+		{
+			m_pFrameSkip->SetPosition(D3DXVECTOR3(FRAME_POS.x, FRAME_POS.y, 0.0f));
+			m_pFrameSkip->SetSize(FRAME_WIDTH, FRAME_HEIGHT);
+			m_pFrameSkip->SetVtx();
+
+			// テクスチャ番号取得
+			int nIdx = CManager::GetTexture()->Regist(FRAME_PATH);
+
+			m_pFrameSkip->SetIdxTexture(nIdx);
+		}
+	}
+}
+
+//=====================================================
 // 描画処理
 //=====================================================
 void CTutorialManager::Draw(void)
@@ -375,5 +505,6 @@ void CTutorialManager::Debug(void)
 	}
 
 	pDebugProc->Print("\n現在の進行[%d]", m_progress);
-	pDebugProc->Print("\n次の進行[%d]",m_NextProgress);
+	pDebugProc->Print("\n次の進行[%d]", m_NextProgress);
+	pDebugProc->Print("\nスキップカウンター[%d]",m_nCntSkip);
 }
