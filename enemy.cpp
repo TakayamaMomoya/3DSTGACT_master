@@ -284,6 +284,8 @@ void CEnemy::Uninit(void)
 
 	if (m_pExplSpawner != nullptr)
 	{
+		m_pExplSpawner->Uninit();
+
 		m_pExplSpawner = nullptr;
 	}
 
@@ -667,8 +669,6 @@ void CEnemy::Death(void)
 {
 	// Ž©•ª‚Ì”š”­
 	CParticle::Create(GetPosition(), CParticle::TYPE_EXPLOSION);
-
-	CExplosion::Create(GetPosition())->SetSize(300.0f, 300.0f);
 
 	CDebrisSpawner::Create(GetPosition(), 12.0f, 1, 12);
 

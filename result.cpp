@@ -226,7 +226,7 @@ void CResult::Input(void)
 	}
 
 	// €–ÚØ‚è‘Ö‚¦
-	if (pKeyboard->GetTrigger(DIK_A) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, 0))
+	if (pKeyboard->GetTrigger(DIK_A) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_LEFT, 0))
 	{
 		m_menu = MENU_REPLAY;
 
@@ -236,7 +236,7 @@ void CResult::Input(void)
 		}
 	}
 
-	if (pKeyboard->GetTrigger(DIK_D) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_UP, 0))
+	if (pKeyboard->GetTrigger(DIK_D) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RIGHT, 0))
 	{
 		m_menu = MENU_RANKING;
 

@@ -263,7 +263,7 @@ void CMenu::Input(void)
 	}
 
 	// €–ÚØ‚è‘Ö‚¦
-	if (pKeyboard->GetTrigger(DIK_A) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_DOWN, 0))
+	if (pKeyboard->GetTrigger(DIK_A) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_LEFT, 0))
 	{
 		m_menu = (MENU)((m_menu + 1) % MENU_MAX);
 
@@ -271,7 +271,7 @@ void CMenu::Input(void)
 		CManager::GetSound()->Play(CSound::LABEL_SELECT);
 	}
 
-	if (pKeyboard->GetTrigger(DIK_D) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_UP, 0))
+	if (pKeyboard->GetTrigger(DIK_D) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_RIGHT, 0))
 	{
 		m_menu = (MENU)((m_menu + MENU_MAX - 1) % MENU_MAX);
 
