@@ -773,7 +773,20 @@ void CPlayer::InputMove(void)
 			move.y += JUMP_POW;
 			if (m_pBodyDowner->GetMotion() != MOTION_BOOST)
 			{// ブーストモーションへ移行
-				m_pBodyDowner->SetMotion(MOTION_BOOST);
+				if (m_bTurnDowner)
+				{
+					if (m_pBodyDowner->GetMotion() != MOTION_TURNBOOST)
+					{// ブーストモーションへ移行
+						m_pBodyDowner->SetMotion(MOTION_TURNBOOST);
+					}
+				}
+				else
+				{
+					if (m_pBodyDowner->GetMotion() != MOTION_BOOST)
+					{// ブーストモーションへ移行
+						m_pBodyDowner->SetMotion(MOTION_BOOST);
+					}
+				}
 			}
 
 			// ブーストの設定
