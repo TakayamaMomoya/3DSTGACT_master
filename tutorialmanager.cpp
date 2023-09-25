@@ -114,8 +114,8 @@ void CTutorialManager::Update(void)
 	
 	if (m_progress >= PROGRESS_SHOT && CEnemy::GetNumAll() == 0)
 	{// ŽËŒ‚ˆÈ~‚Í“G‚ðo‚·
-		//CEnemy::Create(D3DXVECTOR3(500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
-		//CEnemy::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
+		CEnemy::Create(D3DXVECTOR3(500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
+		CEnemy::Create(D3DXVECTOR3(-500.0f, 0.0f, 0.0f), CEnemy::TYPE_TUTORIAL);
 	}
 }
 
@@ -240,7 +240,8 @@ void CTutorialManager::TimeTutorial(void)
 
 	if (pKeyboard != nullptr && pJoypad != nullptr && m_progress == PROGRESS_FREE)
 	{
-		if (pKeyboard->GetTrigger(DIK_RETURN))
+		if (pKeyboard->GetTrigger(DIK_RETURN) ||
+			pJoypad->GetPress(CInputJoypad::PADBUTTONS_START, 0))
 		{// ‰æ–Ê‘JˆÚ
 			if (pFade != nullptr)
 			{

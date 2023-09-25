@@ -1053,6 +1053,9 @@ void CTutorialPlayer::InputShot(void)
 						}
 
 						CParticle::Create(m_posMazzle, CParticle::TYPE_SHOT, D3DXVECTOR3(0.0f, 0.0f, 0.0f), &m_posMazzle);
+
+						// チュートリアルに信号を送る
+						pTutorialManager->AddProgress(CTutorialManager::ACTION_RAPID);
 					}
 				}
 			}

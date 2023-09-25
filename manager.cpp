@@ -397,11 +397,13 @@ void CManager::Update(void)
 		m_pSound->Update();
 	}
 
+#ifdef _DEBUG
 	if (m_pDebugProc != nullptr)
 	{
 		// デバッグプロシージャの更新
-		m_pDebugProc->Update();
+		//m_pDebugProc->Update();
 	}
+#endif
 
 	if (m_pLight != nullptr)
 	{
