@@ -30,10 +30,10 @@
 #define MESH_HEIGHT	(10.0f)	// メッシュの高さ
 #define ADD_HEIGHT	(100.0f)	// 目標からの高さ
 #define WAVE_ANGLE	(D3DX_PI * 0.1f)	// 波打つ範囲の角度
-#define WAVE_HEIGHT	(50.0f)	// 波打つ高さ
+#define WAVE_HEIGHT	(10.0f)	// 波打つ高さ
 #define WAVE_LENGTH	(100.0f)	// 波打つ範囲の距離
 #define CHANGE_COl	(0.15f)	// 色の変わる割合
-#define RAND_HEIGHT	(10.0f)	// 振れる幅
+#define RAND_HEIGHT	(25.0f)	// 振れる幅
 #define WAVE_SIZE	(0.04f)	// 波の大きさ
 #define SHAKE_SIZE	(0.005f)	// 揺れの大きさ
 #define WAVE_SPEED	(0.08f)	// 波の動く速度
@@ -240,6 +240,8 @@ void CRader::Wave(void)
 
 	fSin = D3DX_PI / nCntEnd;
 
+	fSin += 0.5f;
+
 	while (pEnemy != nullptr)
 	{
 		// 次のアドレスを保存
@@ -266,6 +268,7 @@ void CRader::Wave(void)
 		// 目標方向にある頂点を検出
 		for (int nCnt = 0; nCnt < nCntEnd; nCnt++)
 		{
+
 			// 差分距離の割合を求める
 			float fRate = sinf(fSin * nCnt);
 			float fHeight = fRate * WAVE_HEIGHT + fDiff;

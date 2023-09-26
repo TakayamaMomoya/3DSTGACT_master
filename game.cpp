@@ -554,13 +554,18 @@ void CGame::ManageState(void)
 	{
 	case CGame::STATE_NORMAL:
 
+		
+
+		break;
+	case CGame::STATE_RESULT:
+
 		if (m_pTimer != nullptr)
 		{
 			nTime = m_pTimer->GetSecond();
 
 			if (m_pTimer->GetSecond() <= 0)
 			{// タイムアップクリア
-				// スコア保存
+			 // スコア保存
 				CManager::SetScore(m_pScore->GetScore());
 			}
 		}
@@ -569,9 +574,6 @@ void CGame::ManageState(void)
 			// スコアリセット
 			CManager::SetScore(0);
 		}
-
-		break;
-	case CGame::STATE_RESULT:
 
 		break;
 	case CGame::STATE_END:

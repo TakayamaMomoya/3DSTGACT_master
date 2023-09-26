@@ -100,7 +100,7 @@ void CExplSpawner::SetPosition(D3DXVECTOR3 pos)
 //=====================================================
 //	¶¬ˆ—
 //=====================================================
-CExplSpawner *CExplSpawner::Create(D3DXVECTOR3 pos,float fRadius,int nLife)
+CExplSpawner **CExplSpawner::Create(D3DXVECTOR3 pos,float fRadius,int nLife)
 {
 	CExplSpawner *pSpawner = nullptr;
 
@@ -115,5 +115,5 @@ CExplSpawner *CExplSpawner::Create(D3DXVECTOR3 pos,float fRadius,int nLife)
 		pSpawner->m_fRadius = fRadius;
 	}
 
-	return pSpawner;
+	return &pSpawner;
 }

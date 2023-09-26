@@ -293,11 +293,11 @@ void CRanking::Reset(void)
 
 #if 0
 	//ƒ‰ƒ“ƒLƒ“ƒO‰Šúİ’è
-	m_aScore[0] = 5000;
-	m_aScore[1] = 4000;
-	m_aScore[2] = 3000;
-	m_aScore[3] = 2000;
-	m_aScore[4] = 1000;
+	m_aScore[0] = 32;
+	m_aScore[1] = 31;
+	m_aScore[2] = 30;
+	m_aScore[3] = 29;
+	m_aScore[4] = 28;
 #endif
 }
 

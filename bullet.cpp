@@ -17,7 +17,6 @@
 #include "particle.h"
 #include "sound.h"
 #include "score.h"
-#include "item.h"
 #include "enemy.h"
 #include "collision.h"
 #include "meshfield.h"

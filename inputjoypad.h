@@ -72,6 +72,8 @@ public:
 	void Vibration(int nPlayer, PADVIB state, short sVib, int nTime);
 
 private:
+	void CheckStickTrigger(XINPUT_STATE state);
+
 	XINPUT_STATE m_aState[MAX_PLAYER];				//ゲームパッドのプレス情報
 	XINPUT_STATE m_aStateTrigger[MAX_PLAYER];		//ゲームパッドのトリガー情報
 	XINPUT_STATE m_aStateRelease[MAX_PLAYER];		//ゲームパッドのリリース情報

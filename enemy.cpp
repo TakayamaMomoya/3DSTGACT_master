@@ -15,7 +15,6 @@
 #include "score.h"
 #include "collision.h"
 #include "debugproc.h"
-#include "item.h"
 #include "explosion.h"
 #include "particle.h"
 #include "meshfield.h"
@@ -86,6 +85,7 @@ CEnemy::CEnemy()
 	m_state = STATE_NORMAL;
 	m_moveState = MOVESTATE_NONE;
 	m_posDest = { 0.0f,0.0f,0.0f };
+	m_ppExplSpawner = nullptr;
 
 	// 値のクリア
 	m_pPrev = nullptr;
@@ -282,11 +282,11 @@ void CEnemy::Uninit(void)
 		m_pShadow = nullptr;
 	}
 
-	if (m_pExplSpawner != nullptr)
+	if (m_ppExplSpawner != nullptr)
 	{
-		m_pExplSpawner->Uninit();
+		//m_pExplSpawner->Uninit();
 
-		m_pExplSpawner = nullptr;
+		m_ppExplSpawner = nullptr;
 	}
 
 	// 継承クラスの終了
@@ -494,9 +494,14 @@ void CEnemy::ManageState(void)
 	case STATE_DEATH:
 		m_nTimerDeath--;
 
-		if (m_pExplSpawner != nullptr)
+		if (m_ppExplSpawner != nullptr)
 		{
-			m_pExplSpawner->SetPosition(GetPosition());
+			CExplSpawner *pExplSpawner = *m_ppExplSpawner;
+
+			if (pExplSpawner != nullptr)
+			{
+				pExplSpawner->SetPosition(GetPosition());
+			}
 		}
 
 		if (m_nTimerDeath <= 0)
@@ -614,7 +619,13 @@ void CEnemy::Hit(float fDamage)
 			pScore->AddScore(m_nScore);
 		}
 
-		m_pExplSpawner = CExplSpawner::Create(GetPosition(), GetRadiusMax(), TIME_DEATH);
+		CExplosion *pExplosion = nullptr;
+		pExplosion = CExplosion::Create(GetPosition());
+
+		if (pExplosion != nullptr)
+		{
+			pExplosion->SetSize(GetRadiusMax(), GetRadiusMax());
+		}
 
 		m_nTimerDeath = TIME_DEATH;
 
@@ -667,11 +678,19 @@ void CEnemy::ManageBonus(void)
 //=====================================================
 void CEnemy::Death(void)
 {
+	CExplosion *pExplosion = nullptr;
+	pExplosion = CExplosion::Create(GetPosition());
+
+	if (pExplosion != nullptr)
+	{
+		pExplosion->SetSize(GetRadiusMax(), GetRadiusMax());
+	}
+
+	CDebrisSpawner::Create(GetPosition(), 15.0f, 1, 30);
+
 	// 自分の爆発
 	CParticle::Create(GetPosition(), CParticle::TYPE_EXPLOSION);
-
-	CDebrisSpawner::Create(GetPosition(), 12.0f, 1, 12);
-
+	
 	// 自身の終了
 	Uninit();
 

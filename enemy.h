@@ -121,7 +121,7 @@ private:
 	CShadow *m_pShadow;	// 影のポインタ
 	STATE m_state;	// 状態
 	int m_nTimerDeath;	// 死亡までのカウンタ
-	CExplSpawner *m_pExplSpawner;	// 爆発のポインタ
+	CExplSpawner **m_ppExplSpawner;	// 爆発のダブルポインタ
 	D3DXVECTOR3 m_posDest;	// 目標位置
 	MOVESTATE m_moveState;	// 移動状態
 	int m_nScore;	// スコア値

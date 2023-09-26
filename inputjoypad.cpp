@@ -111,6 +111,7 @@ void CInputJoypad::Update(void)
 			//振動状態を伝達
 			XInputSetState(nCntPlayer, &m_aVibration[nCntPlayer]);
 		}
+
 		//入力デバイスからデータを取得
 		if (XInputGetState(nCntPlayer, &aState[nCntPlayer]) == ERROR_SUCCESS)
 		{
@@ -131,6 +132,22 @@ void CInputJoypad::Update(void)
 			}
 		}
 	}
+}
+
+//====================================================
+// ジョイスティックトリガー判定処理
+//====================================================
+void CInputJoypad::CheckStickTrigger(XINPUT_STATE state)
+{
+	//// 左スティック==========================================
+	//// 前回のスティック入力の長さを計算
+	//D3DXVECTOR3 vecStick = { 0.0f,0.0f,0.0f };
+
+	//vecStick.x = m_aState->Gamepad.sThumbLX;
+	//vecStick.y = m_aState->Gamepad.sThumbLY;
+
+	//// 長さ計算
+	//D3DXVec3Length(&vecStick);
 }
 
 //====================================================
