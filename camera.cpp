@@ -27,6 +27,7 @@
 #define ROLL_SPEED					(0.02f)						//回転スピード
 #define MOVE_FACT					(0.3f)						//移動減衰係数
 #define LIMIT_HEIGHT	(50)	// 位置を制限する高さ
+#define INITIAL_ANGLE	(45.0f)	// 初期の視野角
 
 //====================================================
 // 初期化処理
@@ -43,6 +44,7 @@ HRESULT CCamera::Init(void)
 	m_camera.vecU = D3DXVECTOR3(0.0f, 1.0f, 0.0f);
 	m_camera.rot = D3DXVECTOR3(0.0f, 0.0f, 0.0f);
 	m_camera.fLength = 0.0f;
+	m_camera.fViewAngle = INITIAL_ANGLE;
 
 	float fLength = sqrtf
 	(//Y面での対角線
@@ -92,7 +94,29 @@ void CCamera::Update(void)
 	default:
 		break;
 	}
+}
 
+//====================================================
+// デバッグ処理
+//====================================================
+void CCamera::Debug(void)
+{
+	// 情報取得
+	CInputKeyboard *pKeyboard = CManager::GetKeyboard();
+
+	if (pKeyboard == nullptr)
+	{
+		return;
+	}
+
+	if (pKeyboard->GetPress(DIK_UP))
+	{
+		m_camera.fViewAngle += 0.4f;
+	}
+	if (pKeyboard->GetPress(DIK_DOWN))
+	{
+		m_camera.fViewAngle -= 0.4f;
+	}
 }
 
 //====================================================
@@ -282,6 +306,12 @@ void CCamera::FollowPlayer(void)
 			m_camera.posV = D3DXVECTOR3(m_camera.posV.x, fHeight + LIMIT_HEIGHT, m_camera.posV.z);
 		}
 	}
+
+#ifdef _DEBUG
+
+	Debug();
+
+#endif
 }
 
 //====================================================
@@ -417,7 +447,7 @@ void CCamera::SetCamera(void)
 
 	//プロジェクションマトリックス作成
 	D3DXMatrixPerspectiveFovLH(&m_camera.mtxProjection,
-		D3DXToRadian(45.0f),
+		D3DXToRadian(m_camera.fViewAngle),
 		(float)SCREEN_WIDTH / (float)SCREEN_HEIGHT,
 		MIN_DRAW,
 		MAX_DRAW);

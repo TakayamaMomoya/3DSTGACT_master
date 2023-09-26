@@ -30,6 +30,7 @@ public:
 		D3DXVECTOR3 posRDest;	// 目的の注視点
 		D3DXVECTOR3 vecU;	// 上方向ベクトル
 		D3DXVECTOR3 rot;	// 向き
+		float fViewAngle;	// 視野角
 		float fLength;	// 視点から注視点までの距離
 		D3DXMATRIX mtxProjection;	// プロジェクションマトリックス
 		D3DXMATRIX mtxView;	// ビューマトリックス
@@ -55,6 +56,7 @@ public:
 private:
 	void UpdateTitle(void);
 	void UpdateGame(void);
+	void Debug(void);
 
 	Camera m_camera;	// 構造体の情報
 };

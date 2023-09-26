@@ -371,7 +371,7 @@ void CGame::Update(void)
 	// •Ç‚ÌŠÇ—
 	ManageWall();
 
-	if (pKeyboard != nullptr)
+	if (pKeyboard != nullptr && m_state == STATE_NORMAL)
 	{
 		if (pKeyboard->GetTrigger(DIK_P) || pJoypad->GetTrigger(CInputJoypad::PADBUTTONS_START, 0))
 		{// ƒ|[ƒYØ‚è‘Ö‚¦
