@@ -26,7 +26,7 @@
 #define IN_SPEED	(0.03f)	// フェードインのスピード
 #define OUT_SPEED	(0.07f)	// フェードアウトのスピード
 #define TIME_FADE	(60)	// フェードアウトまでのフレーム数
-#define RAPID_NUM	(10)	// 連射の進むまでの数
+#define RAPID_NUM	(6)	// 連射の進むまでの数
 #define FRAME_PATH	"data\\TEXTURE\\UI\\frame05.png"	// スキップのフレームのパス
 #define GAUGE_WIDTH	(136.0f)	// ゲージの横幅
 #define GAUGE_HEIGTH	(19.0f)	// ゲージの縦の長さ

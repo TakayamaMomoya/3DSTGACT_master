@@ -34,11 +34,11 @@
     <Filter Include="ソース ファイル\main">
       <UniqueIdentifier>{1af45593-a736-47a5-80a5-66ee4c5f8a1c}</UniqueIdentifier>
     </Filter>
-    <Filter Include="ソース ファイル\enemy">
-      <UniqueIdentifier>{38969b4d-9643-4338-8cf6-4fe0cafe4afe}</UniqueIdentifier>
-    </Filter>
     <Filter Include="ソース ファイル\input">
       <UniqueIdentifier>{bb23df75-c576-461b-82a6-48f3cbf24c34}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="ソース ファイル\input\enemy">
+      <UniqueIdentifier>{38969b4d-9643-4338-8cf6-4fe0cafe4afe}</UniqueIdentifier>
     </Filter>
   </ItemGroup>
   <ItemGroup>
@@ -163,13 +163,13 @@
       <Filter>ソース ファイル\scene</Filter>
     </ClCompile>
     <ClCompile Include="enemy.cpp">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClCompile>
     <ClCompile Include="enemymove.cpp">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClCompile>
     <ClCompile Include="enemytank.cpp">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClCompile>
     <ClCompile Include="debugproc.cpp">
       <Filter>ソース ファイル\resources</Filter>
@@ -199,7 +199,7 @@
       <Filter>ソース ファイル\input</Filter>
     </ClCompile>
     <ClCompile Include="missile.cpp">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClCompile>
     <ClCompile Include="cockpit.cpp">
       <Filter>ソース ファイル\UI</Filter>
@@ -262,7 +262,7 @@
       <Filter>ソース ファイル</Filter>
     </ClCompile>
     <ClCompile Include="enemytutorial.cpp">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClCompile>
     <ClCompile Include="menu.cpp">
       <Filter>ソース ファイル\UI</Filter>
@@ -396,13 +396,13 @@
       <Filter>ソース ファイル\scene</Filter>
     </ClInclude>
     <ClInclude Include="enemy.h">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClInclude>
     <ClInclude Include="enemymove.h">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClInclude>
     <ClInclude Include="enemytank.h">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClInclude>
     <ClInclude Include="debugproc.h">
       <Filter>ソース ファイル\resources</Filter>
@@ -432,7 +432,7 @@
       <Filter>ソース ファイル\input</Filter>
     </ClInclude>
     <ClInclude Include="missile.h">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClInclude>
     <ClInclude Include="cockpit.h">
       <Filter>ソース ファイル\UI</Filter>
@@ -495,7 +495,7 @@
       <Filter>ヘッダー ファイル</Filter>
     </ClInclude>
     <ClInclude Include="enemytutorial.h">
-      <Filter>ソース ファイル\enemy</Filter>
+      <Filter>ソース ファイル\input\enemy</Filter>
     </ClInclude>
     <ClInclude Include="menu.h">
       <Filter>ソース ファイル\UI</Filter>

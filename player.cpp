@@ -88,6 +88,7 @@
 #define LIMIT_CAMERAROT	(0.8f)	// カメラの角度制限
 #define TIME_DEATH	(240)	// 死ぬまでのフレーム数
 #define TIME_SOUND	(7)	// サウンドを流す頻度
+#define RADIUS_SHADOW	(150.0f)	// 影の大きさ
 
 //=====================================================
 // 優先順位を決めるコンストラクタ
@@ -165,7 +166,7 @@ HRESULT CPlayer::Init(void)
 	// 影の生成
 	if (m_pShadow == nullptr)
 	{
-		m_pShadow = CShadow::Create(D3DXVECTOR3(GetPosition().x, 1.0f, GetPosition().z), 150.0f, 150.0f);
+		m_pShadow = CShadow::Create(D3DXVECTOR3(GetPosition().x, 1.0f, GetPosition().z), RADIUS_SHADOW, RADIUS_SHADOW);
 
 		if (m_pShadow != nullptr)
 		{

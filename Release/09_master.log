@@ -1,17 +1,9 @@
-﻿  camera.cpp
-  enemy.cpp
-  game.cpp
-  lockon.cpp
-  manager.cpp
-  object.cpp
-  player.cpp
-  title.cpp
-  tutorial.cpp
-  tutorialplayer.cpp
+﻿  enemymove.cpp
+  enemytank.cpp
   コード生成しています。
-  25 of 1060 functions ( 2.4%) were compiled, the rest were copied from previous compilation.
+  2 of 1060 functions ( 0.2%) were compiled, the rest were copied from previous compilation.
     0 functions were new in current compilation
-    16 functions had inline decision re-evaluated but remain unchanged
+    0 functions had inline decision re-evaluated but remain unchanged
   コード生成が終了しました。
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.exe
   09_master.vcxproj -> C:\Users\student\Documents\Visual Studio 2015\Projects\プログラミング応用DirectX\09_master\09_master.pdb (Full PDB)

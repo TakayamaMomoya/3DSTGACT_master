@@ -26,59 +26,50 @@ MODEL_FILENAME = data/MODEL/arms00/14_toeR.x		# [6]右足
 # キャラクター情報
 #------------------------------------------------------------------------------
 CHARACTERSET
-	NUM_PARTS = 7					# パーツ数
-	MOVE = 5.0						# 移動量
-	RADIUS = 40.0					# 半径
-	JUMP = 8.65						# ジャンプ量
+    NUM_PARTS = 7
 
-	PARTSSET						# [0]腰
-		INDEX = 0
-		PARENT = -1					# (親)なし
-		POS = 0.0 180.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
-	
-	PARTSSET						# [1]左腿
-		INDEX = 1
-		PARENT = 0					# (親)腰
-		POS = 20.0 0.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
-	
-	PARTSSET						# [2]左脛
-		INDEX = 2
-		PARENT = 1					# (親)左腿
-		POS = 0.0 -60.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
-	
-	PARTSSET						# [3]左足
-		INDEX = 3
-		PARENT = 2				# (親)左脛
-		POS = 0.0 -90.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
-	
-	PARTSSET						# [4]左腿
-		INDEX = 4
-		PARENT = 0					# (親)腰
-		POS = -20.0 0.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
-	
-	PARTSSET						# [5]左脛
-		INDEX = 5
-		PARENT = 4					# (親)右腿
-		POS = 0.0 -60.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
-	
-	PARTSSET						# [6]左足
-		INDEX = 6
-		PARENT = 5					# (親)右脛
-		POS = 0.0 -90.0 0.0
-		ROT = 0.0 0.0 0.0
-	END_PARTSSET
+    PARTSSET
+        INDEX = 0
+        PARENT = -1
+        POS = 0.0 185.5 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 1
+        PARENT = 0
+        POS = 20.0 -4.5 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 2
+        PARENT = 1
+        POS = 0.0 -60.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 3
+        PARENT = 2
+        POS = 0.0 -105.6 2.1
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 4
+        PARENT = 0
+        POS = -19.7 -1.7 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 5
+        PARENT = 4
+        POS = 0.0 -60.0 0.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
+    PARTSSET
+        INDEX = 6
+        PARENT = 5
+        POS = 0.0 -107.3 2.0
+        ROT = 0.0 0.0 0.0
+    END_PARTSSET
 END_CHARACTERSET
 
 #------------------------------------------------------------------------------
@@ -925,5 +916,166 @@ MOTIONSET
 		END_KEY
 	END_KEYSET
 END_MOTIONSET
+
+#---------------------------------------
+# [6] 死亡モーション
+#---------------------------------------
+MOTIONSET
+	LOOP = 0		# ループするかどうか[0:ループしない / 1:ループする]
+	NUM_KEY = 4		# キー数
+
+	KEYSET			# --- <<  : 0 / 4 >> ---
+		FRAME = 10
+		KEY	# ----- [ 0 ] -----
+			POS = 0.00 -1.70 0.00
+			ROT = 0.00 -0.31 0.00
+		END_KEY
+
+		KEY	# ----- [ 1 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.06 -0.31 0.03
+		END_KEY
+
+		KEY	# ----- [ 2 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.19 -0.09 0.00
+		END_KEY
+
+		KEY	# ----- [ 3 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.19 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 4 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.13 0.16 -0.06
+		END_KEY
+
+		KEY	# ----- [ 5 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.19 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 6 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.09 0.00 0.00
+		END_KEY
+	END_KEYSET
+
+	KEYSET			# --- <<  : 1 / 4 >> ---
+		FRAME = 30
+		KEY	# ----- [ 0 ] -----
+			POS = -19.10 -10.00 59.10
+			ROT = 0.16 -0.31 0.00
+		END_KEY
+
+		KEY	# ----- [ 1 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.88 -0.12 0.06
+		END_KEY
+
+		KEY	# ----- [ 2 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -1.86 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 3 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.32 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 4 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.26 0.16 -0.06
+		END_KEY
+
+		KEY	# ----- [ 5 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.13 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 6 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.16 0.00 0.00
+		END_KEY
+	END_KEYSET
+
+	KEYSET			# --- <<  : 2 / 4 >> ---
+		FRAME = 20
+		KEY	# ----- [ 0 ] -----
+			POS = -19.10 -16.00 64.80
+			ROT = 0.31 -0.31 0.00
+		END_KEY
+
+		KEY	# ----- [ 1 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.00 0.16 0.06
+		END_KEY
+
+		KEY	# ----- [ 2 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.72 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 3 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.44 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 4 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.26 0.16 -0.06
+		END_KEY
+
+		KEY	# ----- [ 5 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.32 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 6 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -0.16 0.00 0.00
+		END_KEY
+	END_KEYSET
+
+	KEYSET			# --- <<  : 3 / 4 >> ---
+		FRAME = 1
+		KEY	# ----- [ 0 ] -----
+			POS = -16.80 -94.30 41.60
+			ROT = -0.31 -0.31 -0.16
+		END_KEY
+
+		KEY	# ----- [ 1 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.56 0.19 0.22
+		END_KEY
+
+		KEY	# ----- [ 2 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -1.54 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 3 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.44 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 4 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 2.20 0.10 -0.25
+		END_KEY
+
+		KEY	# ----- [ 5 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = -1.92 0.00 0.00
+		END_KEY
+
+		KEY	# ----- [ 6 ] -----
+			POS = 0.00 0.00 0.00
+			ROT = 0.31 0.00 0.00
+		END_KEY
+	END_KEYSET
+END_MOTIONSET
+
 
 END_SCRIPT		# この行は絶対消さないこと！

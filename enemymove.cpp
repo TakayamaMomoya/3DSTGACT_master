@@ -44,7 +44,7 @@
 #define LIFE_FIGHTER	(10)	// 戦闘機の初期体力
 #define FALL_SPEED	(4.0f)	// 墜落速度
 #define ROLL_FACT	(0.05f)	// 旋回速度
-#define INITIAL_SCORE	(500)	// 初期スコア
+#define INITIAL_SCORE	(800)	// 初期スコア
 #define FALL_POSSIBILITY	(20)	// 墜落するパーセンテージ
 
 //=====================================================
